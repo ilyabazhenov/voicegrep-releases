@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VoiceGrep</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 16px/1.6 -apple-system, system-ui, sans-serif; max-width: 640px;
+         margin: 8vh auto; padding: 0 24px; }
+  h1 { font-size: 2rem; margin-bottom: .2em; }
+  .sub { opacity: .7; margin-top: 0; }
+  .btn { display: inline-block; margin: 1.5em 0; padding: .8em 1.6em; border-radius: 10px;
+         background: #2b6fff; color: #fff; text-decoration: none; font-weight: 600; }
+  ol { padding-left: 1.2em; }
+  code { background: rgba(127,127,127,.18); padding: .15em .4em; border-radius: 5px;
+         font-size: .9em; }
+  .note { opacity: .65; font-size: .9em; margin-top: 2em; }
+</style>
+</head>
+<body>
+  <h1>VoiceGrep</h1>
+  <p class="sub">Локальная запись и расшифровка звонков для macOS.</p>
+
+  <a class="btn" href="VoiceGrep-0.1.0.dmg">Скачать VoiceGrep 0.1.0 (.dmg)</a>
+
+  <h2>Установка</h2>
+  <ol>
+    <li>Откройте .dmg и перетащите <b>VoiceGrep</b> в «Программы».</li>
+    <li>Приложение пока не заверено в Apple, поэтому при первом запуске macOS его
+        заблокирует. Откройте «Терминал» и выполните:
+        <p><code>xattr -dr com.apple.quarantine /Applications/VoiceGrep.app</code></p>
+        Затем запустите VoiceGrep как обычно.</li>
+    <li>При первой записи дайте доступ к <b>Микрофону</b> и <b>Записи экрана</b>.</li>
+  </ol>
+  <p>Дальше приложение обновляется само — повторять обход блокировки не нужно.</p>
+
+  <p class="note">Все данные (аудио и расшифровки) хранятся только на вашем Mac.</p>
+</body>
+</html>

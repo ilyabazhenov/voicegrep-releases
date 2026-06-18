@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>VoiceGrep</title>
+        <item>
+            <title>0.1.0</title>
+            <pubDate>Thu, 18 Jun 2026 23:15:09 +0400</pubDate>
+            <sparkle:version>1</sparkle:version>
+            <sparkle:shortVersionString>0.1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://ilyabazhenov.github.io/voicegrep-releases/VoiceGrep-0.1.0.dmg" length="12638841" type="application/octet-stream" sparkle:edSignature="NC0lmhHSYnn6dkODk27VONL4WGVrvKbTJXLp4MKt5C7ic3jXDQNY8K3/ydmWbcMWYvejVlOLm9xfKjo8oHi+Cg=="/>
+        </item>
+    </channel>
+</rss>
