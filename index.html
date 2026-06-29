@@ -4,170 +4,551 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VoiceGrep — локальная запись и расшифровка звонков для macOS</title>
-<meta name="description" content="VoiceGrep записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт участников по голосу. Полностью локально, без облака. macOS 14+.">
+<meta name="description" content="VoiceGrep записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт участников по голосу. Полностью локально, без облака. macOS 14.4+.">
+<meta property="og:title" content="VoiceGrep — расшифровка звонков прямо на вашем Mac">
+<meta property="og:description" content="Записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт собеседников по голосу. 100% локально, без облака.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ilyabazhenov.github.io/voicegrep-releases/">
+<meta name="theme-color" content="#0a0b0e">
 <style>
   :root {
     color-scheme: light dark;
     --accent: #2b6fff;
+    --accent-2: #7b5cff;
     --bg: #ffffff;
+    --bg-soft: #f6f7fb;
     --fg: #15181d;
-    --muted: rgba(120,124,132,.95);
-    --card: rgba(127,127,127,.07);
-    --border: rgba(127,127,127,.18);
+    --muted: #5f636c;
+    --card: #ffffff;
+    --card-2: #f6f7fb;
+    --border: rgba(20,24,31,.10);
+    --shadow: 0 1px 2px rgba(20,24,31,.04), 0 12px 40px rgba(20,24,31,.10);
+    --shadow-lg: 0 2px 6px rgba(20,24,31,.06), 0 30px 80px rgba(20,24,31,.18);
+    --win: #ffffff;
+    --win-bar: #ececf1;
+    --win-side: #f4f4f8;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #0c0d10; --fg: #f3f4f6; --muted: rgba(170,175,185,.9);
-            --card: rgba(255,255,255,.04); --border: rgba(255,255,255,.10); }
+    :root {
+      --bg: #0a0b0e; --bg-soft: #101218; --fg: #f3f4f6; --muted: #9aa0ac;
+      --card: #14161c; --card-2: #101218;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.5);
+      --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 30px 80px rgba(0,0,0,.6);
+      --win: #16181f; --win-bar: #20232c; --win-side: #1a1d25;
+    }
   }
   * { box-sizing: border-box; }
-  body { font: 17px/1.65 -apple-system, system-ui, "SF Pro Text", sans-serif;
-         color: var(--fg); background: var(--bg);
-         max-width: 860px; margin: 0 auto; padding: 7vh 24px 12vh;
-         -webkit-font-smoothing: antialiased; }
-  h1 { font-size: clamp(2.4rem, 6vw, 3.4rem); line-height: 1.05;
-       letter-spacing: -.02em; margin: 0 0 .25em; }
-  h2 { font-size: 1.55rem; letter-spacing: -.01em; margin: 2.6em 0 .2em; }
-  .sub { font-size: 1.25rem; opacity: .72; margin: 0 0 1.8em; max-width: 36ch; }
-  a { color: var(--accent); }
+  html { scroll-behavior: smooth; }
+  body {
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Inter", sans-serif;
+    color: var(--fg); background: var(--bg); margin: 0;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); text-decoration: none; }
+  h1, h2, h3 { letter-spacing: -.02em; }
 
-  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 2em; }
-  .badge { font-size: .82rem; font-weight: 600; padding: .35em .8em; border-radius: 999px;
-           background: var(--card); border: 1px solid var(--border); color: var(--muted); }
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(18px);
+    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.12rem; color: var(--fg); }
+  .logo {
+    width: 30px; height: 30px; border-radius: 8px; flex: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: grid; place-items: center; color: #fff; box-shadow: 0 3px 10px rgba(43,111,255,.4);
+  }
+  .nav-links { display: flex; align-items: center; gap: 26px; }
+  .nav-links a.txt { color: var(--muted); font-size: .95rem; font-weight: 550; }
+  .nav-links a.txt:hover { color: var(--fg); }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5em; border: 0; cursor: pointer;
+    padding: .7em 1.3em; border-radius: 11px; font-weight: 650; font-size: 1rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff;
+    box-shadow: 0 4px 14px rgba(43,111,255,.35); transition: transform .12s ease, filter .12s ease;
+    font-family: inherit;
+  }
+  .btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+  .btn.lg { padding: .95em 1.9em; font-size: 1.08rem; border-radius: 13px; }
+  .btn.ghost {
+    background: var(--card-2); color: var(--fg); box-shadow: none; border: 1px solid var(--border);
+  }
+  .nav-cta { padding: .55em 1.1em; font-size: .92rem; }
+  @media (max-width: 720px) { .nav-links a.txt { display: none; } }
 
-  .btn { display: inline-flex; align-items: center; gap: .5em; margin: .4em 0 .6em;
-         padding: .9em 1.7em; border-radius: 12px; background: var(--accent);
-         color: #fff; text-decoration: none; font-weight: 650; font-size: 1.05rem; }
-  .btn:hover { filter: brightness(1.08); }
-  .meta { font-size: .9rem; color: var(--muted); margin: 0 0 1em; }
+  /* ---------- hero ---------- */
+  .hero { position: relative; overflow: hidden; padding: 76px 0 40px; }
+  .hero::before {
+    content: ""; position: absolute; inset: -40% 0 auto 0; height: 720px; z-index: -1;
+    background:
+      radial-gradient(60% 60% at 20% 0%, rgba(43,111,255,.16), transparent 70%),
+      radial-gradient(55% 55% at 85% 10%, rgba(123,92,255,.16), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.02fr 1fr; gap: 48px; align-items: center; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px; font-size: .86rem; font-weight: 600;
+    padding: .4em .9em; border-radius: 999px; color: var(--accent);
+    background: rgba(43,111,255,.12);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid rgba(43,111,255,.24);
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent); margin-bottom: 22px;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #25c26e; box-shadow: 0 0 0 4px rgba(37,194,110,.2); }
+  h1 { font-size: clamp(2.5rem, 5.2vw, 3.7rem); line-height: 1.03; margin: 0 0 .35em; }
+  .grad { background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { font-size: 1.24rem; line-height: 1.5; color: var(--muted); margin: 0 0 1.7em; max-width: 30ch; }
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .meta { font-size: .9rem; color: var(--muted); margin: 1.1em 0 0; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  .meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .meta svg { opacity: .8; }
 
-  .lead { font-size: 1.12rem; }
+  /* ---------- mac window mockup ---------- */
+  .shot { position: relative; }
+  .win {
+    border-radius: 14px; overflow: hidden; background: var(--win);
+    border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+  }
+  .titlebar { display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: var(--win-bar); border-bottom: 1px solid var(--border); }
+  .tl { width: 12px; height: 12px; border-radius: 50%; }
+  .tl.r { background: #ff5f57; } .tl.y { background: #febc2e; } .tl.g { background: #28c840; }
+  .titlebar .ttl { margin-left: 8px; font-size: .82rem; font-weight: 600; color: var(--muted); }
+  .win-body { display: grid; grid-template-columns: 116px 1fr; min-height: 318px; }
+  .side { background: var(--win-side); border-right: 1px solid var(--border); padding: 12px 8px; }
+  .side .it { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 8px; font-size: .82rem; color: var(--muted); font-weight: 550; }
+  .side .it.on { background: rgba(43,111,255,.14); background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+  .side .it svg { opacity: .9; }
+  .pane { padding: 16px 18px; }
+  .pane h4 { margin: 0 0 2px; font-size: .98rem; }
+  .pane .when { font-size: .76rem; color: var(--muted); margin: 0 0 14px; }
+  .turn { display: flex; gap: 10px; margin-bottom: 13px; }
+  .av { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font-size: .68rem; font-weight: 700; }
+  .av.a { background: #2b6fff; } .av.b { background: #e0457b; } .av.c { background: #16a34a; }
+  .turn .who { font-size: .8rem; font-weight: 650; }
+  .turn .tc { font-size: .7rem; color: var(--muted); font-weight: 500; margin-left: 6px; }
+  .turn .ln { font-size: .82rem; color: var(--fg); margin: 2px 0 0; line-height: 1.45; opacity: .9; }
+  .skl { height: 7px; border-radius: 4px; background: var(--border); margin-top: 6px; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 14px; margin: 1.4em 0; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-          padding: 18px 18px 20px; }
-  .card h3 { margin: 0 0 .35em; font-size: 1.08rem; letter-spacing: -.01em;
-             display: flex; align-items: center; gap: .5em; }
-  .card p { margin: 0; font-size: .96rem; color: var(--muted); }
-  .ico { font-size: 1.2rem; line-height: 1; }
+  /* floating recording panel */
+  .recpanel {
+    position: absolute; right: -14px; bottom: -22px; width: 196px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: var(--shadow-lg); padding: 13px 14px;
+  }
+  @media (max-width: 480px) { .recpanel { right: 4px; bottom: -16px; width: 168px; } }
+  .rec-top { display: flex; align-items: center; gap: 8px; }
+  .rec-dot { width: 9px; height: 9px; border-radius: 50%; background: #ff3b30; animation: blink 1.4s ease-in-out infinite; }
+  @keyframes blink { 50% { opacity: .25; } }
+  .rec-time { font-size: 1.32rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+  .rec-lbl { font-size: .72rem; color: var(--muted); margin-left: auto; font-weight: 600; }
+  .rec-marks { display: flex; gap: 6px; margin-top: 11px; }
+  .mk { flex: 1; text-align: center; font-size: .66rem; font-weight: 600; padding: .45em 0; border-radius: 8px; background: var(--card-2); border: 1px solid var(--border); color: var(--muted); }
 
-  ol { padding-left: 1.3em; }
-  ol li { margin: .5em 0; }
-  code { background: rgba(127,127,127,.18); padding: .15em .45em; border-radius: 6px;
-         font-size: .88em; word-break: break-all; }
+  /* ---------- logos / trust strip ---------- */
+  .trust { padding: 30px 0 8px; }
+  .trust p { text-align: center; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; font-weight: 650; }
+  .trust-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .chip { font-size: .92rem; font-weight: 600; padding: .5em 1em; border-radius: 10px; color: var(--muted); background: var(--card-2); border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 8px; }
+  .chip svg { color: var(--accent); }
 
-  hr { border: 0; border-top: 1px solid var(--border); margin: 3em 0; }
-  .note { color: var(--muted); font-size: .92rem; }
-  .privacy { background: var(--card); border: 1px solid var(--border);
-             border-radius: 14px; padding: 18px 20px; margin-top: 1em; }
-  footer { margin-top: 4em; color: var(--muted); font-size: .88rem; }
+  /* ---------- sections ---------- */
+  section { padding: 64px 0; }
+  .sec-head { text-align: center; max-width: 640px; margin: 0 auto 44px; }
+  .sec-head .eyebrow { font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+  .sec-head h2 { font-size: clamp(1.9rem, 3.6vw, 2.5rem); line-height: 1.1; margin: 0 0 .4em; }
+  .sec-head p { font-size: 1.12rem; color: var(--muted); margin: 0; }
+
+  /* steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+  .step { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 26px 24px; box-shadow: var(--shadow); }
+  .step .n { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-weight: 700; color: var(--accent); background: rgba(43,111,255,.12); background: color-mix(in srgb, var(--accent) 12%, transparent); margin-bottom: 16px; }
+  .step h3 { font-size: 1.18rem; margin: 0 0 .35em; }
+  .step p { font-size: .98rem; color: var(--muted); margin: 0; }
+
+  /* features */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s; }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(43,111,255,.4); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); }
+  .card .ic { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; margin-bottom: 14px; color: var(--accent); background: rgba(43,111,255,.11); background: color-mix(in srgb, var(--accent) 11%, transparent); }
+  .card h3 { font-size: 1.08rem; margin: 0 0 .35em; }
+  .card p { font-size: .95rem; color: var(--muted); margin: 0; line-height: 1.5; }
+
+  /* privacy band */
+  .band { background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .privacy-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px; align-items: center; }
+  @media (max-width: 820px) { .privacy-grid { grid-template-columns: 1fr; gap: 30px; } }
+  .privacy-grid h2 { font-size: clamp(1.8rem, 3.4vw, 2.4rem); margin: 0 0 .5em; line-height: 1.1; }
+  .privacy-grid p { font-size: 1.08rem; color: var(--muted); margin: 0 0 1em; }
+  .plist { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+  .plist li { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: 13px; padding: 15px 17px; box-shadow: var(--shadow); }
+  .plist .pi { color: #25c26e; flex: none; margin-top: 1px; }
+  .plist b { display: block; font-size: 1rem; }
+  .plist span { font-size: .92rem; color: var(--muted); }
+
+  /* install */
+  .install ol { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; max-width: 760px; margin: 0 auto; }
+  .install li { counter-increment: s; position: relative; padding: 20px 22px 20px 64px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
+  .install li::before { content: counter(s); position: absolute; left: 20px; top: 18px; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  .install li b { font-weight: 650; }
+  code { background: rgba(127,127,127,.16); background: color-mix(in srgb, var(--fg) 8%, transparent); padding: .18em .5em; border-radius: 6px; font: .86em/1.5 ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
+  .codeblock { display: flex; align-items: center; gap: 10px; margin: 10px 0 2px; background: rgba(127,127,127,.1); background: color-mix(in srgb, var(--fg) 6%, transparent); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .codeblock code { background: none; padding: 0; flex: 1; }
+  .copy { border: 1px solid var(--border); background: var(--card); color: var(--muted); border-radius: 8px; padding: 5px 10px; font-size: .8rem; font-weight: 600; cursor: pointer; flex: none; font-family: inherit; }
+  .copy:hover { color: var(--fg); }
+
+  /* faq */
+  .faq { max-width: 760px; margin: 0 auto; }
+  details { border: 1px solid var(--border); border-radius: 13px; background: var(--card); margin-bottom: 12px; overflow: hidden; }
+  summary { cursor: pointer; list-style: none; padding: 18px 22px; font-weight: 600; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary .chev { transition: transform .2s ease; color: var(--muted); flex: none; }
+  details[open] summary .chev { transform: rotate(180deg); }
+  details p { margin: 0; padding: 0 22px 20px; color: var(--muted); font-size: 1rem; line-height: 1.6; }
+
+  /* final cta */
+  .final { text-align: center; }
+  .final-card { position: relative; overflow: hidden; border-radius: 24px; padding: 60px 32px; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: var(--shadow-lg); }
+  .final-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(80% 120% at 80% 0%, rgba(255,255,255,.18), transparent 60%); pointer-events: none; }
+  .final-card h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: 0 0 .35em; }
+  .final-card p { font-size: 1.15rem; opacity: .92; margin: 0 0 1.6em; }
+  .btn.white { background: #fff; color: var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .final-card .meta2 { margin-top: 16px; font-size: .9rem; opacity: .85; }
+
+  footer { border-top: 1px solid var(--border); padding: 36px 0; color: var(--muted); font-size: .9rem; }
+  .foot-in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; }
 </style>
 </head>
 <body>
 
-  <h1>VoiceGrep</h1>
-  <p class="sub">Записывает онлайн-звонки, расшифровывает их и узнаёт собеседников по голосу — полностью на вашем Mac.</p>
+  <nav>
+    <div class="wrap nav-in">
+      <a class="brand" href="#top">
+        <span class="logo" aria-hidden="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </span>
+        VoiceGrep
+      </a>
+      <div class="nav-links">
+        <a class="txt" href="#how">Как работает</a>
+        <a class="txt" href="#features">Возможности</a>
+        <a class="txt" href="#privacy">Приватность</a>
+        <a class="txt" href="#faq">Вопросы</a>
+        <a class="btn nav-cta" href="VoiceGrep-1.1.0.dmg">Скачать</a>
+      </div>
+    </div>
+  </nav>
 
-  <div class="badges">
-    <span class="badge">100% локально</span>
-    <span class="badge">Без облака</span>
-    <span class="badge">Распознавание на русском</span>
-    <span class="badge">macOS 14.4+</span>
+  <header class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="pill"><span class="dot"></span> Работает без интернета · ничего не уходит в облако</span>
+        <h1>Расшифровка звонков <span class="grad">прямо на вашем&nbsp;Mac</span></h1>
+        <p class="sub">VoiceGrep сам записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт собеседников по голосу.</p>
+        <div class="cta-row">
+          <a class="btn lg" href="VoiceGrep-1.1.0.dmg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Скачать для macOS
+          </a>
+          <a class="btn ghost lg" href="#how">Как это работает</a>
+        </div>
+        <div class="meta">
+          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/></svg> Бесплатно</span>
+          <span>Apple Silicon</span>
+          <span>~8&nbsp;МБ</span>
+          <span>macOS 14.4+</span>
+          <span>Обновляется само</span>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="win" role="img" aria-label="Окно приложения VoiceGrep с расшифровкой звонка и подписанными участниками">
+          <div class="titlebar">
+            <span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>
+            <span class="ttl">VoiceGrep</span>
+          </div>
+          <div class="win-body">
+            <aside class="side">
+              <div class="it on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Встречи</div>
+              <div class="it"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2"/></svg> Люди</div>
+              <div class="it"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Проекты</div>
+              <div class="it"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Ассистент</div>
+            </aside>
+            <div class="pane">
+              <h4>Созвон с командой</h4>
+              <p class="when">Сегодня · 24 мин · 3 участника</p>
+
+              <div class="turn">
+                <span class="av a">АП</span>
+                <div>
+                  <span class="who">Анна Петрова</span><span class="tc">00:12</span>
+                  <p class="ln">Давайте обсудим план на следующий спринт и распределим задачи.</p>
+                </div>
+              </div>
+              <div class="turn">
+                <span class="av b">СК</span>
+                <div>
+                  <span class="who">Сергей Котов</span><span class="tc">00:31</span>
+                  <p class="ln">Я подготовил черновик, отправлю после звонка.</p>
+                  <div class="skl" style="width:70%"></div>
+                </div>
+              </div>
+              <div class="turn">
+                <span class="av c">Я</span>
+                <div>
+                  <span class="who">Я</span><span class="tc">00:48</span>
+                  <p class="ln">Хорошо, тогда закрепим сроки.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recpanel" role="img" aria-label="Плавающая панель записи: таймер и кнопки закладок">
+          <div class="rec-top">
+            <span class="rec-dot"></span>
+            <span class="rec-time">02:34</span>
+            <span class="rec-lbl">ЗАПИСЬ</span>
+          </div>
+          <div class="rec-marks">
+            <span class="mk">Важное</span>
+            <span class="mk">Вопрос</span>
+            <span class="mk">Задача</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="trust">
+    <div class="wrap">
+      <p>Почему на этом стоит остановиться</p>
+      <div class="trust-row">
+        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/></svg> 100% локально</span>
+        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h1a3 3 0 0 1 0 6h-1"/><path d="M6 10H5a3 3 0 0 0 0 6h1"/><path d="M6 13h12"/></svg> Без облака</span>
+        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14"/><path d="M5 12h9"/><path d="M5 16h6"/></svg> Распознавание на русском</span>
+        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> Узнаёт по голосу</span>
+      </div>
+    </div>
   </div>
 
-  <a class="btn" href="VoiceGrep-1.0.0.dmg">↓ Скачать VoiceGrep 1.0.0 (.dmg)</a>
-  <p class="meta">Apple Silicon · ~8 МБ · дальше обновляется само</p>
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Как это работает</p>
+        <h2>Три шага — и ничего настраивать не нужно</h2>
+        <p>VoiceGrep тихо сидит в строке меню и включается сам. Вы просто разговариваете.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <h3>Замечает звонок</h3>
+          <p>Распознаёт начало и конец разговора и сам стартует и останавливает запись. Системный звук и микрофон пишутся в две отдельные дорожки.</p>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <h3>Расшифровывает на Mac</h3>
+          <p>После звонка аудио превращается в точный транскрипт прямо на устройстве — локальным движком на CoreML, заточенным под русский язык.</p>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <h3>Узнаёт людей</h3>
+          <p>Назовите собеседника один раз — его голосовой отпечаток сохранится, и дальше реплики автоматически подписываются именами во всех встречах.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <p class="lead">VoiceGrep тихо сидит в строке меню, сам замечает начало звонка и включает
-  запись. После разговора он расшифровывает аудио прямо на устройстве и узнаёт участников
-  по голосу: каждого спикера вы называете один раз, дальше его голос узнаётся
-  автоматически во всех будущих встречах.</p>
+  <section id="features" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Возможности</p>
+        <h2>Не просто диктофон, а память о ваших разговорах</h2>
+        <p>От автоматической записи до ассистента, который отвечает по всему архиву.</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
+          <h3>Автоматическая запись</h3>
+          <p>Сам стартует и останавливает запись по началу и концу звонка. Несколько звонков подряд разбиваются на отдельные встречи.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12a0 0 0 0 1 0 0H4z"/><path d="M8 12h8M8 16h5"/></svg></div>
+          <h3>Расшифровка на устройстве</h3>
+          <p>Точная транскрипция после звонка локальным движком на CoreML, заточенным под русский язык. Ни звук, ни текст не покидают ваш Mac.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M2 20a7 7 0 0 1 14 0"/><circle cx="18" cy="9" r="2.5"/><path d="M22 18a5 5 0 0 0-6-4.5"/></svg></div>
+          <h3>Узнавание по голосу</h3>
+          <p>Назовите спикера один раз — голосовой отпечаток сохранится и будет узнавать его на будущих встречах.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 15-5-5L5 21"/><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/></svg></div>
+          <h3>Захват только звонка</h3>
+          <p>В дорожку попадает только звук приложения звонка — уведомления, музыка и «дзынь» из других программ не записываются.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></div>
+          <h3>Закладки и скриншоты</h3>
+          <p>Плавающая панель во время записи: таймер, метки (важное, вопрос, задача, решение) и скриншоты — всё привязано к моменту разговора.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v4M3 5h4M6 17v4M4 19h4"/><path d="M13 3 16 9l6 3-6 3-3 6-3-6-6-3 6-3z"/></svg></div>
+          <h3>Саммари и задачи</h3>
+          <p>Опциональная пост-обработка: краткое содержание встречи и список задач с исполнителями. Задачи предлагаются — вы подтверждаете нужные.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <h3>Ассистент по архиву</h3>
+          <p>Спросите чат по всему архиву, человеку, проекту или встрече: «о чём договорились», «какие у меня задачи от Сергея». Ответы со ссылками на разговоры.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 7l3 3M17 7l-3 3M17 17l-3-3"/></svg></div>
+          <h3>Люди и граф общения</h3>
+          <p>Карточка на каждого собеседника: роль, компания, заметки, авто-портрет по репликам и наглядный граф — кто с кем созванивался.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></div>
+          <h3>Экспорт и перенос</h3>
+          <p>Любую встречу — в Markdown (саммари, задачи, транскрипт). Голосовые отпечатки людей переносятся между вашими Mac.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3>Защита от потери</h3>
+          <p>Встреча создаётся с первой секунды и переживает сбои: после краша запись восстанавливается и дорасшифровывается. Регулярные авто-бэкапы.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <h2>Что он умеет</h2>
+  <section class="band" id="privacy">
+    <div class="wrap privacy-grid">
+      <div>
+        <p class="eyebrow" style="color:#25c26e;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.82rem;margin:0 0 12px">Приватность по умолчанию</p>
+        <h2>Ваши разговоры остаются вашими</h2>
+        <p>Запись, расшифровка и узнавание голосов работают целиком на вашем Mac. Аудио, транскрипты и голосовые отпечатки никуда не отправляются — это не настройка, которую можно случайно выключить, а то, как приложение устроено.</p>
+        <p style="font-size:.96rem">Пост-обработка и ассистент через внешнюю LLM — отдельная опция, которую вы включаете сами своим ключом.</p>
+      </div>
+      <ul class="plist">
+        <li>
+          <span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
+          <div><b>Никакого облака</b><span>Звук и текст не покидают устройство. Интернет для работы не нужен.</span></div>
+        </li>
+        <li>
+          <span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
+          <div><b>Голоса — только локально</b><span>Отпечатки хранятся на вашем Mac и переносятся лишь по вашему явному действию.</span></div>
+        </li>
+        <li>
+          <span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
+          <div><b>Внешняя LLM — по желанию</b><span>Саммари и ассистент включаются вами и работают на вашем ключе.</span></div>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-  <div class="grid">
-    <div class="card">
-      <h3><span class="ico">🎙️</span> Автоматическая запись звонков</h3>
-      <p>Распознаёт начало и конец звонка и сам стартует/останавливает запись. Системный звук
-      и микрофон пишутся в две дорожки. Несколько звонков подряд разбиваются на отдельные встречи.</p>
+  <section class="install" id="install">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Установка</p>
+        <h2>Запуск за минуту</h2>
+        <p>Приложение пока не заверено в Apple, поэтому первый запуск требует одного шага в Терминале.</p>
+      </div>
+      <ol>
+        <li>Откройте <b>.dmg</b> и перетащите <b>VoiceGrep</b> в папку «Программы».</li>
+        <li>
+          Снимите блокировку Gatekeeper — откройте «Терминал» и выполните:
+          <div class="codeblock">
+            <code id="cmd">xattr -dr com.apple.quarantine /Applications/VoiceGrep.app</code>
+            <button class="copy" id="copyBtn" type="button">Скопировать</button>
+          </div>
+        </li>
+        <li>Запустите VoiceGrep. При первой записи дайте доступ к <b>Микрофону</b> и <b>Записи экрана</b>.</li>
+      </ol>
+      <p style="text-align:center;color:var(--muted);font-size:.92rem;margin-top:22px">Дальше приложение обновляется само — повторять обход блокировки не нужно.</p>
     </div>
-    <div class="card">
-      <h3><span class="ico">📝</span> Расшифровка на устройстве</h3>
-      <p>Точная транскрипция после звонка через WhisperKit (CoreML), заточена под русский язык.
-      Никакой звук и текст не покидают ваш Mac.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">🧑‍🤝‍🧑</span> Узнавание по голосу</h3>
-      <p>Назовите собеседника один раз — голосовой отпечаток сохранится и будет узнавать его
-      на будущих встречах. Реплики автоматически подписываются именами.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">🔒</span> Захват только приложения звонка</h3>
-      <p>При авто-записи в дорожку попадает только звук приложения звонка — посторонние
-      уведомления, музыка и «дзынь» из других программ не записываются.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">🔖</span> Закладки и скриншоты на лету</h3>
-      <p>Плавающая панель во время записи: таймер, кнопки закладок (важное, вопрос, задача,
-      решение, заметка) и скриншоты экрана — всё привязывается к моменту разговора.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">✨</span> Саммари и задачи</h3>
-      <p>Опциональная пост-обработка: краткое содержание встречи и список задач (action items)
-      с исполнителями. Задачи предлагаются — вы подтверждаете нужные.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">💬</span> Ассистент по архиву</h3>
-      <p>Спросите чат по всему архиву, по конкретному человеку, проекту или встрече —
-      «о чём договорились», «какие у меня задачи от Сергея». Ответы со ссылками на разговоры.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">👥</span> Люди и граф общения</h3>
-      <p>Карточка на каждого собеседника: роль, компания, заметки, авто-портрет по его репликам
-      и наглядный граф — кто с кем созванивался.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">🗂️</span> Проекты</h3>
-      <p>Группируйте встречи в проекты, ведите по ним заметки и авто-сводки, задавайте вопросы
-      ассистенту в контексте проекта.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">📤</span> Экспорт и перенос</h3>
-      <p>Любую встречу — в Markdown (саммари, задачи, транскрипт). Голосовые отпечатки людей
-      можно перенести между своими Mac.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">🛡️</span> Защита от потери</h3>
-      <p>Встреча создаётся с первой секунды записи и переживает сбои: после краша запись
-      восстанавливается и дорасшифровывается. Регулярные авто-бэкапы базы.</p>
-    </div>
-    <div class="card">
-      <h3><span class="ico">🔄</span> Авто-обновление</h3>
-      <p>Новые версии прилетают сами — снимать блокировку Gatekeeper второй раз не нужно.</p>
-    </div>
-  </div>
+  </section>
 
-  <h2>Установка</h2>
-  <ol>
-    <li>Откройте .dmg и перетащите <b>VoiceGrep</b> в «Программы».</li>
-    <li>Приложение пока не заверено в Apple, поэтому при первом запуске macOS его
-        заблокирует. Откройте «Терминал» и выполните:
-        <p><code>xattr -dr com.apple.quarantine /Applications/VoiceGrep.app</code></p>
-        Затем запустите VoiceGrep как обычно.</li>
-    <li>При первой записи дайте доступ к <b>Микрофону</b> и <b>Записи экрана</b>.</li>
-  </ol>
-  <p class="note">Дальше приложение обновляется само — повторять обход блокировки не нужно.</p>
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Вопросы</p>
+        <h2>Частые вопросы</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Куда уходят мои записи и транскрипты? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <p>Никуда. Запись, расшифровка и узнавание голосов работают полностью на вашем Mac. Аудио, текст и голосовые отпечатки хранятся только локально и не отправляются в облако.</p>
+        </details>
+        <details>
+          <summary>На каком языке работает распознавание? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <p>Движок расшифровки работает локально на CoreML и заточен в первую очередь под русский язык, понимает и другие. Узнавание по голосу от языка не зависит.</p>
+        </details>
+        <details>
+          <summary>Какие нужны разрешения? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <p>Доступ к Микрофону и Записи экрана — их запрашивают при первой записи. Запись экрана нужна, чтобы захватить системный звук звонка; видео экрана не сохраняется.</p>
+        </details>
+        <details>
+          <summary>Нужен ли интернет? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <p>Для записи, расшифровки и узнавания — нет. Интернет нужен только для авто-обновлений и опциональной пост-обработки через внешнюю LLM, если вы её включите своим ключом.</p>
+        </details>
+        <details>
+          <summary>Какие маки поддерживаются? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <p>Mac на Apple Silicon (M1 и новее) с macOS 14.4 и выше. Размер загрузки — около 8&nbsp;МБ.</p>
+        </details>
+      </div>
+    </div>
+  </section>
 
-  <div class="privacy">
-    <h3 style="margin:0 0 .3em; font-size:1.05rem;">🔐 Приватность по умолчанию</h3>
-    <p class="note" style="margin:0;">Запись, расшифровка и узнавание голосов работают целиком
-    на вашем Mac. Аудио, транскрипты и голосовые отпечатки никуда не отправляются. Пост-обработка
-    и ассистент через внешнюю LLM — отдельная опция, которую вы включаете сами своим ключом.</p>
-  </div>
+  <section class="final">
+    <div class="wrap">
+      <div class="final-card">
+        <h2>Попробуйте VoiceGrep сегодня</h2>
+        <p>Полностью локальная запись и расшифровка звонков для macOS.</p>
+        <a class="btn lg white" href="VoiceGrep-1.1.0.dmg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Скачать для macOS
+        </a>
+        <p class="meta2">Бесплатно · Apple Silicon · ~8&nbsp;МБ · дальше обновляется само</p>
+      </div>
+    </div>
+  </section>
 
   <footer>
-    VoiceGrep · локальная запись и расшифровка звонков для macOS · все данные хранятся только на вашем Mac.
+    <div class="wrap foot-in">
+      <span>VoiceGrep — локальная запись и расшифровка звонков для macOS.</span>
+      <span>Все данные хранятся только на вашем Mac.</span>
+    </div>
   </footer>
+
+  <script>
+    document.getElementById('copyBtn').addEventListener('click', function () {
+      var b = document.getElementById('copyBtn');
+      var t = document.getElementById('cmd').textContent;
+      var done = function () {
+        var old = b.textContent; b.textContent = 'Скопировано';
+        setTimeout(function () { b.textContent = old; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(done).catch(function () {});
+      } else {
+        try {
+          var r = document.createRange(); r.selectNode(document.getElementById('cmd'));
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          document.execCommand('copy'); s.removeAllRanges(); done();
+        } catch (e) {}
+      }
+    });
+  </script>
 
 </body>
 </html>
