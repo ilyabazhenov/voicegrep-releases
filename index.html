@@ -3,26 +3,149 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VoiceGrep</title>
+<title>VoiceGrep — локальная запись и расшифровка звонков для macOS</title>
+<meta name="description" content="VoiceGrep записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт участников по голосу. Полностью локально, без облака. macOS 14+.">
 <style>
-  :root { color-scheme: light dark; }
-  body { font: 16px/1.6 -apple-system, system-ui, sans-serif; max-width: 640px;
-         margin: 8vh auto; padding: 0 24px; }
-  h1 { font-size: 2rem; margin-bottom: .2em; }
-  .sub { opacity: .7; margin-top: 0; }
-  .btn { display: inline-block; margin: 1.5em 0; padding: .8em 1.6em; border-radius: 10px;
-         background: #2b6fff; color: #fff; text-decoration: none; font-weight: 600; }
-  ol { padding-left: 1.2em; }
-  code { background: rgba(127,127,127,.18); padding: .15em .4em; border-radius: 5px;
-         font-size: .9em; }
-  .note { opacity: .65; font-size: .9em; margin-top: 2em; }
+  :root {
+    color-scheme: light dark;
+    --accent: #2b6fff;
+    --bg: #ffffff;
+    --fg: #15181d;
+    --muted: rgba(120,124,132,.95);
+    --card: rgba(127,127,127,.07);
+    --border: rgba(127,127,127,.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0c0d10; --fg: #f3f4f6; --muted: rgba(170,175,185,.9);
+            --card: rgba(255,255,255,.04); --border: rgba(255,255,255,.10); }
+  }
+  * { box-sizing: border-box; }
+  body { font: 17px/1.65 -apple-system, system-ui, "SF Pro Text", sans-serif;
+         color: var(--fg); background: var(--bg);
+         max-width: 860px; margin: 0 auto; padding: 7vh 24px 12vh;
+         -webkit-font-smoothing: antialiased; }
+  h1 { font-size: clamp(2.4rem, 6vw, 3.4rem); line-height: 1.05;
+       letter-spacing: -.02em; margin: 0 0 .25em; }
+  h2 { font-size: 1.55rem; letter-spacing: -.01em; margin: 2.6em 0 .2em; }
+  .sub { font-size: 1.25rem; opacity: .72; margin: 0 0 1.8em; max-width: 36ch; }
+  a { color: var(--accent); }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 2em; }
+  .badge { font-size: .82rem; font-weight: 600; padding: .35em .8em; border-radius: 999px;
+           background: var(--card); border: 1px solid var(--border); color: var(--muted); }
+
+  .btn { display: inline-flex; align-items: center; gap: .5em; margin: .4em 0 .6em;
+         padding: .9em 1.7em; border-radius: 12px; background: var(--accent);
+         color: #fff; text-decoration: none; font-weight: 650; font-size: 1.05rem; }
+  .btn:hover { filter: brightness(1.08); }
+  .meta { font-size: .9rem; color: var(--muted); margin: 0 0 1em; }
+
+  .lead { font-size: 1.12rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 14px; margin: 1.4em 0; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+          padding: 18px 18px 20px; }
+  .card h3 { margin: 0 0 .35em; font-size: 1.08rem; letter-spacing: -.01em;
+             display: flex; align-items: center; gap: .5em; }
+  .card p { margin: 0; font-size: .96rem; color: var(--muted); }
+  .ico { font-size: 1.2rem; line-height: 1; }
+
+  ol { padding-left: 1.3em; }
+  ol li { margin: .5em 0; }
+  code { background: rgba(127,127,127,.18); padding: .15em .45em; border-radius: 6px;
+         font-size: .88em; word-break: break-all; }
+
+  hr { border: 0; border-top: 1px solid var(--border); margin: 3em 0; }
+  .note { color: var(--muted); font-size: .92rem; }
+  .privacy { background: var(--card); border: 1px solid var(--border);
+             border-radius: 14px; padding: 18px 20px; margin-top: 1em; }
+  footer { margin-top: 4em; color: var(--muted); font-size: .88rem; }
 </style>
 </head>
 <body>
-  <h1>VoiceGrep</h1>
-  <p class="sub">Локальная запись и расшифровка звонков для macOS.</p>
 
-  <a class="btn" href="VoiceGrep-0.1.0.dmg">Скачать VoiceGrep 0.1.0 (.dmg)</a>
+  <h1>VoiceGrep</h1>
+  <p class="sub">Записывает онлайн-звонки, расшифровывает их и узнаёт собеседников по голосу — полностью на вашем Mac.</p>
+
+  <div class="badges">
+    <span class="badge">100% локально</span>
+    <span class="badge">Без облака</span>
+    <span class="badge">Распознавание на русском</span>
+    <span class="badge">macOS 14.4+</span>
+  </div>
+
+  <a class="btn" href="VoiceGrep-1.0.0.dmg">↓ Скачать VoiceGrep 1.0.0 (.dmg)</a>
+  <p class="meta">Apple Silicon · ~8 МБ · дальше обновляется само</p>
+
+  <p class="lead">VoiceGrep тихо сидит в строке меню, сам замечает начало звонка и включает
+  запись. После разговора он расшифровывает аудио прямо на устройстве и узнаёт участников
+  по голосу: каждого спикера вы называете один раз, дальше его голос узнаётся
+  автоматически во всех будущих встречах.</p>
+
+  <h2>Что он умеет</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3><span class="ico">🎙️</span> Автоматическая запись звонков</h3>
+      <p>Распознаёт начало и конец звонка и сам стартует/останавливает запись. Системный звук
+      и микрофон пишутся в две дорожки. Несколько звонков подряд разбиваются на отдельные встречи.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">📝</span> Расшифровка на устройстве</h3>
+      <p>Точная транскрипция после звонка через WhisperKit (CoreML), заточена под русский язык.
+      Никакой звук и текст не покидают ваш Mac.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🧑‍🤝‍🧑</span> Узнавание по голосу</h3>
+      <p>Назовите собеседника один раз — голосовой отпечаток сохранится и будет узнавать его
+      на будущих встречах. Реплики автоматически подписываются именами.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🔒</span> Захват только приложения звонка</h3>
+      <p>При авто-записи в дорожку попадает только звук приложения звонка — посторонние
+      уведомления, музыка и «дзынь» из других программ не записываются.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🔖</span> Закладки и скриншоты на лету</h3>
+      <p>Плавающая панель во время записи: таймер, кнопки закладок (важное, вопрос, задача,
+      решение, заметка) и скриншоты экрана — всё привязывается к моменту разговора.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">✨</span> Саммари и задачи</h3>
+      <p>Опциональная пост-обработка: краткое содержание встречи и список задач (action items)
+      с исполнителями. Задачи предлагаются — вы подтверждаете нужные.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">💬</span> Ассистент по архиву</h3>
+      <p>Спросите чат по всему архиву, по конкретному человеку, проекту или встрече —
+      «о чём договорились», «какие у меня задачи от Сергея». Ответы со ссылками на разговоры.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">👥</span> Люди и граф общения</h3>
+      <p>Карточка на каждого собеседника: роль, компания, заметки, авто-портрет по его репликам
+      и наглядный граф — кто с кем созванивался.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🗂️</span> Проекты</h3>
+      <p>Группируйте встречи в проекты, ведите по ним заметки и авто-сводки, задавайте вопросы
+      ассистенту в контексте проекта.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">📤</span> Экспорт и перенос</h3>
+      <p>Любую встречу — в Markdown (саммари, задачи, транскрипт). Голосовые отпечатки людей
+      можно перенести между своими Mac.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🛡️</span> Защита от потери</h3>
+      <p>Встреча создаётся с первой секунды записи и переживает сбои: после краша запись
+      восстанавливается и дорасшифровывается. Регулярные авто-бэкапы базы.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">🔄</span> Авто-обновление</h3>
+      <p>Новые версии прилетают сами — снимать блокировку Gatekeeper второй раз не нужно.</p>
+    </div>
+  </div>
 
   <h2>Установка</h2>
   <ol>
@@ -33,8 +156,18 @@
         Затем запустите VoiceGrep как обычно.</li>
     <li>При первой записи дайте доступ к <b>Микрофону</b> и <b>Записи экрана</b>.</li>
   </ol>
-  <p>Дальше приложение обновляется само — повторять обход блокировки не нужно.</p>
+  <p class="note">Дальше приложение обновляется само — повторять обход блокировки не нужно.</p>
 
-  <p class="note">Все данные (аудио и расшифровки) хранятся только на вашем Mac.</p>
+  <div class="privacy">
+    <h3 style="margin:0 0 .3em; font-size:1.05rem;">🔐 Приватность по умолчанию</h3>
+    <p class="note" style="margin:0;">Запись, расшифровка и узнавание голосов работают целиком
+    на вашем Mac. Аудио, транскрипты и голосовые отпечатки никуда не отправляются. Пост-обработка
+    и ассистент через внешнюю LLM — отдельная опция, которую вы включаете сами своим ключом.</p>
+  </div>
+
+  <footer>
+    VoiceGrep · локальная запись и расшифровка звонков для macOS · все данные хранятся только на вашем Mac.
+  </footer>
+
 </body>
 </html>
