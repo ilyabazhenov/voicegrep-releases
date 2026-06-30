@@ -3,13 +3,13 @@
     <channel>
         <title>VoiceGrep</title>
         <item>
-            <title>1.1.6</title>
-            <pubDate>Tue, 30 Jun 2026 16:23:50 +0400</pubDate>
-            <sparkle:version>164</sparkle:version>
-            <sparkle:shortVersionString>1.1.6</sparkle:shortVersionString>
+            <title>1.1.7</title>
+            <pubDate>Wed, 01 Jul 2026 01:28:21 +0400</pubDate>
+            <sparkle:version>171</sparkle:version>
+            <sparkle:shortVersionString>1.1.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <enclosure url="https://ilyabazhenov.github.io/voicegrep-releases/VoiceGrep-1.1.6.dmg" length="7938098" type="application/octet-stream" sparkle:edSignature="09NQFz60ux+ZWf+yPldLyIZgbgURWMohlI7C5/YXLIN0LE7owaDAPyATipqLNO10fdsbtpBW6He6c1o4YA6UBg=="/>
+            <enclosure url="https://ilyabazhenov.github.io/voicegrep-releases/VoiceGrep-1.1.7.dmg" length="8027774" type="application/octet-stream" sparkle:edSignature="Q4lc7VAGadFq674pz7Mt0xKMsthNKXPzZ1rT+RvINPzbYj973xwS/1RUEE+R5YlWm9VhtXHeoZd71lvcuP5wCA=="/>
         </item>
     </channel>
 </rss>
