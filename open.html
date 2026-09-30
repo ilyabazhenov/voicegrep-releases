@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+  Переадресация https → voicegrep://meeting/<UUID> (см. Sources/App/MeetingDeepLink.swift).
+
+  Зачем: чаты (Claude Desktop и т.п.) пропускают по клику только http(s), а схему
+  voicegrep:// молча глотают. MCP отдаёт https-ссылку на эту страницу, страница
+  открывает встречу в приложении.
+
+  Приватность: id встречи стоит во ФРАГМЕНТЕ (#meeting/<UUID>) — браузер его на
+  сервер не отправляет, в логах хостинга его нет. Никаких внешних скриптов,
+  шрифтов, счётчиков; referrer не передаётся.
+
+  Источник истины — этот файл в основном репозитории; publish.sh копирует его
+  в корень voicegrep-releases (GitHub Pages). Формат фрагмента — контракт с
+  MeetingDeepLink.webURL и тестом MeetingDeepLinkTests: ссылки уже лежат в чатах.
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Открыть в VoiceGrep</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff; --fg: #15181d; --muted: #5f636c;
+    --accent: #2b6fff; --card: #f6f7fb; --border: rgba(20,24,31,.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0a0b0e; --fg: #eceef2; --muted: #9aa0ab; --card: #15171c; --border: rgba(255,255,255,.10); }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px;
+    background: var(--bg); color: var(--fg);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+  main {
+    width: 100%; max-width: 420px; padding: 32px 28px; text-align: center;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  p { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  .button {
+    display: inline-block; padding: 10px 22px; border-radius: 10px;
+    background: var(--accent); color: #fff; text-decoration: none; font-weight: 600;
+  }
+  .hint { margin: 20px 0 0; font-size: 13px; }
+  .hint a { color: var(--accent); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <section id="ok" hidden>
+    <h1>Открываем встречу в VoiceGrep…</h1>
+    <p>Браузер может спросить разрешение открыть VoiceGrep — разрешите. Если ничего не произошло, нажмите кнопку.</p>
+    <a id="open" class="button" href="#">Открыть в VoiceGrep</a>
+    <p class="hint">Встреча открыта? Вкладку можно закрыть.<br>
+      VoiceGrep не установлен? <a href="./">Скачать</a></p>
+  </section>
+  <section id="bad" hidden>
+    <h1>Ссылка не распознана</h1>
+    <p>Ожидается ссылка на встречу VoiceGrep. Возможно, её обрезали при копировании.</p>
+    <p class="hint"><a href="./">О VoiceGrep</a></p>
+  </section>
+  <noscript><p>Для перехода нужен JavaScript.</p></noscript>
+</main>
+<script>
+  (function () {
+    // Строго: #meeting/<UUID> — и ничего больше. Всё остальное не превращаем в переход.
+    var m = /^#meeting\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/?$/i
+      .exec(window.location.hash);
+    if (!m) { document.getElementById("bad").hidden = false; return; }
+    var target = "voicegrep://meeting/" + m[1].toUpperCase();
+    document.getElementById("open").href = target;
+    document.getElementById("ok").hidden = false;
+    window.location.href = target;
+  })();
+</script>
+</body>
+</html>
