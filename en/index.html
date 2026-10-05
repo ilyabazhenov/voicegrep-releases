@@ -49,6 +49,7 @@
     font: 17px/1.6 -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Inter", sans-serif;
     color: var(--fg); background: var(--bg); margin: 0;
     -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
   }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
   a { color: var(--accent); text-decoration: none; }
@@ -77,18 +78,19 @@
     padding: .7em 1.3em; border-radius: 11px; font-weight: 650; font-size: 1rem;
     background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff;
     box-shadow: 0 4px 14px rgba(43,111,255,.35); transition: transform .12s ease, filter .12s ease;
-    font-family: inherit;
+    font-family: inherit; line-height: inherit;
   }
-  .btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+  @media (hover: hover) { .btn:hover { filter: brightness(1.07); transform: translateY(-1px); } }
   .btn.lg { padding: .95em 1.9em; font-size: 1.08rem; border-radius: 13px; }
   .btn.ghost {
     background: var(--card-2); color: var(--fg); box-shadow: none; border: 1px solid var(--border);
   }
-  .nav-cta { padding: .55em 1.1em; font-size: .92rem; }
+  .nav-cta { padding: .55em 1.1em; font-size: .92rem; white-space: nowrap; }
   .lang { font-size: .85rem; font-weight: 650; color: var(--muted); padding: .3em .65em; border-radius: 8px; border: 1px solid var(--border); }
   .lang:hover { color: var(--fg); }
-  @media (max-width: 720px) { .nav-links { gap: 14px; } }
-  @media (max-width: 720px) { .nav-links a.txt { display: none; } }
+  @media (max-width: 860px) { .nav-links { gap: 14px; } }
+  .nav-links a.txt { white-space: nowrap; }
+  @media (max-width: 860px) { .nav-links a.txt { display: none; } }
 
   /* ---------- hero ---------- */
   .hero { position: relative; overflow: hidden; padding: 76px 0 40px; }
@@ -150,7 +152,6 @@
     background: var(--card); border: 1px solid var(--border); border-radius: 14px;
     box-shadow: var(--shadow-lg); padding: 13px 14px;
   }
-  @media (max-width: 480px) { .recpanel { right: 4px; bottom: -16px; width: 168px; } }
   .rec-top { display: flex; align-items: center; gap: 8px; }
   .rec-dot { width: 9px; height: 9px; border-radius: 50%; background: #ff3b30; animation: blink 1.4s ease-in-out infinite; }
   @keyframes blink { 50% { opacity: .25; } }
@@ -186,7 +187,7 @@
   @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s; }
-  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(43,111,255,.4); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); }
+  @media (hover: hover) { .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(43,111,255,.4); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); } }
   .card .ic { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; margin-bottom: 14px; color: var(--accent); background: rgba(43,111,255,.11); background: color-mix(in srgb, var(--accent) 11%, transparent); }
   .card h3 { font-size: 1.08rem; margin: 0 0 .35em; }
   .card p { font-size: .95rem; color: var(--muted); margin: 0; line-height: 1.5; }
@@ -228,14 +229,98 @@
   .final-card { position: relative; overflow: hidden; border-radius: 24px; padding: 60px 32px; color: #fff;
     background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: var(--shadow-lg); }
   .final-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(80% 120% at 80% 0%, rgba(255,255,255,.18), transparent 60%); pointer-events: none; }
-  .final-card h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: 0 0 .35em; }
+  .final-card h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.15; margin: 0 0 .35em; }
   .final-card p { font-size: 1.15rem; opacity: .92; margin: 0 0 1.6em; }
   .btn.white { background: #fff; color: var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
   .final-card .meta2 { margin-top: 16px; font-size: .9rem; opacity: .85; }
 
   footer { border-top: 1px solid var(--border); padding: 36px 0; color: var(--muted); font-size: .9rem; }
   .foot-in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; }
+
+  /* ---------- touch devices: the app is Mac-only, so the main action is "send the link to your Mac" ---------- */
+  .only-touch { display: none !important; }
+  html.touch .only-touch { display: inline-flex !important; }
+  html.touch p.only-touch { display: block !important; }
+  html.touch .no-touch { display: none !important; }
+  .touch-note { font-size: .9rem; color: var(--muted); margin: 14px 0 0; line-height: 1.5; }
+
+  /* ---------- phones ---------- */
+  @media (max-width: 560px) {
+    .wrap { padding: 0 16px; }
+    .lang, .nav-cta { min-height: 40px; display: inline-flex; align-items: center; }
+    .lang { padding: 0 .75em; }
+    .btn.lg { padding-left: 1.2em; padding-right: 1.2em; }
+    .hero { padding: 36px 0 28px; }
+    .pill { font-size: .8rem; border-radius: 12px; align-items: flex-start; margin-bottom: 18px; }
+    .pill .dot { flex: none; margin-top: .42em; }
+    .sub { font-size: 1.1rem; margin-bottom: 1.4em; }
+    .cta-row { flex-direction: column; align-items: stretch; gap: 10px; }
+    .cta-row .btn { justify-content: center; }
+    .meta { justify-content: center; font-size: .85rem; }
+    .touch-note { text-align: center; }
+
+    /* window mockup: drop the sidebar so the transcript gets the full width,
+       and let the recording panel hang off the bottom edge instead of covering a line */
+    .win-body { grid-template-columns: 1fr; min-height: 0; }
+    .side { display: none; }
+    .pane { padding: 14px 14px 40px; }
+    .recpanel { position: relative; right: auto; bottom: auto; width: 190px; margin: -30px 10px 0 auto; }
+
+    .trust { padding-top: 22px; }
+    .trust-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .chip { justify-content: center; text-align: center; font-size: .85rem; padding: .6em .7em; }
+
+    section { padding: 44px 0; }
+    .sec-head { margin-bottom: 26px; }
+    .sec-head p { font-size: 1.02rem; }
+
+    .steps { gap: 12px; }
+    .step { padding: 18px; display: grid; grid-template-columns: 32px 1fr; column-gap: 12px; align-items: center; }
+    .step .n { width: 32px; height: 32px; margin: 0; }
+    .step h3 { margin: 0; }
+    .step p { grid-column: 1 / -1; margin-top: 10px; }
+
+    /* features: icon beside the text — 11 stacked cards were most of the page's height */
+    .grid { gap: 10px; }
+    .card { padding: 16px; display: grid; grid-template-columns: 40px 1fr; column-gap: 14px; align-items: start; }
+    .card .ic { width: 40px; height: 40px; margin: 0; grid-row: span 2; }
+    .card h3 { margin: 1px 0 .25em; font-size: 1.02rem; }
+    .card p { font-size: .92rem; }
+
+    .plist li { padding: 14px; }
+
+    .install li { padding: 16px 16px 16px 54px; }
+    .install li::before { left: 14px; top: 15px; width: 28px; height: 28px; }
+    .codeblock { flex-direction: column; align-items: stretch; }
+    .codeblock code { word-break: normal; overflow-wrap: anywhere; }
+    .copy { align-self: flex-start; min-height: 40px; padding: 0 16px; }
+
+    summary { padding: 16px 18px; font-size: 1rem; }
+    details p { padding: 0 18px 18px; }
+
+    section.final { padding-top: 8px; }
+    .final-card { padding: 40px 20px; border-radius: 20px; }
+    .final-card .btn { width: 100%; justify-content: center; }
+
+    footer { padding: 28px 0; }
+    .foot-in { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+  @media (max-width: 380px) {
+    .nav-links { gap: 8px; }
+    .brand { font-size: 1rem; gap: 8px; }
+    .nav-cta { padding: 0 .8em; font-size: .85rem; }
+    .btn.lg { font-size: 1rem; padding-left: 1em; padding-right: 1em; }
+    .final-card { padding: 36px 14px; }
+    .final-card .btn { padding-left: .8em; padding-right: .8em; }
+  }
 </style>
+<script>
+  // Phones/tablets can't run a Mac app: swap the download CTAs for "send the link to your Mac".
+  // Set before first paint so the buttons don't flash. Macs report maxTouchPoints 0; iPads don't.
+  if (navigator.maxTouchPoints > 0 && window.matchMedia && matchMedia('(pointer: coarse)').matches) {
+    document.documentElement.classList.add('touch');
+  }
+</script>
 </head>
 <body>
 
@@ -253,7 +338,8 @@
         <a class="txt" href="#privacy">Privacy</a>
         <a class="txt" href="#faq">FAQ</a>
         <a class="lang" href="../" hreflang="ru" lang="ru" title="Русская версия">RU</a>
-        <a class="btn nav-cta" href="../VoiceGrep-1.9.0.dmg">Download</a>
+        <a class="btn nav-cta no-touch" href="../VoiceGrep-1.9.0.dmg">Download</a>
+        <button class="btn nav-cta only-touch js-share" type="button" data-done="Copied" aria-label="Send link to your Mac"><span class="lbl">Send to Mac</span></button>
       </div>
     </div>
   </nav>
@@ -265,10 +351,14 @@
         <h1>Call transcripts, <span class="grad">right on your&nbsp;Mac</span></h1>
         <p class="sub">VoiceGrep records your online calls, transcribes them on-device and recognizes who’s speaking by voice.</p>
         <div class="cta-row">
-          <a class="btn lg" href="../VoiceGrep-1.9.0.dmg">
+          <a class="btn lg no-touch" href="../VoiceGrep-1.9.0.dmg">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
             Download for macOS
           </a>
+          <button class="btn lg only-touch js-share" type="button" data-done="Link copied">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+            <span class="lbl">Send link to your Mac</span>
+          </button>
           <a class="btn ghost lg" href="#how">See how it works</a>
         </div>
         <div class="meta">
@@ -279,6 +369,7 @@
           <span>Updates itself</span>
           <span>Interface in Russian</span>
         </div>
+        <p class="touch-note only-touch">VoiceGrep is a Mac app. Send yourself the link and download it on your computer — or <a href="../VoiceGrep-1.9.0.dmg">download the .dmg to this device</a>.</p>
       </div>
 
       <div class="shot">
@@ -534,10 +625,14 @@
       <div class="final-card">
         <h2>Try VoiceGrep today</h2>
         <p>Fully local call recording and transcription for macOS.</p>
-        <a class="btn lg white" href="../VoiceGrep-1.9.0.dmg">
+        <a class="btn lg white no-touch" href="../VoiceGrep-1.9.0.dmg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
           Download for macOS
         </a>
+        <button class="btn lg white only-touch js-share" type="button" data-done="Link copied">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+          <span class="lbl">Send link to your Mac</span>
+        </button>
         <p class="meta2">Free · Apple Silicon · ~23&nbsp;MB · updates itself</p>
       </div>
     </div>
@@ -555,7 +650,7 @@
       var b = document.getElementById('copyBtn');
       var t = document.getElementById('cmd').textContent;
       var done = function () {
-        var old = b.textContent; b.textContent = 'Copied';
+        var old = b.getAttribute('data-orig') || b.textContent; b.setAttribute('data-orig', old); b.textContent = 'Copied';
         setTimeout(function () { b.textContent = old; }, 1600);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -567,6 +662,43 @@
           document.execCommand('copy'); s.removeAllRanges(); done();
         } catch (e) {}
       }
+    });
+
+    document.querySelectorAll('.js-share').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var url = location.origin + location.pathname;
+        var lbl = b.querySelector('.lbl');
+        var flash = function () {
+          // remember the label once, so a double tap can't make the "copied" text stick
+          var orig = b.getAttribute('data-orig') || lbl.textContent;
+          b.setAttribute('data-orig', orig);
+          lbl.textContent = b.getAttribute('data-done');
+          clearTimeout(b._t); b._t = setTimeout(function () { lbl.textContent = orig; }, 1800);
+        };
+        var legacyCopy = function () {
+          try {
+            var t = document.createElement('textarea');
+            t.value = url; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+            document.body.appendChild(t); t.select(); t.setSelectionRange(0, url.length);
+            var ok = document.execCommand('copy'); document.body.removeChild(t);
+            if (ok) { flash(); return; }
+          } catch (e) {}
+          window.prompt('Copy the link', url);
+        };
+        var copy = function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(flash, legacyCopy);
+          } else {
+            legacyCopy();
+          }
+        };
+        if (navigator.share) {
+          navigator.share({ title: 'VoiceGrep', url: url })
+            .catch(function (e) { if (!e || e.name !== 'AbortError') copy(); });
+        } else {
+          copy();
+        }
+      });
     });
   </script>
 
