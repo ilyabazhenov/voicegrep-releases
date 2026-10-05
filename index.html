@@ -928,16 +928,10 @@
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
           <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="chip f-task"><i>✓</i>Задача</span><span class="tc">03:51</span></div>
-          <p class="ln">Скачиваешь, перетаскиваешь в «Программы». Он пока не заверен в Apple, поэтому один раз снимаешь блокировку в Терминале — дальше обновляется сам.</p>
+          <p class="ln">Скачиваешь, перетаскиваешь в «Программы» и запускаешь. Он подписан и заверен в Apple — никаких команд в Терминале, а дальше обновляется сам.</p>
           <div class="embed">
             <ol class="inst">
               <li>Откройте <b>.dmg</b> и перетащите <b>VoiceGrep</b> в папку «Программы».</li>
-              <li>Снимите блокировку Gatekeeper — откройте «Терминал» и выполните:
-                <div class="codeblock">
-                  <code id="cmd">xattr -dr com.apple.quarantine /Applications/VoiceGrep.app</code>
-                  <button class="copy" id="copyBtn" type="button">Скопировать</button>
-                </div>
-              </li>
               <li>Запустите VoiceGrep — мастер первого запуска попросит доступ к <b>Микрофону</b> и <b>Записи экрана</b>.</li>
             </ol>
           </div>
@@ -1000,13 +994,6 @@
                   <a class="btn sm no-touch" href="VoiceGrep-1.10.0.dmg">Скачать .dmg</a>
                   <button class="btn sm only-touch js-share" type="button" data-done="Ссылка скопирована"><span class="lbl">Отправить ссылку на Mac</span></button>
                 </div>
-              </div>
-            </li>
-            <li class="task">
-              <span class="box" aria-hidden="true">✓</span>
-              <div>
-                <div class="t-title">Снять блокировку Gatekeeper — одна команда</div>
-                <div class="t-meta"><span class="who-mini"><span class="av" data-spk="me">Я</span>Я</span><a href="#t-install">к команде ↑</a></div>
               </div>
             </li>
             <li class="task js-task-name">
@@ -1411,24 +1398,6 @@
         userMarks++;
         toast('Метка «' + f[1] + '» на ' + fmt(t) + ' — видна на дорожке сверху.');
       });
-    });
-
-    // ---------- copy the Gatekeeper command ----------
-    $('#copyBtn').addEventListener('click', function () {
-      var b = this, t = $('#cmd').textContent;
-      var done = function () {
-        var old = b.getAttribute('data-orig') || b.textContent; b.setAttribute('data-orig', old); b.textContent = 'Скопировано';
-        setTimeout(function () { b.textContent = old; }, 1600);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(t).then(done).catch(function () {});
-      } else {
-        try {
-          var rg = document.createRange(); rg.selectNode($('#cmd'));
-          var s = window.getSelection(); s.removeAllRanges(); s.addRange(rg);
-          document.execCommand('copy'); s.removeAllRanges(); done();
-        } catch (e) {}
-      }
     });
 
     // ---------- touch: share / copy the page link instead of downloading ----------

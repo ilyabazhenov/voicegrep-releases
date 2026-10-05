@@ -928,16 +928,10 @@
         <span class="av" data-spk="s1" data-ini="s1">S1</span>
         <div class="body">
           <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="chip f-task"><i>✓</i>Task</span><span class="tc">04:15</span></div>
-          <p class="ln">Download it and drag it into Applications. It isn’t notarized by Apple yet, so you clear the quarantine once in Terminal — after that it updates itself.</p>
+          <p class="ln">Download it, drag it into Applications and launch it. It’s signed and notarized by Apple — no Terminal commands, and after that it updates itself.</p>
           <div class="embed">
             <ol class="inst">
               <li>Open the <b>.dmg</b> and drag <b>VoiceGrep</b> into your Applications folder.</li>
-              <li>Clear the Gatekeeper quarantine — open Terminal and run:
-                <div class="codeblock">
-                  <code id="cmd">xattr -dr com.apple.quarantine /Applications/VoiceGrep.app</code>
-                  <button class="copy" id="copyBtn" type="button">Copy</button>
-                </div>
-              </li>
               <li>Launch VoiceGrep. The first-run setup asks for access to the <b>Microphone</b> and <b>Screen Recording</b>.</li>
               <li id="t-lang-step">For calls in English, open Settings → <b lang="ru">Транскрипция</b> (Transcription) → <b lang="ru">Язык встреч</b> (Meeting language) and pick <b>English</b> or <b lang="ru">Автоопределение</b> (Auto-detect). The default is Russian, which won’t transcribe English speech correctly; the setting applies to new transcriptions.</li>
             </ol>
@@ -1001,13 +995,6 @@
                   <a class="btn sm no-touch" href="../VoiceGrep-1.10.0.dmg">Download .dmg</a>
                   <button class="btn sm only-touch js-share" type="button" data-done="Link copied"><span class="lbl">Send link to your Mac</span></button>
                 </div>
-              </div>
-            </li>
-            <li class="task">
-              <span class="box" aria-hidden="true">✓</span>
-              <div>
-                <div class="t-title">Clear the Gatekeeper quarantine — one command</div>
-                <div class="t-meta"><span class="who-mini"><span class="av" data-spk="me">Me</span>Me</span><a href="#t-install">to the command ↑</a></div>
               </div>
             </li>
             <li class="task">
@@ -1413,24 +1400,6 @@
         userMarks++;
         toast('“' + f[1] + '” mark at ' + fmt(t) + ' — it’s on the timeline above.');
       });
-    });
-
-    // ---------- copy the Gatekeeper command ----------
-    $('#copyBtn').addEventListener('click', function () {
-      var b = this, t = $('#cmd').textContent;
-      var done = function () {
-        var old = b.getAttribute('data-orig') || b.textContent; b.setAttribute('data-orig', old); b.textContent = 'Copied';
-        setTimeout(function () { b.textContent = old; }, 1600);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(t).then(done).catch(function () {});
-      } else {
-        try {
-          var rg = document.createRange(); rg.selectNode($('#cmd'));
-          var s = window.getSelection(); s.removeAllRanges(); s.addRange(rg);
-          document.execCommand('copy'); s.removeAllRanges(); done();
-        } catch (e) {}
-      }
     });
 
     // ---------- touch: share / copy the page link instead of downloading ----------
