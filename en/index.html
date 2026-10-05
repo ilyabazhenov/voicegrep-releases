@@ -11,307 +11,440 @@
 <meta property="og:url" content="https://ilyabazhenov.github.io/voicegrep-releases/en/">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ru_RU">
-<meta name="theme-color" content="#0a0b0e">
+<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)">
 <link rel="alternate" hreflang="ru" href="https://ilyabazhenov.github.io/voicegrep-releases/">
 <link rel="alternate" hreflang="en" href="https://ilyabazhenov.github.io/voicegrep-releases/en/">
 <link rel="alternate" hreflang="x-default" href="https://ilyabazhenov.github.io/voicegrep-releases/en/">
 <style>
+  /* Концепция: страница — это карточка встречи в VoiceGrep. Контент — расшифровка звонка,
+     где трое решают, ставить ли приложение; ключевые возможности посетитель трогает руками
+     (дорожки говорящих, «назвать один раз», поиск по встрече, метки). */
   :root {
     color-scheme: light dark;
-    --accent: #2b6fff;
-    --accent-2: #7b5cff;
-    --bg: #ffffff;
-    --bg-soft: #f6f7fb;
-    --fg: #15181d;
-    --muted: #5f636c;
-    --card: #ffffff;
-    --card-2: #f6f7fb;
-    --border: rgba(20,24,31,.10);
-    --shadow: 0 1px 2px rgba(20,24,31,.04), 0 12px 40px rgba(20,24,31,.10);
-    --shadow-lg: 0 2px 6px rgba(20,24,31,.06), 0 30px 80px rgba(20,24,31,.18);
-    --win: #ffffff;
-    --win-bar: #ececf1;
-    --win-side: #f4f4f8;
+    --bg: #f7f5f0;
+    --bg-2: #efece4;
+    --card: #fffefb;
+    --fg: #17181b;
+    --muted: #66655f;
+    --faint: #716f67;
+    --line: rgba(23,24,27,.11);
+    --line-2: rgba(23,24,27,.06);
+    --accent: #087a73;
+    --me: #0c7f75;
+    --s1: #5856d6;
+    --s2: #c94431;
+    --on-c: #fff;
+    --unnamed: #a9a69c;
+    --mark: #ffe070;
+    --f-imp: #8f5e00; --f-q: #7c4ddb; --f-task: #2368d8; --f-dec: #188547;
+    --shadow: 0 1px 2px rgba(23,24,27,.05), 0 10px 30px rgba(23,24,27,.07);
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+    --serif: ui-serif, "New York", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --s1-now: var(--unnamed);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #0a0b0e; --bg-soft: #101218; --fg: #f3f4f6; --muted: #9aa0ac;
-      --card: #14161c; --card-2: #101218;
-      --border: rgba(255,255,255,.10);
-      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.5);
-      --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 30px 80px rgba(0,0,0,.6);
-      --win: #16181f; --win-bar: #20232c; --win-side: #1a1d25;
+      --bg: #0e0f12; --bg-2: #17191d; --card: #15171b;
+      --fg: #f1f0ec; --muted: #a09e97; --faint: #86847d; --on-c: #0e0f12;
+      --line: rgba(255,255,255,.11); --line-2: rgba(255,255,255,.06);
+      --accent: #3cc9bb; --me: #2fbfb0; --s1: #8c8aff; --s2: #ff7a66; --unnamed: #7f7d76;
+      --mark: rgba(255,214,10,.38);
+      --f-imp: #f5b638; --f-q: #a78bfa; --f-task: #5b9bff; --f-dec: #3ccb7f;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
     }
   }
+  html.named { --s1-now: var(--s1); }
+  [data-spk="me"] { --c: var(--me); }
+  [data-spk="s1"] { --c: var(--s1-now); }
+  [data-spk="s2"] { --c: var(--s2); }
+
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  html.playing { scroll-behavior: auto; }
   body {
-    font: 17px/1.6 -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Inter", sans-serif;
-    color: var(--fg); background: var(--bg); margin: 0;
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.6 var(--sans);
     -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
     -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
   }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .narrow { max-width: 820px; }
   a { color: var(--accent); text-decoration: none; }
-  h1, h2, h3 { letter-spacing: -.02em; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  button { font: inherit; color: inherit; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 
-  /* ---------- nav ---------- */
-  nav {
-    position: sticky; top: 0; z-index: 50;
-    backdrop-filter: saturate(180%) blur(18px);
-    background: var(--bg);
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.12rem; color: var(--fg); }
-  .logo {
-    width: 30px; height: 30px; border-radius: 8px; flex: none;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    display: grid; place-items: center; color: #fff; box-shadow: 0 3px 10px rgba(43,111,255,.4);
-  }
-  .nav-links { display: flex; align-items: center; gap: 26px; }
-  .nav-links a.txt { color: var(--muted); font-size: .95rem; font-weight: 550; }
-  .nav-links a.txt:hover { color: var(--fg); }
+  /* ---------- buttons ---------- */
   .btn {
-    display: inline-flex; align-items: center; gap: .5em; border: 0; cursor: pointer;
-    padding: .7em 1.3em; border-radius: 11px; font-weight: 650; font-size: 1rem;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff;
-    box-shadow: 0 4px 14px rgba(43,111,255,.35); transition: transform .12s ease, filter .12s ease;
-    font-family: inherit; line-height: inherit;
+    display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+    border: 1px solid transparent; cursor: pointer; text-decoration: none !important;
+    padding: .72em 1.3em; border-radius: 12px; font-weight: 650; font-size: 1rem; line-height: 1.2;
+    background: var(--fg); color: var(--bg); transition: transform .12s ease, opacity .12s ease;
   }
-  @media (hover: hover) { .btn:hover { filter: brightness(1.07); transform: translateY(-1px); } }
-  .btn.lg { padding: .95em 1.9em; font-size: 1.08rem; border-radius: 13px; }
-  .btn.ghost {
-    background: var(--card-2); color: var(--fg); box-shadow: none; border: 1px solid var(--border);
+  @media (hover: hover) { .btn:hover { transform: translateY(-1px); opacity: .92; } }
+  .btn.lg { padding: .95em 1.7em; font-size: 1.06rem; border-radius: 14px; }
+  .btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+  .btn.sm { padding: .5em .95em; font-size: .9rem; border-radius: 10px; }
+
+  /* ---------- nav + docked player ---------- */
+  nav.top {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 84%, transparent);
+    -webkit-backdrop-filter: saturate(160%) blur(16px); backdrop-filter: saturate(160%) blur(16px);
+    border-bottom: 1px solid var(--line);
   }
-  .nav-cta { padding: .55em 1.1em; font-size: .92rem; white-space: nowrap; }
-  .lang { font-size: .85rem; font-weight: 650; color: var(--muted); padding: .3em .65em; border-radius: 8px; border: 1px solid var(--border); }
-  .lang:hover { color: var(--fg); }
-  @media (max-width: 860px) { .nav-links { gap: 14px; } }
-  .nav-links a.txt { white-space: nowrap; }
-  @media (max-width: 860px) { .nav-links a.txt { display: none; } }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 58px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; color: var(--fg); text-decoration: none !important; }
+  .brand svg { flex: none; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+  .nav-links { display: flex; align-items: center; gap: 22px; }
+  .nav-links a.txt { color: var(--muted); font-size: .93rem; font-weight: 550; white-space: nowrap; }
+  .nav-links a.txt:hover { color: var(--fg); text-decoration: none; }
+  .lang { font-size: .82rem; font-weight: 650; color: var(--muted); padding: .3em .6em; border-radius: 8px; border: 1px solid var(--line); }
+  .lang:hover { color: var(--fg); text-decoration: none; }
+  .nav-cta { padding: .5em 1em; font-size: .9rem; border-radius: 10px; white-space: nowrap; }
+  @media (max-width: 860px) { .nav-links a.txt { display: none; } .nav-links { gap: 12px; } }
+
+  /* the hero's speaker lanes "dock" into the nav as a slim player once they scroll away */
+  .player {
+    position: absolute; left: 0; right: 0; top: 100%;
+    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    -webkit-backdrop-filter: saturate(160%) blur(16px); backdrop-filter: saturate(160%) blur(16px);
+    border-bottom: 1px solid var(--line);
+    opacity: 0; transform: translateY(-6px); visibility: hidden;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s;
+  }
+  body.docked .player { opacity: 1; transform: none; visibility: visible; }
+  .player-in { display: flex; align-items: center; gap: 12px; height: 44px; }
+  .play {
+    flex: none; width: 30px; height: 30px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--fg); color: var(--bg); display: grid; place-items: center; padding: 0;
+  }
+  .js-play .i-pause { display: none; }
+  html.playing .js-play .i-play { display: none; }
+  html.playing .js-play .i-pause { display: block; }
+  .clock { font: 500 .8rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .clock b { color: var(--fg); font-weight: 600; }
+  .speed { font: 600 .74rem/1 var(--mono); color: var(--muted); border: 1px solid var(--line); background: transparent; border-radius: 6px; padding: 4px 6px; cursor: pointer; flex: none; }
+  .speed:hover { color: var(--fg); }
+  .mini { position: relative; flex: 1; height: 10px; border-radius: 5px; background: var(--line-2); overflow: visible; min-width: 60px; }
+  .mini .seg { position: absolute; top: 0; bottom: 0; border-radius: 3px; background: var(--c); cursor: pointer; transition: background-color .7s ease, opacity .2s; }
+  .cloud { display: inline-flex; align-items: center; gap: 6px; font: 500 .76rem/1 var(--mono); color: var(--muted); white-space: nowrap; flex: none; }
+  .cloud b { color: var(--accent); font-weight: 650; }
 
   /* ---------- hero ---------- */
-  .hero { position: relative; overflow: hidden; padding: 76px 0 40px; }
-  .hero::before {
-    content: ""; position: absolute; inset: -40% 0 auto 0; height: 720px; z-index: -1;
-    background:
-      radial-gradient(60% 60% at 20% 0%, rgba(43,111,255,.16), transparent 70%),
-      radial-gradient(55% 55% at 85% 10%, rgba(123,92,255,.16), transparent 70%);
-    pointer-events: none;
+  .hero { padding: 64px 0 26px; }
+  .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font: 500 .84rem/1.4 var(--mono); color: var(--muted); margin: 0 0 22px; }
+  .kicker .live { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); font-weight: 600; }
+  .kicker .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); }
+  h1 {
+    font-family: var(--serif); font-weight: 600; letter-spacing: -.02em;
+    font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.02; margin: 0 0 .32em; max-width: 20ch;
   }
-  .hero-grid { display: grid; grid-template-columns: 1.02fr 1fr; gap: 48px; align-items: center; }
-  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
-  .pill {
-    display: inline-flex; align-items: center; gap: 7px; font-size: .86rem; font-weight: 600;
-    padding: .4em .9em; border-radius: 999px; color: var(--accent);
-    background: rgba(43,111,255,.12);
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    border: 1px solid rgba(43,111,255,.24);
-    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent); margin-bottom: 22px;
-  }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: #25c26e; box-shadow: 0 0 0 4px rgba(37,194,110,.2); }
-  h1 { font-size: clamp(2.5rem, 5.2vw, 3.7rem); line-height: 1.03; margin: 0 0 .35em; }
-  .grad { background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .sub { font-size: 1.24rem; line-height: 1.5; color: var(--muted); margin: 0 0 1.7em; max-width: 30ch; }
-  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
-  .meta { font-size: .9rem; color: var(--muted); margin: 1.1em 0 0; display: flex; flex-wrap: wrap; gap: 6px 16px; }
-  .meta span { display: inline-flex; align-items: center; gap: 6px; }
-  .meta svg { opacity: .8; }
+  .sub { font-size: 1.2rem; line-height: 1.55; color: var(--muted); margin: 0 0 1.6em; max-width: 50ch; }
+  .sub em { font-style: normal; color: var(--fg); }
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .88rem; color: var(--muted); margin: 1.1em 0 0; }
+  .skip { font-size: .95rem; font-weight: 600; margin-left: 6px; }
+  .touch-note { font-size: .9rem; color: var(--muted); margin: 14px 0 0; line-height: 1.5; max-width: 52ch; }
 
-  /* ---------- mac window mockup ---------- */
-  .shot { position: relative; }
-  .win {
-    border-radius: 14px; overflow: hidden; background: var(--win);
-    border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+  /* ---------- speaker lanes (diarization view) ---------- */
+  .diar {
+    margin: 46px 0 0; padding: 18px 20px 16px; border-radius: 18px;
+    background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow);
   }
-  .titlebar { display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: var(--win-bar); border-bottom: 1px solid var(--border); }
-  .tl { width: 12px; height: 12px; border-radius: 50%; }
-  .tl.r { background: #ff5f57; } .tl.y { background: #febc2e; } .tl.g { background: #28c840; }
-  .titlebar .ttl { margin-left: 8px; font-size: .82rem; font-weight: 600; color: var(--muted); }
-  .win-body { display: grid; grid-template-columns: 116px 1fr; min-height: 318px; }
-  .side { background: var(--win-side); border-right: 1px solid var(--border); padding: 12px 8px; }
-  .side .it { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 8px; font-size: .82rem; color: var(--muted); font-weight: 550; }
-  .side .it.on { background: rgba(43,111,255,.14); background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
-  .side .it svg { opacity: .9; }
-  .pane { padding: 16px 18px; }
-  .pane h4 { margin: 0 0 2px; font-size: .98rem; }
-  .pane .when { font-size: .76rem; color: var(--muted); margin: 0 0 14px; }
-  .turn { display: flex; gap: 10px; margin-bottom: 13px; }
-  .av { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font-size: .68rem; font-weight: 700; }
-  .av.a { background: #2b6fff; } .av.b { background: #e0457b; } .av.c { background: #16a34a; }
-  .turn .who { font-size: .8rem; font-weight: 650; }
-  .turn .tc { font-size: .7rem; color: var(--muted); font-weight: 500; margin-left: 6px; }
-  .turn .ln { font-size: .82rem; color: var(--fg); margin: 2px 0 0; line-height: 1.45; opacity: .9; }
-  .skl { height: 7px; border-radius: 4px; background: var(--border); margin-top: 6px; }
+  .diar-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .diar-head .ttl { font-weight: 650; font-size: .95rem; }
+  .diar-head .clock { margin-left: 2px; }
+  .diar-head .cloud { margin-left: auto; }
+  .lanes { --lw: 230px; display: grid; grid-template-columns: var(--lw) 1fr; row-gap: 9px; column-gap: 14px; align-items: center; }
+  .flags { grid-column: 2; grid-row: 1; position: relative; height: 18px; }
+  .lane-name { grid-column: 1; position: relative; display: flex; align-items: center; gap: 9px; min-width: 0; font-size: .9rem; font-weight: 600; }
+  .lane-name .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lane-name .hint { font-size: .74rem; font-weight: 500; color: var(--faint); white-space: nowrap; }
+  .track { grid-column: 2; position: relative; height: 26px; border-radius: 7px; background: var(--line-2); }
+  .track .seg { position: absolute; top: 3px; bottom: 3px; border-radius: 5px; background: var(--c); cursor: pointer; transition: background-color .7s ease, opacity .2s; }
+  .track .seg:hover { opacity: .8; }
+  .overlay { grid-column: 2; grid-row: 1 / 5; position: relative; align-self: stretch; pointer-events: none; }
+  .ph { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--fg); left: 0; }
+  .ph::before { content: ""; position: absolute; top: -3px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--fg); }
+  .mini .ph { top: -4px; bottom: -4px; }
+  .mini .ph::before { display: none; }
+  .tick { position: absolute; top: -2px; bottom: -2px; width: 3px; margin-left: -1.5px; border-radius: 2px; background: var(--mark); box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 25%, transparent); }
+  .flag {
+    position: absolute; top: 0; transform: translateX(-50%); cursor: pointer; pointer-events: auto;
+    width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center;
+    font: 700 .68rem/1 var(--sans); color: var(--on-c); background: var(--fc); border: 0; padding: 0;
+  }
+  .flag.user { box-shadow: 0 0 0 2px var(--card); animation: pop .35s ease; }
+  @keyframes pop { from { transform: translateX(-50%) scale(.3); } to { transform: translateX(-50%) scale(1); } }
+  .mini .flag { display: none; }
+  .f-imp { --fc: var(--f-imp); } .f-q { --fc: var(--f-q); } .f-task { --fc: var(--f-task); } .f-dec { --fc: var(--f-dec); }
+  .diar figcaption { margin-top: 14px; font-size: .84rem; color: var(--faint); }
 
-  /* floating recording panel */
-  .recpanel {
-    position: absolute; right: -14px; bottom: -22px; width: 196px;
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    box-shadow: var(--shadow-lg); padding: 13px 14px;
+  /* avatars */
+  .av {
+    flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    font: 700 .7rem/1 var(--sans); color: var(--on-c); background: var(--c); letter-spacing: .01em;
+    transition: background-color .7s ease, color .7s ease, border-color .7s ease;
+    border: 1.5px solid transparent;
   }
+  html:not(.named) .av[data-spk="s1"] { background: transparent; color: var(--muted); border: 1.5px dashed var(--unnamed); }
+
+  .name-btn {
+    font-size: .74rem; font-weight: 650; padding: 3px 9px; border-radius: 999px; cursor: pointer;
+    color: var(--s1); background: color-mix(in srgb, var(--s1) 12%, transparent); border: 1px solid color-mix(in srgb, var(--s1) 30%, transparent);
+    white-space: nowrap;
+  }
+  html.named .name-btn { display: none; }
+  .namer[hidden] { display: none; }
+  .namer.pop {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; width: 300px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; box-shadow: var(--shadow);
+  }
+
+  /* ---------- transcript ---------- */
+  .tx { padding: 30px 0 10px; }
+  .tx-bar { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 18px; }
+  .tx-bar h2 { font-size: 1.05rem; margin: 0; letter-spacing: 0; }
+  .tx-bar span { font: 500 .8rem/1 var(--mono); color: var(--faint); }
+
+  .turn {
+    position: relative; display: grid; grid-template-columns: 36px 1fr; column-gap: 14px;
+    padding: 14px 16px 14px 92px; margin: 0 -16px 0 -92px; border-radius: 16px;
+    scroll-margin-top: 130px; transition: background-color .25s ease;
+  }
+  .turn .av { width: 36px; height: 36px; font-size: .78rem; margin-top: 2px; }
+  .who { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-height: 1.4em; }
+  .who .nm { font-weight: 650; font-size: .92rem; color: var(--c); transition: color .7s ease; border-radius: 4px; }
+  .tc { position: absolute; left: 16px; top: 22px; width: 58px; text-align: right; font: 500 .76rem/1 var(--mono); color: var(--faint); font-variant-numeric: tabular-nums; }
+  .ln { font: 400 1.22rem/1.55 var(--serif); margin: .12em 0 0; text-wrap: pretty; }
+  .ln q { quotes: "«" "»"; }
+  .turn.cont { padding-top: 2px; }
+  .turn.cont .av { visibility: hidden; height: 0; }
+  .turn.cont .who .nm { display: none; }
+  .turn.cont .tc { top: 10px; }
+  .turn.now { background: color-mix(in srgb, var(--c) 8%, transparent); }
+  .turn.now .tc { color: var(--c); }
+  .turn.hit .tc::after { content: "●"; margin-left: 4px; color: var(--f-imp); }
+  mark.hit { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .renamed .who .nm { animation: renamed 1.6s ease; }
+  @keyframes renamed { 0%, 30% { background: var(--mark); box-shadow: 0 0 0 3px var(--mark); } 100% { background: transparent; box-shadow: 0 0 0 3px transparent; } }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px; font: 650 .72rem/1 var(--sans);
+    padding: 4px 8px 4px 6px; border-radius: 999px; color: var(--fc);
+    background: color-mix(in srgb, var(--fc) 13%, transparent);
+  }
+  .chip i { font-style: normal; width: 14px; height: 14px; border-radius: 4px; display: grid; place-items: center; background: var(--fc); color: var(--on-c); font-size: .6rem; }
+  .chip.user { animation: fadein .4s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+  .badge { font: 600 .7rem/1 var(--sans); padding: 4px 7px; border-radius: 6px; color: var(--muted); background: var(--line-2); border: 1px solid var(--line); }
+  .badge.ok { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); border-color: color-mix(in srgb, var(--accent) 25%, transparent); }
+
+  .if-named { display: none !important; }
+  html.named .if-named { display: revert !important; }
+  html.named .if-unnamed { display: none !important; }
+
+  /* embeds inside turns */
+  .embed {
+    margin: 14px 0 6px; padding: 16px 18px; border-radius: 14px;
+    background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: .95rem;
+  }
+  .embed h3 { margin: 0 0 4px; font-size: .95rem; }
+  .embed, .inst li { scroll-margin-top: 130px; }
+  .embed p { margin: 0; color: var(--muted); line-height: 1.5; }
+  .embed .lbl { font: 600 .72rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--faint); margin: 0 0 10px; }
+
+  /* unknown voice → name it */
+  .unknown { border-style: dashed; border-color: color-mix(in srgb, var(--s1) 45%, var(--line)); box-shadow: none; }
+  html.named .unknown { border-style: solid; }
+  .unknown-top { display: flex; gap: 12px; align-items: flex-start; }
+  .wave-ic { flex: none; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: var(--s1); background: color-mix(in srgb, var(--s1) 12%, transparent); }
+  .namer { display: flex; gap: 8px; margin-top: 12px; }
+  .namer input {
+    flex: 1; min-width: 0; font: 500 1rem/1.2 var(--sans); padding: .6em .8em; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--bg); color: var(--fg);
+  }
+  .namer input:focus { outline: none; border-color: var(--s1); box-shadow: 0 0 0 3px color-mix(in srgb, var(--s1) 22%, transparent); }
+  .namer .btn { background: var(--s1); color: var(--on-c); }
+  .sugg { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; font-size: .84rem; color: var(--faint); }
+  .sugg button { font-size: .84rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: transparent; cursor: pointer; color: var(--muted); }
+  .sugg button:hover { color: var(--fg); border-color: var(--faint); }
+  .namer-err { font-size: .84rem; color: var(--s2); margin: 8px 0 0; min-height: 0; }
+  .named-ok { display: flex; gap: 10px; align-items: center; }
+  .named-ok .chk { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--s1); color: var(--on-c); }
+  .linkbtn { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-weight: 600; font-size: inherit; }
+
+  /* two tracks */
+  .tracks { display: grid; gap: 8px; }
+  .trk { display: grid; grid-template-columns: 130px 1fr; gap: 12px; align-items: center; font-size: .82rem; color: var(--muted); }
+  .wave { height: 30px; display: flex; align-items: center; gap: 2px; }
+  .wave span { flex: 1; min-width: 1px; border-radius: 2px; background: var(--c, var(--faint)); }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin-top: 12px; font-size: .84rem; color: var(--muted); }
+  .flow b { font-weight: 600; color: var(--fg); padding: 4px 9px; border-radius: 8px; background: var(--line-2); border: 1px solid var(--line); }
+
+  /* where the data lives */
+  .readout { font: 500 .88rem/1.4 var(--mono); }
+  .ro { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; }
+  .ro .k { white-space: nowrap; }
+  .ro .dots { flex: 1; border-bottom: 1px dotted var(--faint); transform: translateY(-4px); min-width: 16px; }
+  .ro .v { white-space: nowrap; color: var(--accent); font-weight: 600; }
+  .ro .v.opt { color: var(--muted); font-weight: 500; }
+  .ro.total { border-top: 1px solid var(--line); margin-top: 6px; padding-top: 10px; font-weight: 700; }
+  .ro.total .v { font-size: 1.05rem; }
+
+  /* next meeting card */
+  .mm-head { display: flex; justify-content: space-between; gap: 10px; font-size: .82rem; color: var(--faint); margin-bottom: 10px; flex-wrap: wrap; }
+  .mm-head b { color: var(--fg); font-weight: 650; }
+  .mm-turn { display: flex; gap: 10px; padding: 8px 0; }
+  .mm-turn + .mm-turn { border-top: 1px solid var(--line-2); }
+  .mm-who { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-weight: 650; font-size: .88rem; }
+  .mm-who .nm { color: var(--c); transition: color .7s; }
+  .mm-turn p { margin: 2px 0 0; color: var(--fg); font-family: var(--serif); font-size: 1.02rem; }
+
+  /* grep box */
+  .grep { display: flex; align-items: center; gap: 10px; padding: 4px 4px 4px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); }
+  .grep:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+  .grep svg { flex: none; color: var(--faint); }
+  .grep input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--fg); font: 500 1rem/1.2 var(--sans); padding: .55em 0; outline: none; }
+  .grep-res { font-size: .86rem; color: var(--muted); margin: 10px 0 0; min-height: 1.3em; }
+  .grep-res .linkbtn { margin-left: 6px; }
+
+  /* recording panel replica */
+  .recpanel { display: inline-block; width: min(100%, 440px); padding: 14px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); }
   .rec-top { display: flex; align-items: center; gap: 8px; }
   .rec-dot { width: 9px; height: 9px; border-radius: 50%; background: #ff3b30; animation: blink 1.4s ease-in-out infinite; }
   @keyframes blink { 50% { opacity: .25; } }
-  .rec-time { font-size: 1.32rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .01em; }
-  .rec-lbl { font-size: .72rem; color: var(--muted); margin-left: auto; font-weight: 600; }
-  .rec-marks { display: flex; gap: 6px; margin-top: 11px; }
-  .mk { flex: 1; text-align: center; font-size: .66rem; font-weight: 600; padding: .45em 0; border-radius: 8px; background: var(--card-2); border: 1px solid var(--border); color: var(--muted); }
-
-  /* ---------- logos / trust strip ---------- */
-  .trust { padding: 30px 0 8px; }
-  .trust p { text-align: center; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; font-weight: 650; }
-  .trust-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-  .chip { font-size: .92rem; font-weight: 600; padding: .5em 1em; border-radius: 10px; color: var(--muted); background: var(--card-2); border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 8px; }
-  .chip svg { color: var(--accent); }
-
-  /* ---------- sections ---------- */
-  section { padding: 64px 0; }
-  .sec-head { text-align: center; max-width: 640px; margin: 0 auto 44px; }
-  .sec-head .eyebrow { font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
-  .sec-head h2 { font-size: clamp(1.9rem, 3.6vw, 2.5rem); line-height: 1.1; margin: 0 0 .4em; }
-  .sec-head p { font-size: 1.12rem; color: var(--muted); margin: 0; }
-
-  /* steps */
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  @media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
-  .step { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 26px 24px; box-shadow: var(--shadow); }
-  .step .n { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-weight: 700; color: var(--accent); background: rgba(43,111,255,.12); background: color-mix(in srgb, var(--accent) 12%, transparent); margin-bottom: 16px; }
-  .step h3 { font-size: 1.18rem; margin: 0 0 .35em; }
-  .step p { font-size: .98rem; color: var(--muted); margin: 0; }
-
-  /* features */
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s; }
-  @media (hover: hover) { .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(43,111,255,.4); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); } }
-  .card .ic { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; margin-bottom: 14px; color: var(--accent); background: rgba(43,111,255,.11); background: color-mix(in srgb, var(--accent) 11%, transparent); }
-  .card h3 { font-size: 1.08rem; margin: 0 0 .35em; }
-  .card p { font-size: .95rem; color: var(--muted); margin: 0; line-height: 1.5; }
-
-  /* privacy band */
-  .band { background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .privacy-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px; align-items: center; }
-  @media (max-width: 820px) { .privacy-grid { grid-template-columns: 1fr; gap: 30px; } }
-  .privacy-grid h2 { font-size: clamp(1.8rem, 3.4vw, 2.4rem); margin: 0 0 .5em; line-height: 1.1; }
-  .privacy-grid p { font-size: 1.08rem; color: var(--muted); margin: 0 0 1em; }
-  .plist { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
-  .plist li { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: 13px; padding: 15px 17px; box-shadow: var(--shadow); }
-  .plist .pi { color: #25c26e; flex: none; margin-top: 1px; }
-  .plist b { display: block; font-size: 1rem; }
-  .plist span { font-size: .92rem; color: var(--muted); }
+  .rec-time { font: 700 1.3rem/1 var(--sans); font-variant-numeric: tabular-nums; }
+  .rec-lbl { font: 650 .7rem/1 var(--sans); color: var(--muted); margin-left: auto; letter-spacing: .04em; }
+  .rec-marks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; }
+  .mk {
+    font: 600 .72rem/1.1 var(--sans); padding: .55em .2em; border-radius: 8px; cursor: pointer;
+    background: var(--card); border: 1px solid var(--line); color: var(--fc);
+  }
+  .mk:hover { background: color-mix(in srgb, var(--fc) 10%, var(--card)); }
+  .mk:active { transform: scale(.96); }
 
   /* install */
-  .install ol { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; max-width: 760px; margin: 0 auto; }
-  .install li { counter-increment: s; position: relative; padding: 20px 22px 20px 64px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
-  .install li::before { content: counter(s); position: absolute; left: 20px; top: 18px; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
-  .install li b { font-weight: 650; }
-  code { background: rgba(127,127,127,.16); background: color-mix(in srgb, var(--fg) 8%, transparent); padding: .18em .5em; border-radius: 6px; font: .86em/1.5 ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
-  .codeblock { display: flex; align-items: center; gap: 10px; margin: 10px 0 2px; background: rgba(127,127,127,.1); background: color-mix(in srgb, var(--fg) 6%, transparent); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
-  .codeblock code { background: none; padding: 0; flex: 1; }
-  .copy { border: 1px solid var(--border); background: var(--card); color: var(--muted); border-radius: 8px; padding: 5px 10px; font-size: .8rem; font-weight: 600; cursor: pointer; flex: none; font-family: inherit; }
+  .inst { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .inst li { counter-increment: s; position: relative; padding-left: 36px; line-height: 1.5; }
+  .inst li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; font: 700 .78rem/1 var(--sans); color: var(--bg); background: var(--fg); }
+  code { font: .86em/1.5 var(--mono); background: var(--line-2); padding: .15em .45em; border-radius: 6px; }
+  .codeblock { display: flex; align-items: center; gap: 10px; margin: 8px 0 2px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px 9px 12px; }
+  .codeblock code { background: none; padding: 0; flex: 1; overflow-wrap: anywhere; }
+  .copy { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 8px; padding: 5px 10px; font-size: .8rem; font-weight: 600; cursor: pointer; flex: none; }
   .copy:hover { color: var(--fg); }
 
-  /* faq */
-  .faq { max-width: 760px; margin: 0 auto; }
-  details { border: 1px solid var(--border); border-radius: 13px; background: var(--card); margin-bottom: 12px; overflow: hidden; }
-  summary { cursor: pointer; list-style: none; padding: 18px 22px; font-weight: 600; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  summary::-webkit-details-marker { display: none; }
-  summary .chev { transition: transform .2s ease; color: var(--muted); flex: none; }
-  details[open] summary .chev { transform: rotate(180deg); }
-  details p { margin: 0; padding: 0 22px 20px; color: var(--muted); font-size: 1rem; line-height: 1.6; }
+  .tx-end { display: flex; align-items: center; gap: 12px; margin: 26px 0 0; font: 500 .82rem/1.4 var(--mono); color: var(--faint); }
+  .tx-end::before, .tx-end::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .tx-end .sq { width: 9px; height: 9px; background: var(--faint); border-radius: 2px; display: inline-block; margin-right: 8px; vertical-align: 0; }
 
-  /* final cta */
-  .final { text-align: center; }
-  .final-card { position: relative; overflow: hidden; border-radius: 24px; padding: 60px 32px; color: #fff;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: var(--shadow-lg); }
-  .final-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(80% 120% at 80% 0%, rgba(255,255,255,.18), transparent 60%); pointer-events: none; }
-  .final-card h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.15; margin: 0 0 .35em; }
-  .final-card p { font-size: 1.15rem; opacity: .92; margin: 0 0 1.6em; }
-  .btn.white { background: #fff; color: var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
-  .final-card .meta2 { margin-top: 16px; font-size: .9rem; opacity: .85; }
+  /* ---------- summary ---------- */
+  .summary { padding: 64px 0 30px; scroll-margin-top: 110px; }
+  .sum-head h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing: -.02em; line-height: 1.05; margin: 0 0 .3em; }
+  .sum-head p { color: var(--muted); margin: 0 0 28px; max-width: 60ch; }
+  .sum-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: start; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; box-shadow: var(--shadow); }
+  .panel h3 { display: flex; align-items: center; gap: 8px; font-size: 1rem; margin: 0 0 14px; }
+  .panel h3 svg { color: var(--accent); }
+  .panel h3 .badge { margin-left: auto; }
+  .bul { margin: 0; padding: 0 0 0 1.1em; display: grid; gap: 8px; }
+  .bul li { padding-left: 4px; line-height: 1.5; }
+  .bul li::marker { color: var(--faint); }
+  .tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .task { display: grid; grid-template-columns: 22px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line-2); }
+  .task:first-child { border-top: 0; padding-top: 2px; }
+  .box { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--faint); margin-top: 2px; display: grid; place-items: center; color: transparent; }
+  .task.done .box { background: var(--accent); border-color: var(--accent); color: var(--on-c); }
+  .task.done .t-title { text-decoration: line-through; text-decoration-color: var(--faint); color: var(--muted); }
+  .t-title { font-weight: 600; }
+  .t-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 6px; font-size: .84rem; color: var(--muted); }
+  .t-meta .who-mini { display: inline-flex; align-items: center; gap: 6px; }
+  .t-meta .av { width: 18px; height: 18px; font-size: .5rem; }
+  .people { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px; font-size: .88rem; color: var(--muted); align-items: center; }
+  .people span { display: inline-flex; align-items: center; gap: 7px; }
+  .people .av { width: 22px; height: 22px; font-size: .58rem; }
 
-  footer { border-top: 1px solid var(--border); padding: 36px 0; color: var(--muted); font-size: .9rem; }
-  .foot-in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; }
+  .closing { text-align: center; padding: 56px 0 72px; }
+  .closing h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(1.9rem, 4.4vw, 3rem); letter-spacing: -.02em; line-height: 1.08; margin: 0 auto .35em; max-width: 18ch; }
+  .closing p { color: var(--muted); margin: 0 0 1.5em; }
+  .closing .meta { justify-content: center; }
 
-  /* ---------- touch devices: the app is Mac-only, so the main action is "send the link to your Mac" ---------- */
+  footer { border-top: 1px solid var(--line); padding: 30px 0; color: var(--muted); font-size: .88rem; }
+  .foot-in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+  /* toast */
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; z-index: 80; transform: translate(-50%, 20px); opacity: 0;
+    max-width: calc(100vw - 32px); padding: 11px 16px; border-radius: 12px; font-size: .92rem; font-weight: 550;
+    background: var(--fg); color: var(--bg); box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    transition: opacity .2s ease, transform .2s ease; pointer-events: none;
+  }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- touch devices: the app is Mac-only → "send the link to your Mac" ---------- */
   .only-touch { display: none !important; }
   html.touch .only-touch { display: inline-flex !important; }
   html.touch p.only-touch { display: block !important; }
   html.touch .no-touch { display: none !important; }
-  .touch-note { font-size: .9rem; color: var(--muted); margin: 14px 0 0; line-height: 1.5; }
 
+  /* ---------- tablets ---------- */
+  @media (max-width: 1000px) {
+    .turn { padding-left: 16px; margin-left: -16px; }
+    .tc { position: static; width: auto; text-align: left; order: 9; font-size: .72rem; }
+    .turn.cont .tc { display: none; }
+    .sum-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .lanes { --lw: 132px; }
+    .lane-name .hint, .lane-name .name-btn { display: none; }
+    .diar-head .cloud { display: none; }
+    .cloud.in-player { display: none; }
+  }
   /* ---------- phones ---------- */
   @media (max-width: 560px) {
     .wrap { padding: 0 16px; }
-    .lang, .nav-cta { min-height: 40px; display: inline-flex; align-items: center; }
-    .lang { padding: 0 .75em; }
-    .btn.lg { padding-left: 1.2em; padding-right: 1.2em; }
-    .hero { padding: 36px 0 28px; }
-    .pill { font-size: .8rem; border-radius: 12px; align-items: flex-start; margin-bottom: 18px; }
-    .pill .dot { flex: none; margin-top: .42em; }
-    .sub { font-size: 1.1rem; margin-bottom: 1.4em; }
+    .nav-cta, .lang { min-height: 38px; display: inline-flex; align-items: center; }
+    .hero { padding: 34px 0 18px; }
+    .kicker { font-size: .76rem; margin-bottom: 16px; }
+    .sub { font-size: 1.08rem; }
     .cta-row { flex-direction: column; align-items: stretch; gap: 10px; }
-    .cta-row .btn { justify-content: center; }
-    .meta { justify-content: center; font-size: .85rem; }
+    .skip { text-align: center; margin: 4px 0 0; }
+    .meta { justify-content: center; font-size: .84rem; }
     .touch-note { text-align: center; }
-
-    /* window mockup: drop the sidebar so the transcript gets the full width,
-       and let the recording panel hang off the bottom edge instead of covering a line */
-    .win-body { grid-template-columns: 1fr; min-height: 0; }
-    .side { display: none; }
-    .pane { padding: 14px 14px 40px; }
-    .recpanel { position: relative; right: auto; bottom: auto; width: 190px; margin: -30px 10px 0 auto; }
-
-    .trust { padding-top: 22px; }
-    .trust-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .chip { justify-content: center; text-align: center; font-size: .85rem; padding: .6em .7em; }
-
-    section { padding: 44px 0; }
-    .sec-head { margin-bottom: 26px; }
-    .sec-head p { font-size: 1.02rem; }
-
-    .steps { gap: 12px; }
-    .step { padding: 18px; display: grid; grid-template-columns: 32px 1fr; column-gap: 12px; align-items: center; }
-    .step .n { width: 32px; height: 32px; margin: 0; }
-    .step h3 { margin: 0; }
-    .step p { grid-column: 1 / -1; margin-top: 10px; }
-
-    /* features: icon beside the text — 11 stacked cards were most of the page's height */
-    .grid { gap: 10px; }
-    .card { padding: 16px; display: grid; grid-template-columns: 40px 1fr; column-gap: 14px; align-items: start; }
-    .card .ic { width: 40px; height: 40px; margin: 0; grid-row: span 2; }
-    .card h3 { margin: 1px 0 .25em; font-size: 1.02rem; }
-    .card p { font-size: .92rem; }
-
-    .plist li { padding: 14px; }
-
-    .install li { padding: 16px 16px 16px 54px; }
-    .install li::before { left: 14px; top: 15px; width: 28px; height: 28px; }
+    .diar { margin-top: 30px; padding: 14px 12px 12px; border-radius: 16px; }
+    .lanes { --lw: 34px; column-gap: 10px; }
+    .lane-name .nm { display: none; }
+    .lane-name .av { width: 26px; height: 26px; font-size: .62rem; }
+    .track { height: 22px; }
+    .flag { width: 15px; height: 15px; font-size: .58rem; border-radius: 4px; }
+    .diar figcaption { font-size: .8rem; }
+    .turn { grid-template-columns: 30px 1fr; column-gap: 11px; padding: 11px 12px; margin: 0 -12px; }
+    .turn .av { width: 30px; height: 30px; font-size: .66rem; }
+    .ln { font-size: 1.08rem; }
+    .embed { padding: 14px; margin-left: -41px; }
+    .trk { grid-template-columns: 1fr; gap: 4px; }
+    .namer { flex-direction: column; }
+    .namer .btn { min-height: 42px; }
     .codeblock { flex-direction: column; align-items: stretch; }
-    .codeblock code { word-break: normal; overflow-wrap: anywhere; }
-    .copy { align-self: flex-start; min-height: 40px; padding: 0 16px; }
-
-    summary { padding: 16px 18px; font-size: 1rem; }
-    details p { padding: 0 18px 18px; }
-
-    section.final { padding-top: 8px; }
-    .final-card { padding: 40px 20px; border-radius: 20px; }
-    .final-card .btn { width: 100%; justify-content: center; }
-
-    footer { padding: 28px 0; }
-    .foot-in { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .copy { align-self: flex-start; min-height: 38px; padding: 0 14px; }
+    .rec-marks { grid-template-columns: repeat(2, 1fr); }
+    .mk { min-height: 38px; }
+    .player-in { gap: 9px; }
+    .speed { display: none; }
+    .panel { padding: 18px; }
+    .closing { padding: 40px 0 56px; }
+    .closing .btn { width: 100%; }
+    .foot-in { flex-direction: column; gap: 4px; }
   }
-  @media (max-width: 380px) {
-    .nav-links { gap: 8px; }
-    .brand { font-size: 1rem; gap: 8px; }
-    .nav-cta { padding: 0 .8em; font-size: .85rem; }
-    .btn.lg { font-size: 1rem; padding-left: 1em; padding-right: 1em; }
-    .final-card { padding: 36px 14px; }
-    .final-card .btn { padding-left: .8em; padding-right: .8em; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .rec-dot, .flag.user, .chip.user, .renamed .who .nm { animation: none; }
   }
 </style>
 <script>
@@ -320,321 +453,517 @@
   if (navigator.maxTouchPoints > 0 && window.matchMedia && matchMedia('(pointer: coarse)').matches) {
     document.documentElement.classList.add('touch');
   }
+  // A visitor who already named "Собеседник 1" is "recognized by voice" on the next visit —
+  // apply before first paint so the name doesn't flash from the placeholder.
+  try { if (localStorage.getItem('vg.landing.s1name')) document.documentElement.classList.add('named'); } catch (e) {}
 </script>
 </head>
 <body>
 
-  <nav>
+  <nav class="top" aria-label="Navigation">
     <div class="wrap nav-in">
-      <a class="brand" href="#top">
-        <span class="logo" aria-hidden="true">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-        </span>
+      <a class="brand" href="#top" aria-label="VoiceGrep — back to top">
+        <svg width="30" height="30" viewBox="100 100 824 824" aria-hidden="true"><defs><linearGradient id="lg-m" x1="132" y1="116" x2="892" y2="916" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FCFDFD"/><stop offset=".52" stop-color="#E4E9EA"/><stop offset="1" stop-color="#C4CED1"/></linearGradient><linearGradient id="lg-w" x1="512" y1="272" x2="512" y2="752" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#70D9C8"/><stop offset="1" stop-color="#078F88"/></linearGradient></defs><rect x="100" y="100" width="824" height="824" rx="184" fill="url(#lg-m)"/><g fill="url(#lg-w)"><rect x="284" y="432" width="72" height="160" rx="36"/><rect x="380" y="352" width="72" height="320" rx="36"/><rect x="476" y="272" width="72" height="480" rx="36"/><rect x="572" y="352" width="72" height="320" rx="36"/><rect x="668" y="432" width="72" height="160" rx="36"/></g></svg>
         VoiceGrep
       </a>
       <div class="nav-links">
-        <a class="txt" href="#how">How it works</a>
-        <a class="txt" href="#features">Features</a>
-        <a class="txt" href="#privacy">Privacy</a>
-        <a class="txt" href="#faq">FAQ</a>
+        <a class="txt" href="#t-privacy">Privacy</a>
+        <a class="txt" href="#t-names">Recognition</a>
+        <a class="txt" href="#t-install">Install</a>
+        <a class="txt" href="#summary">Recap</a>
         <a class="lang" href="../" hreflang="ru" lang="ru" title="Русская версия">RU</a>
         <a class="btn nav-cta no-touch" href="../VoiceGrep-1.9.0.dmg">Download</a>
         <button class="btn nav-cta only-touch js-share" type="button" data-done="Copied" aria-label="Send link to your Mac"><span class="lbl">Send to Mac</span></button>
       </div>
     </div>
+    <div class="player" role="group" aria-label="Meeting player">
+      <div class="wrap player-in">
+        <button class="play js-play" type="button" aria-label="Play the meeting: the page scrolls by itself" aria-pressed="false">
+          <svg class="i-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"/></svg>
+          <svg class="i-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z" fill="currentColor"/></svg>
+        </button>
+        <span class="clock"><b class="js-now">00:00</b> / <span class="js-total">04:38</span></span>
+        <button class="speed js-speed" type="button" aria-label="Playback speed: 1×">1×</button>
+        <div class="mini" id="mini" aria-hidden="true"><div class="ph"></div></div>
+        <span class="cloud in-player" title="How much of this meeting went to the cloud"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 0 1 0 9z"/><path d="m3 3 18 18"/></svg>to the cloud: <b>0&nbsp;B</b></span>
+      </div>
+    </div>
   </nav>
 
   <header class="hero" id="top">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="pill"><span class="dot"></span> Works offline · nothing goes to the cloud</span>
-        <h1>Call transcripts, <span class="grad">right on your&nbsp;Mac</span></h1>
-        <p class="sub">VoiceGrep records your online calls, transcribes them on-device and recognizes who’s speaking by voice.</p>
-        <div class="cta-row">
-          <a class="btn lg no-touch" href="../VoiceGrep-1.9.0.dmg">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-            Download for macOS
-          </a>
-          <button class="btn lg only-touch js-share" type="button" data-done="Link copied">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
-            <span class="lbl">Send link to your Mac</span>
-          </button>
-          <a class="btn ghost lg" href="#how">See how it works</a>
-        </div>
-        <div class="meta">
-          <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/></svg> Free</span>
-          <span>Apple Silicon</span>
-          <span>~23&nbsp;MB</span>
-          <span>macOS 14.4+</span>
-          <span>Updates itself</span>
-          <span>Interface in Russian</span>
-        </div>
-        <p class="touch-note only-touch">VoiceGrep is a Mac app. Send yourself the link and download it on your computer — or <a href="../VoiceGrep-1.9.0.dmg">download the .dmg to this device</a>.</p>
+    <div class="wrap">
+      <p class="kicker"><span class="live">Transcribed on this Mac</span><span>Meeting · today · <span class="js-total">04:38</span> · 3 people</span></p>
+      <h1>Call transcripts, right&nbsp;on&nbsp;your&nbsp;Mac</h1>
+      <p class="sub">VoiceGrep records your online calls, transcribes them on-device and recognizes who’s speaking by voice. <em>And this page is the transcript of one such call:</em> three people deciding whether to install VoiceGrep.</p>
+      <div class="cta-row">
+        <a class="btn lg no-touch" href="../VoiceGrep-1.9.0.dmg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Download for macOS
+        </a>
+        <button class="btn lg only-touch js-share" type="button" data-done="Link copied">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+          <span class="lbl">Send link to your Mac</span>
+        </button>
+        <button class="btn ghost lg js-play js-play-hero" type="button">
+          <svg class="i-play" width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"/></svg>
+          <svg class="i-pause" width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z" fill="currentColor"/></svg>
+          <span class="js-play-lbl">Play the meeting</span>
+        </button>
+        <a class="skip" href="#summary">or skip to the recap ↓</a>
       </div>
+      <div class="meta">
+        <span>Free</span><span>Apple Silicon</span><span>~23&nbsp;MB</span><span>macOS 14.4+</span><span>Updates itself</span><span>Interface in Russian</span>
+      </div>
+      <p class="touch-note only-touch">VoiceGrep is a Mac app. Send yourself the link and download it on your computer — or <a href="../VoiceGrep-1.9.0.dmg">download the .dmg to this device</a>.</p>
 
-      <div class="shot">
-        <div class="win" role="img" aria-label="VoiceGrep window showing a call transcript with each speaker labeled by name">
-          <div class="titlebar">
-            <span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>
-            <span class="ttl">VoiceGrep</span>
+      <figure class="diar" id="diar" tabindex="-1" aria-label="Speaker lanes: lines from three people on the meeting’s timeline">
+        <div class="diar-head">
+          <button class="play js-play" type="button" aria-label="Play the meeting: the page scrolls by itself" aria-pressed="false">
+            <svg class="i-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"/></svg>
+            <svg class="i-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z" fill="currentColor"/></svg>
+          </button>
+          <span class="ttl">Who spoke when</span>
+          <span class="clock"><b class="js-now">00:00</b> / <span class="js-total">04:38</span></span>
+          <span class="cloud" title="How much of this meeting went to the cloud"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 0 1 0 9z"/><path d="m3 3 18 18"/></svg>to the cloud: <b>0&nbsp;bytes</b></span>
+        </div>
+        <div class="lanes">
+          <div class="flags" id="flags" aria-hidden="true"></div>
+          <div class="lane-name" style="grid-row:2" data-spk="me"><span class="av" data-spk="me">Me</span><span class="nm">Me</span><span class="hint">microphone</span></div>
+          <div class="track" style="grid-row:2" data-lane="me" aria-hidden="true"></div>
+          <div class="lane-name" style="grid-row:3" data-spk="s2"><span class="av" data-spk="s2">OB</span><span class="nm">Olivia Bell</span><span class="hint">✓ by voice</span></div>
+          <div class="track" style="grid-row:3" data-lane="s2" aria-hidden="true"></div>
+          <div class="lane-name" style="grid-row:4" data-spk="s1">
+            <span class="av" data-spk="s1" data-ini="s1">S1</span><span class="nm" data-name="s1">Speaker 1</span>
+            <button class="name-btn js-name-open" type="button" aria-expanded="false">Name</button>
+            <form class="namer pop" data-namer hidden>
+              <label class="sr" for="nm-pop">Speaker’s name</label>
+              <input id="nm-pop" maxlength="32" autocomplete="off" placeholder="What’s their name?" enterkeyhint="done">
+              <button class="btn sm" type="submit">Remember</button>
+            </form>
           </div>
-          <div class="win-body">
-            <aside class="side">
-              <div class="it on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Meetings</div>
-              <div class="it"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2"/></svg> People</div>
-              <div class="it"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Projects</div>
-              <div class="it"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Assistant</div>
-            </aside>
-            <div class="pane">
-              <h4>Team sync</h4>
-              <p class="when">Today · 24 min · 3 people</p>
+          <div class="track" style="grid-row:4" data-lane="s1" aria-hidden="true"></div>
+          <div class="overlay" id="overlay" aria-hidden="true"><div class="ph"></div></div>
+        </div>
+        <figcaption>This is how VoiceGrep lays out a call by voice. Click a segment to jump to that line.</figcaption>
+      </figure>
+    </div>
+  </header>
 
-              <div class="turn">
-                <span class="av a">AP</span>
+  <main class="tx" id="transcript" data-total="278">
+    <div class="wrap narrow">
+      <div class="tx-bar"><h2>Transcript</h2><span>3 people · <span class="js-count">30 lines</span></span></div>
+
+      <article data-t="0" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="tc">00:00</span></div>
+          <p class="ln">Hey, after every call you’ve got the minutes ready — with names, who said what. Are you typing all that up by hand?</p>
+        </div>
+      </article>
+
+      <article data-t="9" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">00:09</span></div>
+          <p class="ln">No, that’s VoiceGrep. It sits in the menu bar and notices on its own when a call starts — I don’t press a thing.</p>
+          <div class="embed unknown" id="namer-card">
+            <div class="if-unnamed">
+              <div class="unknown-top">
+                <span class="wave-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg></span>
                 <div>
-                  <span class="who">Anna Parker</span><span class="tc">00:12</span>
-                  <p class="ln">Let’s go over the plan for the next sprint and split up the tasks.</p>
+                  <h3>VoiceGrep hasn’t heard this voice before</h3>
+                  <p>Name this speaker once — and from then on VoiceGrep labels their lines by itself: here, above, below and in every future meeting.</p>
                 </div>
               </div>
-              <div class="turn">
-                <span class="av b">SC</span>
-                <div>
-                  <span class="who">Sam Cole</span><span class="tc">00:31</span>
-                  <p class="ln">I’ve put together a draft — I’ll send it right after the call.</p>
-                  <div class="skl" style="width:70%"></div>
-                </div>
-              </div>
-              <div class="turn">
-                <span class="av c">Me</span>
-                <div>
-                  <span class="who">Me</span><span class="tc">00:48</span>
-                  <p class="ln">Great, then let’s lock in the deadlines.</p>
-                </div>
+              <form class="namer" data-namer>
+                <label class="sr" for="nm-card">Speaker’s name</label>
+                <input id="nm-card" maxlength="32" autocomplete="off" placeholder="What’s their name?" enterkeyhint="done">
+                <button class="btn sm" type="submit">Remember voice</button>
+              </form>
+              <p class="namer-err" aria-live="polite"></p>
+              <div class="sugg">or pick one: <button type="button" data-sugg="Anna">Anna</button><button type="button" data-sugg="Max">Max</button><button type="button" data-sugg="Sam">Sam</button></div>
+            </div>
+            <div class="if-named">
+              <div class="named-ok">
+                <span class="chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5"/></svg></span>
+                <p>Voice saved as “<b data-name="s1">Speaker 1</b>”. Look at the lines above and below — and at the lanes at the top of the page. <button class="linkbtn js-rename" type="button">Change</button></p>
               </div>
             </div>
           </div>
         </div>
+      </article>
 
-        <div class="recpanel" role="img" aria-label="Floating recording panel with a timer and bookmark buttons">
-          <div class="rec-top">
-            <span class="rec-dot"></span>
-            <span class="rec-time">02:34</span>
-            <span class="rec-lbl">REC</span>
+      <article data-t="17" class="turn cont" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">00:17</span></div>
+          <p class="ln">It records two tracks — system audio and the microphone. The call ends, the recording stops, and right there on the Mac it all turns into text.</p>
+          <div class="embed">
+            <p class="lbl">This meeting’s two tracks</p>
+            <div class="tracks">
+              <div class="trk"><span>System audio</span><div class="wave" data-wave="sys"></div></div>
+              <div class="trk"><span>Microphone</span><div class="wave" data-wave="mic"></div></div>
+            </div>
+            <div class="flow"><b>Call ended</b>→<b>Transcribed on the Mac</b>→<b>Names by voice</b></div>
           </div>
-          <div class="rec-marks">
-            <span class="mk">Important</span>
-            <span class="mk">Question</span>
-            <span class="mk">Task</span>
+        </div>
+      </article>
+
+      <article data-t="27" class="turn" data-spk="s2" data-flag="q">
+        <span class="av" data-spk="s2">OB</span>
+        <div class="body">
+          <div class="who"><span class="nm">Olivia Bell</span><span class="chip f-q"><i>?</i>Question</span><span class="tc">00:27</span></div>
+          <p class="ln">Hold on. “Turns into text” — where, exactly? These are client calls. We can’t hand them over to someone else’s cloud.</p>
+        </div>
+      </article>
+
+      <article data-t="36" class="turn" data-spk="s1" data-flag="imp" id="t-privacy">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="chip f-imp"><i>★</i>Important</span><span class="tc">00:36</span></div>
+          <p class="ln">They’re not handed over anywhere. Recording, transcription and voice recognition all run on the device. That’s not a checkbox you could untick by accident — it’s how the app is built.</p>
+          <div class="embed readout" role="group" aria-label="Where this meeting’s data lives">
+            <div class="ro"><span class="k">Call audio</span><span class="dots"></span><span class="v">on this Mac</span></div>
+            <div class="ro"><span class="k">Transcript</span><span class="dots"></span><span class="v">on this Mac</span></div>
+            <div class="ro"><span class="k">Voiceprints</span><span class="dots"></span><span class="v">on this Mac</span></div>
+            <div class="ro"><span class="k">External LLM</span><span class="dots"></span><span class="v opt">off · opt-in</span></div>
+            <div class="ro total"><span class="k">Sent to the cloud</span><span class="dots"></span><span class="v">0 bytes</span></div>
           </div>
         </div>
-      </div>
-    </div>
-  </header>
+      </article>
 
-  <div class="trust">
-    <div class="wrap">
-      <p>Why VoiceGrep</p>
-      <div class="trust-row">
-        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/></svg> 100% local</span>
-        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h1a3 3 0 0 1 0 6h-1"/><path d="M6 10H5a3 3 0 0 0 0 6h1"/><path d="M6 13h12"/></svg> No cloud</span>
-        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14"/><path d="M5 12h9"/><path d="M5 16h6"/></svg> English &amp; Russian speech</span>
-        <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> Recognizes voices</span>
-      </div>
-    </div>
-  </div>
+      <article data-t="49" class="turn" data-spk="s2">
+        <span class="av" data-spk="s2">OB</span>
+        <div class="body">
+          <div class="who"><span class="nm">Olivia Bell</span><span class="tc">00:49</span></div>
+          <p class="ln">Does it need the internet?</p>
+        </div>
+      </article>
 
-  <section id="how">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow">How it works</p>
-        <h2>Three steps — then it runs on its own</h2>
-        <p>VoiceGrep sits quietly in your menu bar and kicks in on its own. You just talk.</p>
-      </div>
-      <div class="steps">
-        <div class="step">
-          <div class="n">1</div>
-          <h3>Notices the call</h3>
-          <p>Detects when a conversation starts and ends and records it automatically. System audio and your microphone are recorded on two separate tracks.</p>
+      <article data-t="52" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">00:52</span></div>
+          <p class="ln">Once — to download the speech model, about 0.6–1&nbsp;GB. After that it all works offline. The network is only for updates, and for an external LLM if you turn one on with your own key.</p>
         </div>
-        <div class="step">
-          <div class="n">2</div>
-          <h3>Transcribes on your Mac</h3>
-          <p>After the call, the audio is turned into an accurate transcript right on the device, using a local CoreML speech engine for English and Russian.</p>
-        </div>
-        <div class="step">
-          <div class="n">3</div>
-          <h3>Recognizes people</h3>
-          <p>Name someone once and their voiceprint is saved — from then on, their lines are labeled with their name in every meeting.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </article>
 
-  <section id="features" style="padding-top:0">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow">Features</p>
-        <h2>Not just a recorder — a memory of your conversations</h2>
-        <p>From automatic recording to an assistant that answers questions across your whole archive.</p>
-      </div>
-      <div class="grid">
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
-          <h3>Automatic recording</h3>
-          <p>Starts and stops with the call. Back-to-back calls are split into separate meetings.</p>
+      <article data-t="65" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="tc">01:05</span></div>
+          <p class="ln">Does it handle English? Most of our calls are in English.</p>
         </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
-          <h3>Bring your own recordings</h3>
-          <p>Already have a recording? Just import it: audio or video from any app is transcribed the same way — with speaker names, a summary and tasks.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12a0 0 0 0 1 0 0H4z"/><path d="M8 12h8M8 16h5"/></svg></div>
-          <h3>On-device transcription</h3>
-          <p>Accurate transcripts after every call, produced by a local CoreML engine. Neither the audio nor the text ever leaves your Mac.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M2 20a7 7 0 0 1 14 0"/><circle cx="18" cy="9" r="2.5"/><path d="M22 18a5 5 0 0 0-6-4.5"/></svg></div>
-          <h3>Voice recognition</h3>
-          <p>Name a speaker once — their voiceprint is saved and picks them out in future meetings.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 15-5-5L5 21"/><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/></svg></div>
-          <h3>Captures only the call</h3>
-          <p>When recording automatically, only the call app’s audio makes it into the track — notifications, music and pings from other apps stay out.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg></div>
-          <h3>Bookmarks &amp; screenshots</h3>
-          <p>An optional floating panel while you record: timer, marks (important, question, task, decision) and screenshots — each pinned to its moment in the conversation.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v4M3 5h4M6 17v4M4 19h4"/><path d="M13 3 16 9l6 3-6 3-3 6-3-6-6-3 6-3z"/></svg></div>
-          <h3>Summaries &amp; tasks</h3>
-          <p>Optional post-processing: a meeting summary and a task list with owners. Tasks are suggested — you confirm the ones that matter.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <h3>Archive assistant</h3>
-          <p>Ask about your whole archive, a person, a project or a single meeting: “what did we agree on?”, “what tasks did Sam give me?” Answers link back to the conversations.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 7l3 3M17 7l-3 3M17 17l-3-3"/></svg></div>
-          <h3>People &amp; contact graph</h3>
-          <p>A card for everyone you talk to: role, company, notes, an auto-profile built from what they said, and a visual graph of who meets with whom.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></div>
-          <h3>Export &amp; transfer</h3>
-          <p>Export any meeting to Markdown (summary, tasks, transcript). People’s voiceprints can be moved between your Macs.</p>
-        </div>
-        <div class="card">
-          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3>Nothing gets lost</h3>
-          <p>A meeting is saved from the very first second and survives failures: after a crash, the recording is recovered and transcribed. Automatic backups run regularly.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </article>
 
-  <section class="band" id="privacy">
-    <div class="wrap privacy-grid">
-      <div>
-        <p class="eyebrow" style="color:#25c26e;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.82rem;margin:0 0 12px">Private by default</p>
-        <h2>Your conversations stay yours</h2>
-        <p>Recording, transcription and voice recognition run entirely on your Mac. Audio, transcripts and voiceprints are never sent anywhere — this isn’t a setting you could switch off by accident; it’s how the app is built.</p>
-        <p style="font-size:.96rem">Post-processing and the assistant via an external LLM are a separate option you turn on yourself, with your own key.</p>
-      </div>
-      <ul class="plist">
-        <li>
-          <span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
-          <div><b>No cloud</b><span>Audio and text never leave the device. After a one-time model download, it works offline.</span></div>
-        </li>
-        <li>
-          <span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
-          <div><b>Voices stay local</b><span>Voiceprints live on your Mac and move only when you explicitly export them.</span></div>
-        </li>
-        <li>
-          <span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
-          <div><b>External LLM is opt-in</b><span>Summaries and the assistant are turned on by you and run on your own key.</span></div>
-        </li>
-      </ul>
-    </div>
-  </section>
+      <article data-t="70" class="turn" data-spk="s1" id="t-lang">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">01:10</span></div>
+          <p class="ln">Yes — English and Russian. Russian is the default, so switch the meeting language to English in Settings, or let it auto-detect. Heads-up: the interface itself is in Russian for now, and so are summaries and tasks — though the assistant can answer in English.</p>
+        </div>
+      </article>
 
-  <section class="install" id="install">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow">Install</p>
-        <h2>Up and running in a minute</h2>
-        <p>The app isn’t notarized by Apple yet, so the first launch takes one step in Terminal.</p>
-      </div>
-      <ol>
-        <li>Open the <b>.dmg</b> and drag <b>VoiceGrep</b> into your Applications folder.</li>
-        <li>
-          Clear the Gatekeeper quarantine — open Terminal and run:
-          <div class="codeblock">
-            <code id="cmd">xattr -dr com.apple.quarantine /Applications/VoiceGrep.app</code>
-            <button class="copy" id="copyBtn" type="button">Copy</button>
+      <article data-t="88" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="tc">01:28</span></div>
+          <p class="ln">Wait, how does it tell my voice from yours?</p>
+        </div>
+      </article>
+
+      <article data-t="92" class="turn" data-spk="s1" data-flag="imp" id="t-names">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="chip f-imp"><i>★</i>Important</span><span class="tc">01:32</span></div>
+          <p class="ln">You’re the microphone, so it labels you “Me”. Everyone else it tells apart by voice: name someone once, their voiceprint is saved, and from then on they’re labeled automatically in every meeting. It already knows Olivia from earlier calls. <span class="if-unnamed">Me it doesn’t know yet — name me, there’s a button above, and watch what happens to the lines.</span><span class="if-named">See — my name is already on every line, above and below.</span></p>
+          <div class="embed">
+            <div class="mm-head"><b>Next meeting</b><span>Tuesday · 10:00 · 41 min</span></div>
+            <div class="mm-turn" data-spk="s1">
+              <span class="av" data-spk="s1" data-ini="s1">S1</span>
+              <div>
+                <div class="mm-who"><span class="nm" data-name="s1">Speaker 1</span><span class="badge ok if-named">✓ voice recognized</span><span class="badge if-unnamed">voice not known yet</span></div>
+                <p>On timing: the draft will be ready by Thursday.</p>
+              </div>
+            </div>
+            <div class="mm-turn" data-spk="me">
+              <span class="av" data-spk="me">Me</span>
+              <div>
+                <div class="mm-who"><span class="nm">Me</span><span class="badge">microphone</span></div>
+                <p>Great, let’s regroup on Thursday then.</p>
+              </div>
+            </div>
           </div>
-        </li>
-        <li>Launch VoiceGrep. The first-run setup asks for access to the <b>Microphone</b> and <b>Screen Recording</b>.</li>
-        <li>For calls in English, open Settings → <b lang="ru">Транскрипция</b> (Transcription) → <b lang="ru">Язык встреч</b> (Meeting language) and pick <b>English</b> or <b lang="ru">Автоопределение</b> (Auto-detect). The default is Russian, which won’t transcribe English speech correctly; the setting applies to new transcriptions.</li>
-      </ol>
-      <p style="text-align:center;color:var(--muted);font-size:.92rem;margin-top:22px">From then on the app updates itself — no need to repeat the workaround.</p>
+        </div>
+      </article>
+
+      <article data-t="115" class="turn" data-spk="s2">
+        <span class="av" data-spk="s2">OB</span>
+        <div class="body">
+          <div class="who"><span class="nm">Olivia Bell</span><span class="tc">01:55</span></div>
+          <p class="ln">What if calls run back to back? Some days I have five in a row.</p>
+        </div>
+      </article>
+
+      <article data-t="120" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">02:00</span></div>
+          <p class="ln">It splits them into separate meetings on its own. And when it records automatically, it captures only the call app’s audio — notifications, music and random pings from other apps stay out.</p>
+        </div>
+      </article>
+
+      <article data-t="133" class="turn" data-spk="s2">
+        <span class="av" data-spk="s2">OB</span>
+        <div class="body">
+          <div class="who"><span class="nm">Olivia Bell</span><span class="tc">02:13</span></div>
+          <p class="ln">What permissions does it ask for? Screen Recording makes me nervous.</p>
+        </div>
+      </article>
+
+      <article data-t="139" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">02:19</span></div>
+          <p class="ln">Microphone and Screen Recording. Screen Recording is just how macOS lets it capture the call’s system audio — no screen video is ever saved.</p>
+        </div>
+      </article>
+
+      <article data-t="149" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="tc">02:29</span></div>
+          <p class="ln">Okay, so it’s recorded. Then what? Nobody rereads transcripts.</p>
+        </div>
+      </article>
+
+      <article data-t="154" class="turn" data-spk="s1" id="t-search">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">02:34</span></div>
+          <p class="ln">You don’t reread them. Each meeting has search, and for the whole archive there’s the assistant: ask “what did we agree with Sam?” or “what are my tasks?” — it searches the transcripts itself, even by sound, and answers with links back to the conversations. The assistant needs an external LLM on your own key — that’s opt-in.</p>
+          <div class="embed">
+            <p class="lbl">Search this meeting</p>
+            <label class="grep">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <span class="sr">Search the transcript</span>
+              <input id="grep" type="search" autocomplete="off" spellcheck="false" placeholder="For example: voice" enterkeyhint="search">
+            </label>
+            <div class="sugg">try: <button type="button" data-q="voice">voice</button><button type="button" data-q="English">English</button><button type="button" data-q="task">task</button><button type="button" data-q="Mac">Mac</button></div>
+            <p class="grep-res" id="grep-res" aria-live="polite">Matches light up in the lines and on the lanes above.</p>
+          </div>
+        </div>
+      </article>
+
+      <article data-t="177" class="turn" data-spk="s2">
+        <span class="av" data-spk="s2">OB</span>
+        <div class="body">
+          <div class="who"><span class="nm">Olivia Bell</span><span class="tc">02:57</span></div>
+          <p class="ln">Does it do summaries and tasks too?</p>
+        </div>
+      </article>
+
+      <article data-t="180" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">03:00</span></div>
+          <p class="ln">If you connect an LLM with your own key — yes: a short summary and tasks with owners. It only suggests tasks; you confirm the ones you want. There’s also a card for every person — role, company, notes — and a graph of who meets with whom.</p>
+        </div>
+      </article>
+
+      <article data-t="197" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="tc">03:17</span></div>
+          <p class="ln">Can I mark something during the call? An important moment, say.</p>
+        </div>
+      </article>
+
+      <article data-t="202" class="turn" data-spk="s1" id="t-marks">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">03:22</span></div>
+          <p class="ln">There’s a floating panel you can turn on in Settings: a timer, marks — important, question, task, decision — and screenshots. Everything is pinned to its moment in the conversation. Try it — the mark lands right on the timeline.</p>
+          <div class="embed">
+            <div class="recpanel" role="group" aria-label="Floating recording panel">
+              <div class="rec-top"><span class="rec-dot"></span><span class="rec-time js-now-panel">00:00</span><span class="rec-lbl">REC</span></div>
+              <div class="rec-marks">
+                <button class="mk f-imp" type="button" data-mark="imp">★ Important</button>
+                <button class="mk f-q" type="button" data-mark="q">? Question</button>
+                <button class="mk f-task" type="button" data-mark="task">✓ Task</button>
+                <button class="mk f-dec" type="button" data-mark="dec">◆ Decision</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article data-t="218" class="turn" data-spk="s2" data-flag="q">
+        <span class="av" data-spk="s2">OB</span>
+        <div class="body">
+          <div class="who"><span class="nm">Olivia Bell</span><span class="chip f-q"><i>?</i>Question</span><span class="tc">03:38</span></div>
+          <p class="ln">And if the Mac crashes in the middle of a call?</p>
+        </div>
+      </article>
+
+      <article data-t="222" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">03:42</span></div>
+          <p class="ln">The meeting exists from the first second of recording. After a crash, the recording is recovered and transcribed. And it backs up its database regularly on its own.</p>
+        </div>
+      </article>
+
+      <article data-t="234" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="tc">03:54</span></div>
+          <p class="ln">What about recordings I already have?</p>
+        </div>
+      </article>
+
+      <article data-t="237" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">03:57</span></div>
+          <p class="ln">Sure — import an existing recording, audio or video, and it’s transcribed the same way, with names, a summary and tasks. You can export any meeting to Markdown, and move voiceprints to another Mac of yours.</p>
+        </div>
+      </article>
+
+      <article data-t="252" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="tc">04:12</span></div>
+          <p class="ln">Sold. How do I install it?</p>
+        </div>
+      </article>
+
+      <article data-t="255" class="turn" data-spk="s1" data-flag="task" id="t-install">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="chip f-task"><i>✓</i>Task</span><span class="tc">04:15</span></div>
+          <p class="ln">Download it and drag it into Applications. It isn’t notarized by Apple yet, so you clear the quarantine once in Terminal — after that it updates itself.</p>
+          <div class="embed">
+            <ol class="inst">
+              <li>Open the <b>.dmg</b> and drag <b>VoiceGrep</b> into your Applications folder.</li>
+              <li>Clear the Gatekeeper quarantine — open Terminal and run:
+                <div class="codeblock">
+                  <code id="cmd">xattr -dr com.apple.quarantine /Applications/VoiceGrep.app</code>
+                  <button class="copy" id="copyBtn" type="button">Copy</button>
+                </div>
+              </li>
+              <li>Launch VoiceGrep. The first-run setup asks for access to the <b>Microphone</b> and <b>Screen Recording</b>.</li>
+              <li id="t-lang-step">For calls in English, open Settings → <b lang="ru">Транскрипция</b> (Transcription) → <b lang="ru">Язык встреч</b> (Meeting language) and pick <b>English</b> or <b lang="ru">Автоопределение</b> (Auto-detect). The default is Russian, which won’t transcribe English speech correctly; the setting applies to new transcriptions.</li>
+            </ol>
+          </div>
+        </div>
+      </article>
+
+      <article data-t="266" class="turn" data-spk="s2">
+        <span class="av" data-spk="s2">OB</span>
+        <div class="body">
+          <div class="who"><span class="nm">Olivia Bell</span><span class="tc">04:26</span></div>
+          <p class="ln">Which Mac do I need?</p>
+        </div>
+      </article>
+
+      <article data-t="269" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">S1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">04:29</span></div>
+          <p class="ln">Apple Silicon — M1 or later, on macOS 14.4 or newer. It’s about 23&nbsp;MB. And it’s free.</p>
+        </div>
+      </article>
+
+      <article data-t="275" class="turn" data-spk="me" data-flag="dec">
+        <span class="av" data-spk="me">Me</span>
+        <div class="body">
+          <div class="who"><span class="nm">Me</span><span class="chip f-dec"><i>◆</i>Decision</span><span class="tc">04:35</span></div>
+          <p class="ln">Done — installing it.</p>
+        </div>
+      </article>
+
+      <p class="tx-end"><span><span class="sq"></span>Call ended · recording stopped on its own · <span class="js-total">04:38</span></span></p>
+    </div>
+
+  <section class="summary" id="summary">
+    <div class="wrap">
+      <div class="sum-head">
+        <h2>Meeting recap</h2>
+        <p>This is what the meeting card looks like after a call when an external LLM is connected (optional, on your own key): it writes the summary and suggests tasks. Transcription and names work without it.</p>
+      </div>
+      <div class="sum-grid">
+        <div class="panel">
+          <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v4M3 5h4M6 17v4M4 19h4"/><path d="M13 3 16 9l6 3-6 3-3 6-3-6-6-3 6-3z"/></svg>Summary</h3>
+          <ul class="bul">
+            <li>VoiceGrep notices the call, records system audio and the microphone, and transcribes both right on the Mac after the call — no cloud.</li>
+            <li>Transcribes English and Russian. Russian is the default — switch the meeting language to English. The interface is in Russian for now.</li>
+            <li>Name a person once — from then on they’re recognized by voice in every meeting.</li>
+            <li>Search inside each meeting and an assistant across the whole archive (via an external LLM), marks and screenshots during the call, importing your own recordings, Markdown export.</li>
+            <li>Apple Silicon, macOS 14.4+, about 23&nbsp;MB, free.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tasks<span class="badge">4</span></h3>
+          <ul class="tasks">
+            <li class="task">
+              <span class="box" aria-hidden="true">✓</span>
+              <div>
+                <div class="t-title">Download VoiceGrep</div>
+                <div class="t-meta">
+                  <span class="who-mini"><span class="av" data-spk="me">Me</span>Me</span>
+                  <a class="btn sm no-touch" href="../VoiceGrep-1.9.0.dmg">Download .dmg</a>
+                  <button class="btn sm only-touch js-share" type="button" data-done="Link copied"><span class="lbl">Send link to your Mac</span></button>
+                </div>
+              </div>
+            </li>
+            <li class="task">
+              <span class="box" aria-hidden="true">✓</span>
+              <div>
+                <div class="t-title">Clear the Gatekeeper quarantine — one command</div>
+                <div class="t-meta"><span class="who-mini"><span class="av" data-spk="me">Me</span>Me</span><a href="#t-install">to the command ↑</a></div>
+              </div>
+            </li>
+            <li class="task">
+              <span class="box" aria-hidden="true">✓</span>
+              <div>
+                <div class="t-title">Switch the meeting language to English</div>
+                <div class="t-meta"><span class="who-mini"><span class="av" data-spk="me">Me</span>Me</span><a href="#t-lang-step">how ↑</a></div>
+              </div>
+            </li>
+            <li class="task js-task-name">
+              <span class="box" aria-hidden="true">✓</span>
+              <div>
+                <div class="t-title">Name the new speaker once</div>
+                <div class="t-meta"><span class="who-mini"><span class="av" data-spk="me">Me</span>Me</span><span class="if-unnamed"><a href="#namer-card">name them ↑</a></span><span class="if-named">done: “<span data-name="s1">Speaker 1</span>”</span></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="people">
+        People:
+        <span><span class="av" data-spk="me">Me</span>Me</span>
+        <span><span class="av" data-spk="s2">OB</span>Olivia Bell</span>
+        <span><span class="av" data-spk="s1" data-ini="s1">S1</span><span data-name="s1">Speaker 1</span></span>
+      </div>
     </div>
   </section>
+  </main>
 
-  <section id="faq" style="padding-top:0">
+  <section class="closing">
     <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow">FAQ</p>
-        <h2>Frequently asked questions</h2>
-      </div>
-      <div class="faq">
-        <details>
-          <summary>Where do my recordings and transcripts go? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
-          <p>Nowhere. Recording, transcription and voice recognition run entirely on your Mac. Audio, text and voiceprints are stored locally only and are never sent to the cloud.</p>
-        </details>
-        <details>
-          <summary>Which languages does it transcribe? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
-          <p>English and Russian — choose one in Settings or let the app auto-detect. The speech engine runs locally on CoreML. Voice recognition doesn’t depend on the language at all.</p>
-        </details>
-        <details>
-          <summary>Is the app itself in English? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
-          <p>Not fully yet. The interface is in Russian, and summaries, tasks and meeting titles are generated in Russian too. Transcribing English calls works fully — just switch the meeting language to English (<a href="#install">step 4 of the install</a>). The assistant can answer in English: Settings → <b lang="ru">Ассистент</b> (Assistant) → <b lang="ru">Язык ответа</b> (Answer language) → <b>English</b>.</p>
-        </details>
-        <details>
-          <summary>What permissions does it need? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
-          <p>Microphone and Screen Recording — the first-run setup asks for both. Screen Recording is how macOS lets an app capture the call’s system audio; no screen video is ever saved.</p>
-        </details>
-        <details>
-          <summary>Do I need an internet connection? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
-          <p>Only once, on first launch, to download the speech model (about 0.6–1&nbsp;GB). After that, recording, transcription and recognition work offline. The internet is otherwise used only for auto-updates and for the optional external-LLM post-processing, if you turn it on with your own key.</p>
-        </details>
-        <details>
-          <summary>Which Macs are supported? <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></summary>
-          <p>Apple Silicon Macs (M1 and later) running macOS 14.4 or newer. The download is about 23&nbsp;MB.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <section class="final">
-    <div class="wrap">
-      <div class="final-card">
-        <h2>Try VoiceGrep today</h2>
-        <p>Fully local call recording and transcription for macOS.</p>
-        <a class="btn lg white no-touch" href="../VoiceGrep-1.9.0.dmg">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-          Download for macOS
-        </a>
-        <button class="btn lg white only-touch js-share" type="button" data-done="Link copied">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
-          <span class="lbl">Send link to your Mac</span>
-        </button>
-        <p class="meta2">Free · Apple Silicon · ~23&nbsp;MB · updates itself</p>
-      </div>
+      <h2>Your next call gets transcribed by your Mac</h2>
+      <p>Fully local call recording and transcription for macOS.</p>
+      <a class="btn lg no-touch" href="../VoiceGrep-1.9.0.dmg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+        Download for macOS
+      </a>
+      <button class="btn lg only-touch js-share" type="button" data-done="Link copied">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+        <span class="lbl">Send link to your Mac</span>
+      </button>
+      <div class="meta"><span>Free</span><span>Apple Silicon</span><span>~23&nbsp;MB</span><span>macOS 14.4+</span><span>Updates itself</span><span>Interface in Russian</span></div>
     </div>
   </section>
 
@@ -645,10 +974,363 @@
     </div>
   </footer>
 
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script>
-    document.getElementById('copyBtn').addEventListener('click', function () {
-      var b = document.getElementById('copyBtn');
-      var t = document.getElementById('cmd').textContent;
+  (function () {
+    'use strict';
+    var root = document.documentElement;
+    var SMOOTH = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth';
+    var $ = function (s, el) { return (el || document).querySelector(s); };
+    var $$ = function (s, el) { return [].slice.call((el || document).querySelectorAll(s)); };
+
+    function fmt(s) {
+      s = Math.max(0, Math.round(s));
+      var m = Math.floor(s / 60), r = s % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r;
+    }
+
+    var toastEl = $('#toast'), toastT;
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('on');
+      clearTimeout(toastT);
+      toastT = setTimeout(function () { toastEl.classList.remove('on'); }, 3200);
+    }
+
+    // ---------- the meeting model: one entry per turn ----------
+    var TOTAL = +$('#transcript').getAttribute('data-total');
+    var turns = $$('.turn').map(function (el) {
+      return { el: el, t: +el.getAttribute('data-t'), spk: el.getAttribute('data-spk'), flag: el.getAttribute('data-flag') };
+    });
+    function endOf(i) { return i + 1 < turns.length ? turns[i + 1].t : TOTAL; }
+    $$('.js-count').forEach(function (e) { e.textContent = turns.length + ' ' + (turns.length === 1 ? 'line' : 'lines'); });
+
+    var FLAGS = { imp: ['★', 'Important'], q: ['?', 'Question'], task: ['✓', 'Task'], dec: ['◆', 'Decision'] };
+    var pct = function (t) { return (100 * t / TOTAL).toFixed(3) + '%'; };
+
+    // speaker lanes (hero) + the slim docked timeline
+    var mini = $('#mini');
+    turns.forEach(function (d, i) {
+      var a = d.t, b = Math.max(a + 1.2, endOf(i) - 0.7);
+      var mk = function () {
+        var s = document.createElement('span');
+        s.className = 'seg'; s.setAttribute('data-spk', d.spk);
+        s.style.left = pct(a); s.style.width = pct(b - a);
+        s.addEventListener('click', function () { seek(i); });
+        return s;
+      };
+      var lane = $('.track[data-lane="' + d.spk + '"]');
+      if (lane) lane.appendChild(mk());
+      mini.insertBefore(mk(), mini.firstChild);
+      if (d.flag) addFlag(d.flag, d.t, i, false);
+    });
+
+    function addFlag(kind, t, i, user) {
+      var f = FLAGS[kind];
+      var b = document.createElement('button');
+      // a mouse shortcut only: the lanes are aria-hidden, the transcript itself is the accessible path
+      b.type = 'button'; b.tabIndex = -1; b.className = 'flag f-' + kind + (user ? ' user' : '');
+      b.textContent = f[0]; b.title = f[1] + ' · ' + fmt(t);
+      b.style.left = pct(t);
+      b.addEventListener('click', function () { seek(i); });
+      $('#flags').appendChild(b);
+    }
+
+    // two-track waveform, derived from who speaks when: the system track carries the others,
+    // the mic carries "Me" — exactly how VoiceGrep separates the local user from everyone else
+    function rng(seed) { return function () { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }; }
+    $$('[data-wave]').forEach(function (w) {
+      var mic = w.getAttribute('data-wave') === 'mic', N = 90, r = rng(mic ? 7 : 3), html = '';
+      for (var k = 0; k < N; k++) {
+        var t = (k + .5) / N * TOTAL, who = null;
+        for (var i = 0; i < turns.length; i++) if (t >= turns[i].t && t < endOf(i) - 0.7) { who = turns[i].spk; break; }
+        var on = who && ((who === 'me') === mic);
+        var h = on ? 22 + 78 * r() : 4 + 6 * r();
+        html += '<span data-spk="' + (on ? who : '') + '" style="height:' + h.toFixed(0) + '%' + (on ? '' : ';opacity:.35') + '"></span>';
+      }
+      w.innerHTML = html;
+    });
+
+    // ---------- playhead: scroll position ⇄ meeting time ----------
+    var READ = 0.42; // the "reading line", as a fraction of the viewport height
+    function lineY() { return window.innerHeight * READ; }
+    function timeAtScroll() {
+      var y = lineY(), cur = -1, frac = 0;
+      for (var i = 0; i < turns.length; i++) {
+        var r = turns[i].el.getBoundingClientRect();
+        if (r.top <= y) { cur = i; frac = Math.min(1, Math.max(0, (y - r.top) / Math.max(1, r.height))); } else break;
+      }
+      if (cur < 0) return { t: 0, i: -1 };
+      if (cur === turns.length - 1 && frac >= 1) return { t: TOTAL, i: cur };
+      return { t: turns[cur].t + frac * (endOf(cur) - turns[cur].t), i: cur };
+    }
+    function scrollForTime(t) {
+      var i = 0;
+      while (i + 1 < turns.length && turns[i + 1].t <= t) i++;
+      var r = turns[i].el.getBoundingClientRect();
+      var frac = (t - turns[i].t) / Math.max(0.01, endOf(i) - turns[i].t);
+      return window.scrollY + r.top + frac * r.height - lineY();
+    }
+
+    var phs = $$('.ph'), nows = $$('.js-now'), panelNow = $('.js-now-panel'), activeI = -2, lastT = 0;
+    $$('.js-total').forEach(function (e) { e.textContent = fmt(TOTAL); });
+    function render(t, i) {
+      lastT = t;
+      var p = pct(Math.min(t, TOTAL));
+      phs.forEach(function (ph) { ph.style.left = p; });
+      var s = fmt(t);
+      nows.forEach(function (n) { n.textContent = s; });
+      if (panelNow) panelNow.textContent = s;
+      var want = t < TOTAL ? i : -1;
+      if (want !== activeI) {
+        if (activeI >= 0) turns[activeI].el.classList.remove('now');
+        if (want >= 0) turns[want].el.classList.add('now');
+        activeI = want;
+      }
+      if (!playing && heroLbl && heroLbl.textContent !== heroText()) heroLbl.textContent = heroText();
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking || playing) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; var r = timeAtScroll(); render(r.t, r.i); });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    // the hero lanes dock into the nav once they leave the screen
+    // (and while playing — otherwise on a phone the pause button can be off-screen)
+    var diar = $('#diar'), diarOut = false;
+    function updateDock() { document.body.classList.toggle('docked', diarOut || playing); }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { diarOut = !e.isIntersecting && e.boundingClientRect.top < 0; updateDock(); });
+      }).observe(diar);
+    }
+
+    // ---------- "play": scroll the transcript at the pace the meeting was spoken ----------
+    var playing = false, playT = 0, lastTs = 0, rate = 1, RATES = [1, 1.5, 2], loopGen = 0;
+    var playBtns = $$('.js-play'), heroLbl = $('.js-play-lbl');
+    function heroText() { return playing ? 'Pause' : (lastT > 0 && lastT < TOTAL ? 'Resume' : 'Play the meeting'); }
+    function setPlayUI() {
+      root.classList.toggle('playing', playing);
+      // the hero button speaks through its label; the round icon buttons through aria-pressed
+      playBtns.forEach(function (b) { if (b !== heroBtn) b.setAttribute('aria-pressed', playing ? 'true' : 'false'); });
+      if (heroLbl) heroLbl.textContent = heroText();
+      updateDock();
+    }
+    var heroBtn = $('.js-play-hero');
+    function frame(ts, gen) {
+      if (!playing || gen !== loopGen) return;
+      if (lastTs) playT += (ts - lastTs) / 1000 * rate;
+      lastTs = ts;
+      if (playT >= TOTAL) {
+        stop();
+        document.getElementById('summary').scrollIntoView({ behavior: SMOOTH });
+        return;
+      }
+      window.scrollTo(0, scrollForTime(playT));
+      var i = 0; while (i + 1 < turns.length && turns[i + 1].t <= playT) i++;
+      render(playT, i);
+      requestAnimationFrame(function (n) { frame(n, gen); });
+    }
+    function start() {
+      var cur = timeAtScroll();
+      playT = (cur.i < 0 || cur.t >= TOTAL) ? 0 : cur.t;
+      playing = true; lastTs = 0; setPlayUI();
+      // one live loop at a time: a quick pause+play must not leave a second rAF chain running
+      var gen = ++loopGen, go = function () { requestAnimationFrame(function (n) { frame(n, gen); }); };
+      var target = scrollForTime(playT);
+      if (Math.abs(target - window.scrollY) > window.innerHeight * 0.5) {
+        // far away (e.g. from the hero): glide to the first line, then start the clock
+        window.scrollTo({ top: target, behavior: SMOOTH });
+        setTimeout(function () { if (playing && gen === loopGen) go(); }, SMOOTH === 'auto' ? 0 : 650);
+      } else {
+        go();
+      }
+    }
+    function stop() { if (!playing) return; playing = false; setPlayUI(); onScroll(); }
+    playBtns.forEach(function (b) { b.addEventListener('click', function () { playing ? stop() : start(); }); });
+    // any manual scroll intent takes the wheel back from the player
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (ev) {
+      window.addEventListener(ev, function (e) {
+        if (!playing) return;
+        var el = e.target;
+        // the player's own controls toggle it via their click, which comes right after this event —
+        // stopping here would make that click start it again (tap ⏸ / Space on ▶ restarted playback)
+        if (el && el.closest && el.closest('.js-play, .js-speed, input, textarea')) return;
+        if (ev === 'keydown' && !/^(Arrow|Page|Home|End| )/.test(e.key)) return;
+        // a pointerdown on <html> itself is a grab of the scrollbar
+        if (ev === 'pointerdown' && el !== root) return;
+        stop();
+      }, { passive: true });
+    });
+    $$('.js-speed').forEach(function (b) {
+      b.addEventListener('click', function () {
+        rate = RATES[(RATES.indexOf(rate) + 1) % RATES.length];
+        var lbl = String(rate) + '×';
+        $$('.js-speed').forEach(function (x) { x.textContent = lbl; x.setAttribute('aria-label', 'Playback speed: ' + lbl); });
+      });
+    });
+
+    function seek(i) {
+      if (playing) { playT = turns[i].t; window.scrollTo(0, scrollForTime(playT)); return; }
+      window.scrollTo({ top: scrollForTime(turns[i].t) + 2, behavior: SMOOTH });
+    }
+
+    // ---------- "name once": the core VoiceGrep trick, on this page ----------
+    var KEY = 'vg.landing.s1name';
+    function initials(n) {
+      var w = n.split(/\s+/).filter(Boolean);
+      return ((w[0] || '?').charAt(0) + (w[1] ? w[1].charAt(0) : '')).toUpperCase();
+    }
+    function applyName(name, how) {
+      $$('[data-name="s1"]').forEach(function (e) { e.textContent = name; });
+      $$('[data-ini="s1"]').forEach(function (e) { e.textContent = initials(name); });
+      root.classList.add('named');
+      $('.js-task-name').classList.add('done');
+      if (how === 'fresh') {
+        $$('.turn[data-spk="s1"], .mm-turn[data-spk="s1"]').forEach(function (el) {
+          el.classList.remove('renamed'); void el.offsetWidth; el.classList.add('renamed');
+        });
+        toast('Voice saved: “' + name + '”. VoiceGrep will label them from now on.');
+      } else if (how === 'return') {
+        setTimeout(function () { toast('Welcome back. Voice “' + name + '” recognized — no need to name it again.'); }, 900);
+      }
+    }
+    // the same gate the app uses: placeholders are not names
+    function isRealName(n) { return n && !/^(я|me)$/i.test(n) && !/^(собеседник|speaker)(\s*\d+)?$/i.test(n); }
+    function setName(raw, form) {
+      var name = String(raw || '').replace(/\s+/g, ' ').trim().slice(0, 32);
+      var err = form && form.parentNode.querySelector('.namer-err');
+      if (!name) { if (form) form.querySelector('input').focus(); return; }
+      if (!isRealName(name)) {
+        var m = /^(я|me)$/i.test(name)
+          ? '“Me” is you — that’s how VoiceGrep labels the microphone’s owner.'
+          : 'That’s not a name — it’s what VoiceGrep calls people it doesn’t know yet.';
+        if (err) err.textContent = m; else toast(m);
+        return;
+      }
+      $$('.namer-err').forEach(function (x) { x.textContent = ''; });
+      try { localStorage.setItem(KEY, name); } catch (e) {}
+      applyName(name, 'fresh');
+      closePop();
+      // the field we typed in is now hidden — don't leave keyboard focus on nothing
+      var ae = document.activeElement;
+      if (!ae || ae === document.body || ae.offsetParent === null) {
+        (form && form.classList.contains('pop') ? diar : $('.js-rename')).focus({ preventScroll: true });
+      }
+    }
+    $$('[data-namer]').forEach(function (f) {
+      f.addEventListener('submit', function (e) { e.preventDefault(); setName(f.querySelector('input').value, f); });
+    });
+    $$('[data-sugg]').forEach(function (b) { b.addEventListener('click', function () { setName(b.getAttribute('data-sugg')); }); });
+
+    var pop = $('.namer.pop'), popBtn = $('.js-name-open');
+    function closePop() { if (pop) { pop.hidden = true; popBtn.setAttribute('aria-expanded', 'false'); } }
+    popBtn.addEventListener('click', function () {
+      pop.hidden = !pop.hidden; popBtn.setAttribute('aria-expanded', pop.hidden ? 'false' : 'true');
+      if (!pop.hidden) pop.querySelector('input').focus();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || !pop || pop.hidden) return;
+      var inside = pop.contains(document.activeElement);
+      closePop();
+      if (inside) popBtn.focus();
+    });
+    document.addEventListener('click', function (e) { if (pop && !pop.hidden && !pop.parentNode.contains(e.target)) closePop(); });
+    $('.js-rename').addEventListener('click', function () {
+      root.classList.remove('named');
+      $('.js-task-name').classList.remove('done');
+      $$('[data-name="s1"]').forEach(function (e) { e.textContent = 'Speaker 1'; });
+      $$('[data-ini="s1"]').forEach(function (e) { e.textContent = 'S1'; });
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      $$('.namer-err').forEach(function (x) { x.textContent = ''; });
+      var inp = $('#nm-card'); inp.value = ''; inp.focus();
+    });
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    if (saved && isRealName(saved)) applyName(saved.slice(0, 32), 'return');
+    else root.classList.remove('named');
+
+    // ---------- grep: search this meeting ----------
+    var lines = $$('.turn .ln'), grepIn = $('#grep'), grepRes = $('#grep-res'), firstHit = null;
+    var norm = function (s) { return s.toLowerCase().replace(/ё/g, 'е'); };
+    function clearMarks() {
+      $$('mark.hit').forEach(function (m) { var p = m.parentNode; p.replaceChild(document.createTextNode(m.textContent), m); p.normalize(); });
+      $$('.turn.hit').forEach(function (t) { t.classList.remove('hit'); });
+      $$('.tick').forEach(function (t) { t.remove(); });
+    }
+    function grep(q) {
+      clearMarks(); firstHit = null;
+      q = q.trim();
+      if (q.length < 2) { grepRes.textContent = 'Matches light up in the lines and on the lanes above.'; return; }
+      var nq = norm(q), L = nq.length, hits = 0, inTurns = 0;
+      lines.forEach(function (ln) {
+        var walker = document.createTreeWalker(ln, NodeFilter.SHOW_TEXT, null), nodes = [], n, found = 0;
+        while ((n = walker.nextNode())) {
+          // skip text the visitor can't see (the hidden named/unnamed variant)
+          if (n.parentNode.offsetParent === null) continue;
+          nodes.push(n);
+        }
+        nodes.forEach(function (node) {
+          var text = node.nodeValue, lower = norm(text), at = lower.indexOf(nq);
+          if (at < 0) return;
+          var frag = document.createDocumentFragment(), from = 0;
+          while (at >= 0) {
+            frag.appendChild(document.createTextNode(text.slice(from, at)));
+            var m = document.createElement('mark'); m.className = 'hit'; m.textContent = text.slice(at, at + L);
+            frag.appendChild(m); found++;
+            if (!firstHit) firstHit = m;
+            from = at + L; at = lower.indexOf(nq, from);
+          }
+          frag.appendChild(document.createTextNode(text.slice(from)));
+          node.parentNode.replaceChild(frag, node);
+        });
+        if (found) {
+          hits += found; inTurns++;
+          var turn = ln.closest('.turn'); turn.classList.add('hit');
+          var d = turns.filter(function (x) { return x.el === turn; })[0];
+          [$('#overlay'), mini].forEach(function (host) {
+            var tk = document.createElement('span'); tk.className = 'tick'; tk.style.left = pct(d.t + 0.5); host.appendChild(tk);
+          });
+        }
+      });
+      if (!hits) { grepRes.textContent = 'No matches. Try “voice” or “Mac”.'; return; }
+      grepRes.innerHTML = '';
+      grepRes.appendChild(document.createTextNode('Found ' + hits + ' ' + (hits === 1 ? 'match' : 'matches') +
+        ' in ' + inTurns + ' ' + (inTurns === 1 ? 'line' : 'lines') + ' — marked on the lanes.'));
+      var go = document.createElement('button'); go.type = 'button'; go.className = 'linkbtn'; go.textContent = 'Go to first';
+      go.addEventListener('click', function () { if (firstHit) firstHit.closest('.turn').scrollIntoView({ behavior: SMOOTH, block: 'center' }); });
+      grepRes.appendChild(go);
+    }
+    var grepT;
+    grepIn.addEventListener('input', function () { clearTimeout(grepT); grepT = setTimeout(function () { grep(grepIn.value); }, 120); });
+    $$('[data-q]').forEach(function (b) { b.addEventListener('click', function () { grepIn.value = b.getAttribute('data-q'); grep(grepIn.value); }); });
+
+    // ---------- the floating panel: a mark lands on the timeline at "now" ----------
+    var userMarks = 0;
+    $$('[data-mark]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (userMarks >= 12) { toast('That’s plenty of marks for one meeting :)'); return; }
+        var kind = b.getAttribute('data-mark'), f = FLAGS[kind];
+        var r = timeAtScroll(), i = r.i < 0 ? 0 : r.i, t = r.i < 0 ? 0 : r.t;
+        addFlag(kind, t, i, true);
+        var who = $('.who', turns[i].el), chip = document.createElement('span');
+        chip.className = 'chip user f-' + kind; chip.innerHTML = '<i></i>';
+        chip.firstChild.textContent = f[0]; chip.appendChild(document.createTextNode(f[1]));
+        who.insertBefore(chip, $('.tc', who));
+        userMarks++;
+        toast('“' + f[1] + '” mark at ' + fmt(t) + ' — it’s on the timeline above.');
+      });
+    });
+
+    // ---------- copy the Gatekeeper command ----------
+    $('#copyBtn').addEventListener('click', function () {
+      var b = this, t = $('#cmd').textContent;
       var done = function () {
         var old = b.getAttribute('data-orig') || b.textContent; b.setAttribute('data-orig', old); b.textContent = 'Copied';
         setTimeout(function () { b.textContent = old; }, 1600);
@@ -657,14 +1339,15 @@
         navigator.clipboard.writeText(t).then(done).catch(function () {});
       } else {
         try {
-          var r = document.createRange(); r.selectNode(document.getElementById('cmd'));
-          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          var rg = document.createRange(); rg.selectNode($('#cmd'));
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(rg);
           document.execCommand('copy'); s.removeAllRanges(); done();
         } catch (e) {}
       }
     });
 
-    document.querySelectorAll('.js-share').forEach(function (b) {
+    // ---------- touch: share / copy the page link instead of downloading ----------
+    $$('.js-share').forEach(function (b) {
       b.addEventListener('click', function () {
         var url = location.origin + location.pathname;
         var lbl = b.querySelector('.lbl');
@@ -686,20 +1369,19 @@
           window.prompt('Copy the link', url);
         };
         var copy = function () {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url).then(flash, legacyCopy);
-          } else {
-            legacyCopy();
-          }
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(flash, legacyCopy);
+          else legacyCopy();
         };
         if (navigator.share) {
-          navigator.share({ title: 'VoiceGrep', url: url })
-            .catch(function (e) { if (!e || e.name !== 'AbortError') copy(); });
+          navigator.share({ title: 'VoiceGrep', url: url }).catch(function (e) { if (!e || e.name !== 'AbortError') copy(); });
         } else {
           copy();
         }
       });
     });
+
+    onScroll();
+  })();
   </script>
 
 </body>
