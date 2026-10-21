@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VoiceGrep — локальная запись и расшифровка звонков для macOS</title>
-<meta name="description" content="VoiceGrep записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт участников по голосу. Полностью локально, без облака. macOS 14.4+.">
+<title>VoiceGrep — транскрибация звонков на Mac: локально, без облака</title>
+<meta name="description" content="VoiceGrep сам записывает звонки в Zoom, Teams, Google Meet и Телемосте, делает транскрибацию прямо на Mac и узнаёт участников по голосу. Без облака и ботов.">
 <meta property="og:title" content="VoiceGrep — расшифровка звонков прямо на вашем Mac">
-<meta property="og:description" content="Записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт собеседников по голосу. 100% локально, без облака.">
+<meta property="og:description" content="Записывает звонки в Zoom, Teams, Google Meet и Телемосте, делает транскрибацию на устройстве и узнаёт собеседников по голосу. 100% локально, без облака.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://voicegrep.com/">
 <meta property="og:locale" content="ru_RU">
@@ -22,6 +22,7 @@
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://voicegrep.com/">
 <link rel="alternate" hreflang="ru" href="https://voicegrep.com/">
 <link rel="alternate" hreflang="en" href="https://voicegrep.com/en/">
 <link rel="alternate" hreflang="x-default" href="https://voicegrep.com/en/">
@@ -140,7 +141,7 @@
   [data-theme="dark"] .js-theme .t-light { display: inline; }
   html.theme-switch, html.theme-switch * { transition: none !important; }
   .nav-cta { padding: .5em 1em; font-size: .9rem; border-radius: 10px; white-space: nowrap; }
-  @media (max-width: 860px) { .nav-links a.txt { display: none; } .nav-links { gap: 12px; } }
+  @media (max-width: 880px) { .nav-links a.txt { display: none; } .nav-links { gap: 12px; } }
 
   /* the hero's speaker lanes "dock" into the nav as a slim player once they scroll away */
   .player {
@@ -408,6 +409,22 @@
   .closing h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(1.9rem, 4.4vw, 3rem); letter-spacing: -.02em; line-height: 1.08; margin: 0 auto .35em; max-width: 18ch; }
   .closing p { color: var(--muted); margin: 0 0 1.5em; }
   .closing .meta { justify-content: center; }
+  .key-note { font-size: .88rem; color: var(--muted); margin: 8px 0 0; line-height: 1.5; max-width: 60ch; }
+  .closing .key-note.center { margin: 12px auto 0; }
+
+  /* ---------- FAQ: the call's facts again, as plain questions (for skimmers and search engines) ---------- */
+  .faq { padding: 40px 0 10px; scroll-margin-top: 110px; }
+  .faq-list { display: grid; gap: 10px; max-width: 820px; }
+  .qa { background: var(--card); border: 1px solid var(--line); border-radius: 14px; scroll-margin-top: 120px; }
+  .qa summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 14px; }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary h3 { margin: 0; font-size: 1.02rem; font-weight: 600; line-height: 1.35; flex: 1; }
+  .qa summary::after { content: "+"; content: "+" / ""; flex: none; font: 500 1.3rem/1 var(--sans); color: var(--faint); transition: transform .2s ease; }
+  .qa[open] summary::after { transform: rotate(45deg); }
+  .qa summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .qa .ans { padding: 0 20px 16px; color: var(--muted); line-height: 1.6; }
+  .qa .ans p { margin: 0 0 .6em; }
+  .qa .ans p:last-child { margin-bottom: 0; }
 
   footer { border-top: 1px solid var(--line); padding: 30px 0; color: var(--muted); font-size: .88rem; }
   .foot-in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
@@ -486,6 +503,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .rec-dot, .flag.user, .chip.user, .renamed .who .nm { animation: none; }
+    .qa summary::after { transition: none; }
   }
 </style>
 <script>
@@ -542,6 +560,162 @@
     });
   })();
 </script>
+<!-- seo:jsonld:start -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://voicegrep.com/#website",
+   "url": "https://voicegrep.com/",
+   "name": "VoiceGrep",
+   "inLanguage": [
+    "ru",
+    "en"
+   ],
+   "publisher": {
+    "@id": "https://voicegrep.com/#org"
+   }
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://voicegrep.com/#org",
+   "name": "VoiceGrep",
+   "url": "https://voicegrep.com/",
+   "logo": "https://voicegrep.com/apple-touch-icon.png"
+  },
+  {
+   "@type": "SoftwareApplication",
+   "@id": "https://voicegrep.com/#app",
+   "name": "VoiceGrep",
+   "url": "https://voicegrep.com/",
+   "description": "VoiceGrep сам записывает звонки в Zoom, Teams, Google Meet и Телемосте, делает транскрибацию прямо на Mac и узнаёт участников по голосу. Без облака и ботов.",
+   "applicationCategory": "BusinessApplication",
+   "operatingSystem": "macOS 14.4+",
+   "processorRequirements": "Apple Silicon (arm64)",
+   "softwareVersion": "1.11.0",
+   "downloadUrl": "https://voicegrep.com/VoiceGrep-1.11.0.dmg",
+   "image": "https://voicegrep.com/og-image.png",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "RUB"
+   },
+   "publisher": {
+    "@id": "https://voicegrep.com/#org"
+   },
+   "fileSize": "23 MB"
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://voicegrep.com/#faq",
+   "url": "https://voicegrep.com/",
+   "inLanguage": "ru",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Что такое VoiceGrep?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Приложение для Mac, которое живёт в строке меню: само записывает онлайн-звонки, после звонка делает транскрибацию — превращает речь в текст — прямо на устройстве и подписывает реплики именами участников, узнавая их по голосу. Запись и расшифровка не покидают Mac, и в звонок не подключается бот.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "С какими программами для звонков работает VoiceGrep?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>С любыми, где звонок идёт через микрофон Mac: Zoom, Microsoft Teams, Google Meet, Телемост, Telegram, FaceTime, Slack и другие — в том числе звонки в браузере. VoiceGrep сам замечает начало звонка и останавливает запись, когда он закончился. При автозаписи он старается писать только звук приложения звонка, чтобы уведомления и музыка из других программ не попадали в запись.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Как сделать транскрибацию звонка в Zoom или Teams?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Специально ничего делать не нужно. Установите VoiceGrep, разрешите доступ к Микрофону и Записи экрана, введите \u003ca href=\"https://voicegrep.com/#faq-key\">ключ активации\u003c/a> — и просто созванивайтесь. Когда звонок закончится, расшифровка появится в карточке встречи: с таймкодами, разбивкой по говорящим и поиском. Ни ссылку на встречу вставлять, ни бота приглашать не нужно.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Куда попадают записи и расшифровки?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Остаются на вашем Mac: аудио, текст и отпечатки голосов хранятся локально, распознавание речи и голосов работает на устройстве. Это не настройка, которую можно случайно переключить, — приложение так устроено.\u003c/p> \u003cp>Сеть нужна, только чтобы один раз скачать модель распознавания (0,6–1 ГБ) и проверять обновления. Если вы сами подключите облачную языковую модель для саммари и ассистента, ей уйдёт текст встреч (расшифровки, заметки, материалы) — не аудио и не голоса; с локальной моделью (Ollama, LM Studio) не уходит и он.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Это бесплатно? Что за ключ активации?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>VoiceGrep бесплатный. Чтобы записывать и импортировать новые встречи, нужен ключ активации: он привязан к компьютеру и выдаётся на срок. Откройте «Настройки → Лицензия», скопируйте «ID машины» и \u003ca href=\"https://t.me/ilyabazheno\">напишите в Telegram\u003c/a> — пришлём ключ.\u003c/p> \u003cp>За 14 дней до конца срока приложение напомнит о продлении; на новом Mac понадобится новый ключ. Без ключа всё уже записанное остаётся доступным: слушать, искать, экспортировать.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Насколько хорошо VoiceGrep распознаёт русскую речь?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>VoiceGrep сделан в первую очередь для звонков на русском. Английский тоже поддерживается: язык выбирается в настройках, можно включить автоопределение.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Как VoiceGrep узнаёт, кто говорит?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Ваш голос приходит с микрофона, поэтому ваши реплики подписаны «Я». Остальных VoiceGrep различает по голосу: назовите собеседника один раз — отпечаток его голоса сохранится, и на следующих встречах VoiceGrep подпишет его реплики сам.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Можно ли расшифровать готовую запись?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Да. Загрузите аудио или видео (m4a, mp3, wav, mp4, mov и другие форматы, которые открывает macOS) — VoiceGrep расшифрует его так же, как свой звонок: с разбивкой по голосам, а с подключённой языковой моделью — ещё и с саммари и задачами. Любую встречу можно выгрузить в Markdown.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Делает ли VoiceGrep саммари и список задач?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Да, если подключить языковую модель: по своему API-ключу, через подписку Claude или ChatGPT (их программы для терминала claude и codex) или локальную (Ollama, LM Studio). Тогда после звонка появятся краткое содержание и задачи с исполнителями: задачи VoiceGrep предлагает, а вы подтверждаете нужные. По всему архиву встреч отвечает ассистент — со ссылками на разговоры.\u003c/p> \u003cp>Транскрибация и имена участников работают и без языковой модели.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Что показывает граф общения?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Это отдельное окно в разделе «Люди». Граф сам находит круги людей, которые бывают на встречах вместе, и подписывает их проектом или компанией. На соседних вкладках видно, сколько часов в неделю уходит на каждый круг или проект, кто связывает разные команды и какие из них общаются только через вас, с кем встречи стали реже или прекратились.\u003c/p> \u003cp>Всё считается на вашем Mac, по вашему архиву, — языковая модель для этого не нужна.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Чем VoiceGrep отличается от облачных сервисов транскрибации?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Облачные сервисы обрабатывают запись на своих серверах, многие — подключая к звонку бота-участника. VoiceGrep ничего не подключает к звонку и никуда не загружает запись: транскрибация идёт на вашем Mac. Поэтому он подходит и для звонков с клиентами, которые нельзя отдавать третьим лицам (если не подключать облачную языковую модель), — и работает без интернета.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Какие системные требования?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Mac на Apple Silicon (M1 и новее) и macOS 14.4 или новее. Приложение весит около 23 МБ, модель распознавания — 0,6–1 ГБ, она скачивается один раз. Нужны разрешения «Микрофон» и «Запись экрана»: второе — только чтобы macOS отдала звук звонка, видео экрана не сохраняется.\u003c/p>"
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- seo:jsonld:end -->
 </head>
 <body>
 
@@ -556,6 +730,7 @@
         <a class="txt" href="#t-names">Узнавание</a>
         <a class="txt" href="#t-install">Установка</a>
         <a class="txt" href="#summary">Итоги</a>
+        <a class="txt" href="#faq">Вопросы</a>
         <button class="theme js-theme" type="button" aria-pressed="false" aria-label="Тёмная тема" title="Тёмная тема"><svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 1 1 9.9 3.5a6.6 6.6 0 0 0 10.6 10.6z"/></svg><svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg></button>
         <a class="lang" href="en/" hreflang="en" lang="en" title="English version">EN</a>
         <a class="btn nav-cta no-touch" href="VoiceGrep-1.11.0.dmg">Скачать</a>
@@ -568,7 +743,7 @@
           <svg class="i-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"/></svg>
           <svg class="i-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z" fill="currentColor"/></svg>
         </button>
-        <span class="clock"><b class="js-now">00:00</b> / <span class="js-total">04:13</span></span>
+        <span class="clock"><b class="js-now">00:00</b> / <span class="js-total">04:45</span></span>
         <button class="speed js-speed" type="button" aria-label="Скорость проигрывания: 1×">1×</button>
         <div class="mini" id="mini" aria-hidden="true"><div class="ph"></div></div>
         <span class="cloud in-player" title="Сколько данных этой встречи ушло в облако"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 0 1 0 9z"/><path d="m3 3 18 18"/></svg>в облако: <b>0&nbsp;Б</b></span>
@@ -578,9 +753,9 @@
 
   <header class="hero" id="top">
     <div class="wrap">
-      <p class="kicker"><span class="live">Расшифровано на этом Mac</span><span>Встреча · сегодня · <span class="js-total">04:13</span> · 3 участника</span></p>
+      <p class="kicker"><span class="live">Расшифровано на этом Mac</span><span>Встреча · сегодня · <span class="js-total">04:45</span> · 3 участника</span></p>
       <h1>Расшифровка звонков прямо на&nbsp;вашем&nbsp;Mac</h1>
-      <p class="sub">VoiceGrep сам записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт собеседников по голосу. <em>А эта страница — расшифровка одного такого звонка:</em> трое решают, ставить ли VoiceGrep.</p>
+      <p class="sub">VoiceGrep сам записывает звонки в Zoom, Teams, Google Meet и Телемосте, делает транскрибацию прямо на устройстве и узнаёт собеседников по голосу. <em>А эта страница — расшифровка одного такого звонка:</em> трое решают, ставить ли VoiceGrep.</p>
       <div class="cta-row">
         <a class="btn lg no-touch" href="VoiceGrep-1.11.0.dmg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
@@ -600,6 +775,7 @@
       <div class="meta">
         <span>Бесплатно</span><span>Apple Silicon</span><span>~23&nbsp;МБ</span><span>macOS 14.4+</span><span>Обновляется само</span>
       </div>
+      <p class="key-note">Для записи нужен ключ активации: пришлите «ID машины» из настроек в&nbsp;Telegram — выдадим. <a href="#faq-key">Подробнее о&nbsp;ключе</a></p>
       <p class="touch-note only-touch">VoiceGrep — приложение для Mac. Отправьте ссылку себе и скачайте его на компьютере — или <a href="VoiceGrep-1.11.0.dmg">скачайте .dmg на это устройство</a>.</p>
 
       <figure class="diar" id="diar" tabindex="-1" aria-label="Дорожки говорящих: реплики трёх участников на шкале времени встречи">
@@ -609,7 +785,7 @@
             <svg class="i-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z" fill="currentColor"/></svg>
           </button>
           <span class="ttl">Кто и когда говорил</span>
-          <span class="clock"><b class="js-now">00:00</b> / <span class="js-total">04:13</span></span>
+          <span class="clock"><b class="js-now">00:00</b> / <span class="js-total">04:45</span></span>
           <span class="cloud" title="Сколько данных этой встречи ушло в облако"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 0 1 0 9z"/><path d="m3 3 18 18"/></svg>в облако: <b>0&nbsp;байт</b></span>
         </div>
         <div class="lanes">
@@ -635,7 +811,7 @@
     </div>
   </header>
 
-  <main class="tx" id="transcript" data-total="253">
+  <main class="tx" id="transcript" data-total="285">
     <div class="wrap narrow">
       <div class="tx-bar"><h2>Расшифровка</h2><span>3 участника · <span class="js-count">30 реплик</span></span></div>
 
@@ -651,7 +827,7 @@
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
           <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">00:08</span></div>
-          <p class="ln">Нет, это VoiceGrep. Сидит в строке меню и сам замечает, когда начинается звонок, — я ничего не нажимаю.</p>
+          <p class="ln">Нет, это VoiceGrep. Сидит в строке меню и сам замечает, когда начинается звонок — в Zoom, Teams, Google Meet, Телемосте, Telegram, где угодно. Я ничего не нажимаю.</p>
           <div class="embed unknown" id="namer-card">
             <div class="if-unnamed">
               <div class="unknown-top">
@@ -679,10 +855,10 @@
         </div>
       </article>
 
-      <article data-t="16" class="turn cont" data-spk="s1">
+      <article data-t="20" class="turn cont" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">00:16</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">00:20</span></div>
           <p class="ln">Пишет две дорожки — системный звук и микрофон. Звонок закончился — запись остановилась, и прямо на маке всё превращается в текст.</p>
           <div class="embed">
             <p class="lbl">Две дорожки этой встречи</p>
@@ -695,19 +871,19 @@
         </div>
       </article>
 
-      <article data-t="26" class="turn" data-spk="s2" data-flag="q">
+      <article data-t="30" class="turn" data-spk="s2" data-flag="q">
         <span class="av" data-spk="s2">ОБ</span>
         <div class="body">
-          <div class="who"><span class="nm">Ольга Белова</span><span class="chip f-q"><i>?</i>Вопрос</span><span class="tc">00:26</span></div>
+          <div class="who"><span class="nm">Ольга Белова</span><span class="chip f-q"><i>?</i>Вопрос</span><span class="tc">00:30</span></div>
           <p class="ln">Стоп. «Превращается в текст» — это где? У нас звонки с клиентами, отдавать их в чужое облако нельзя.</p>
         </div>
       </article>
 
-      <article data-t="33" class="turn" data-spk="s1" data-flag="imp" id="t-privacy">
+      <article data-t="37" class="turn" data-spk="s1" data-flag="imp" id="t-privacy">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="chip f-imp"><i>★</i>Важное</span><span class="tc">00:33</span></div>
-          <p class="ln">Никуда не отдаётся. Запись, расшифровка и узнавание голосов работают целиком на устройстве. Это не галочка в настройках, которую можно случайно снять, — приложение так устроено.</p>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="chip f-imp"><i>★</i>Важное</span><span class="tc">00:37</span></div>
+          <p class="ln">Никуда не отдаётся. Запись, транскрибация и узнавание голосов работают целиком на устройстве. Это не галочка в настройках, которую можно случайно снять, — приложение так устроено.</p>
           <div class="embed readout" role="group" aria-label="Где хранятся данные встречи">
             <div class="ro"><span class="k">Аудио звонка</span><span class="dots"></span><span class="v">на этом Mac</span></div>
             <div class="ro"><span class="k">Расшифровка</span><span class="dots"></span><span class="v">на этом Mac</span></div>
@@ -718,50 +894,50 @@
         </div>
       </article>
 
-      <article data-t="46" class="turn" data-spk="s2">
+      <article data-t="50" class="turn" data-spk="s2">
         <span class="av" data-spk="s2">ОБ</span>
         <div class="body">
-          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">00:46</span></div>
+          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">00:50</span></div>
           <p class="ln">А интернет ему нужен?</p>
         </div>
       </article>
 
-      <article data-t="49" class="turn" data-spk="s1">
+      <article data-t="53" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">00:49</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">00:53</span></div>
           <p class="ln">Один раз — скачать модель распознавания, это 0,6–1&nbsp;ГБ. Дальше всё работает офлайн. Сеть нужна только для обновлений и для внешней LLM — если включишь её своим ключом.</p>
         </div>
       </article>
 
-      <article data-t="61" class="turn" data-spk="me">
+      <article data-t="65" class="turn" data-spk="me">
         <span class="av" data-spk="me">Я</span>
         <div class="body">
-          <div class="who"><span class="nm">Я</span><span class="tc">01:01</span></div>
+          <div class="who"><span class="nm">Я</span><span class="tc">01:05</span></div>
           <p class="ln">А русский он нормально понимает? У нас половина созвонов на русском.</p>
         </div>
       </article>
 
-      <article data-t="66" class="turn" data-spk="s1">
+      <article data-t="70" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">01:06</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">01:10</span></div>
           <p class="ln">Под русский он и заточен. Английский тоже есть — язык выбирается в настройках, можно и автоопределение.</p>
         </div>
       </article>
 
-      <article data-t="74" class="turn" data-spk="me">
+      <article data-t="78" class="turn" data-spk="me">
         <span class="av" data-spk="me">Я</span>
         <div class="body">
-          <div class="who"><span class="nm">Я</span><span class="tc">01:14</span></div>
+          <div class="who"><span class="nm">Я</span><span class="tc">01:18</span></div>
           <p class="ln">Подожди, а как он отличает, где говорю я, а где ты?</p>
         </div>
       </article>
 
-      <article data-t="78" class="turn" data-spk="s1" data-flag="imp" id="t-names">
+      <article data-t="82" class="turn" data-spk="s1" data-flag="imp" id="t-names">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="chip f-imp"><i>★</i>Важное</span><span class="tc">01:18</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="chip f-imp"><i>★</i>Важное</span><span class="tc">01:22</span></div>
           <p class="ln">Ты — это микрофон, тебя он подписывает «Я». Остальных различает по голосу: называешь человека один раз — отпечаток голоса сохраняется, и дальше в любой встрече он подписан сам. Ольгу, например, он узнал по прошлым созвонам. <span class="if-unnamed">А меня пока не знает — назови меня, кнопка есть выше, и посмотри, что станет с репликами.</span><span class="if-named">Видишь — моё имя уже стоит во всех репликах, и выше, и ниже.</span></p>
           <div class="embed">
             <div class="mm-head"><b>Следующая встреча</b><span>вторник · 10:00 · 41 мин</span></div>
@@ -783,50 +959,50 @@
         </div>
       </article>
 
-      <article data-t="100" class="turn" data-spk="s2">
+      <article data-t="104" class="turn" data-spk="s2">
         <span class="av" data-spk="s2">ОБ</span>
         <div class="body">
-          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">01:40</span></div>
+          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">01:44</span></div>
           <p class="ln">А если звонки идут подряд? У меня бывает пять подряд, без перерыва.</p>
         </div>
       </article>
 
-      <article data-t="105" class="turn" data-spk="s1">
+      <article data-t="109" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">01:45</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">01:49</span></div>
           <p class="ln">Сам разрежет на отдельные встречи. А при автозаписи пишет только звук приложения звонка — уведомления, музыка и всякое «дзынь» из других программ в запись не попадают.</p>
         </div>
       </article>
 
-      <article data-t="118" class="turn" data-spk="s2">
+      <article data-t="122" class="turn" data-spk="s2">
         <span class="av" data-spk="s2">ОБ</span>
         <div class="body">
-          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">01:58</span></div>
+          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">02:02</span></div>
           <p class="ln">А разрешения какие просит? Запись экрана — это настораживает.</p>
         </div>
       </article>
 
-      <article data-t="122" class="turn" data-spk="s1">
+      <article data-t="126" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">02:02</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">02:06</span></div>
           <p class="ln">Микрофон и Запись экрана. Запись экрана нужна лишь для того, чтобы достать системный звук звонка — видео экрана не сохраняется.</p>
         </div>
       </article>
 
-      <article data-t="132" class="turn" data-spk="me">
+      <article data-t="136" class="turn" data-spk="me">
         <span class="av" data-spk="me">Я</span>
         <div class="body">
-          <div class="who"><span class="nm">Я</span><span class="tc">02:12</span></div>
+          <div class="who"><span class="nm">Я</span><span class="tc">02:16</span></div>
           <p class="ln">Ладно, записали. А дальше? Транскрипты же никто не перечитывает.</p>
         </div>
       </article>
 
-      <article data-t="137" class="turn" data-spk="s1" id="t-search">
+      <article data-t="141" class="turn" data-spk="s1" id="t-search">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">02:17</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">02:21</span></div>
           <p class="ln">Их и не надо перечитывать. Внутри встречи есть поиск, а по всему архиву отвечает ассистент: спрашиваешь «о чём договорились с Сергеем» или «какие у меня задачи» — он сам ищет по расшифровкам, даже по звучанию, и отвечает со ссылками на разговоры. Ассистенту нужна внешняя LLM на твоём ключе — это по желанию.</p>
           <div class="embed">
             <p class="lbl">Поиск по этой встрече</p>
@@ -841,34 +1017,50 @@
         </div>
       </article>
 
-      <article data-t="158" class="turn" data-spk="s2">
+      <article data-t="162" class="turn" data-spk="s2">
         <span class="av" data-spk="s2">ОБ</span>
         <div class="body">
-          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">02:38</span></div>
+          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">02:42</span></div>
           <p class="ln">Саммари и задачи тоже сам делает?</p>
         </div>
       </article>
 
-      <article data-t="162" class="turn" data-spk="s1">
+      <article data-t="166" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">02:42</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">02:46</span></div>
           <p class="ln">Если подключишь LLM своим ключом — да: краткое содержание и задачи с исполнителями. Задачи он только предлагает, а ты подтверждаешь нужные. Ещё есть карточка на каждого человека — роль, компания, заметки — и граф, кто с кем созванивался.</p>
         </div>
       </article>
 
-      <article data-t="178" class="turn" data-spk="me">
+      <article data-t="182" class="turn" data-spk="me">
         <span class="av" data-spk="me">Я</span>
         <div class="body">
-          <div class="who"><span class="nm">Я</span><span class="tc">02:58</span></div>
+          <div class="who"><span class="nm">Я</span><span class="tc">03:02</span></div>
+          <p class="ln">А граф — это просто картинка?</p>
+        </div>
+      </article>
+
+      <article data-t="185" class="turn" data-spk="s1">
+        <span class="av" data-spk="s1" data-ini="s1">С1</span>
+        <div class="body">
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">03:05</span></div>
+          <p class="ln">Нет, там выводы. Видно, куда уходит время — по кругам людей или по проектам, кто связывает разные команды и какие из них общаются только через тебя, с кем встречи стали реже, а кто пропал совсем. Всё считается на Mac, по твоим же встречам.</p>
+        </div>
+      </article>
+
+      <article data-t="202" class="turn" data-spk="me">
+        <span class="av" data-spk="me">Я</span>
+        <div class="body">
+          <div class="who"><span class="nm">Я</span><span class="tc">03:22</span></div>
           <p class="ln">А по ходу звонка что-то отметить можно? Важный момент, например.</p>
         </div>
       </article>
 
-      <article data-t="183" class="turn" data-spk="s1" id="t-marks">
+      <article data-t="207" class="turn" data-spk="s1" id="t-marks">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">03:03</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">03:27</span></div>
           <p class="ln">Есть плавающая панель — включается в настройках: таймер, метки — важное, вопрос, задача, решение — и скриншоты. Всё привязывается к моменту разговора. Попробуй — метка встанет прямо на дорожку.</p>
           <div class="embed">
             <div class="recpanel" role="group" aria-label="Плавающая панель записи">
@@ -884,85 +1076,86 @@
         </div>
       </article>
 
-      <article data-t="197" class="turn" data-spk="s2" data-flag="q">
+      <article data-t="221" class="turn" data-spk="s2" data-flag="q">
         <span class="av" data-spk="s2">ОБ</span>
         <div class="body">
-          <div class="who"><span class="nm">Ольга Белова</span><span class="chip f-q"><i>?</i>Вопрос</span><span class="tc">03:17</span></div>
+          <div class="who"><span class="nm">Ольга Белова</span><span class="chip f-q"><i>?</i>Вопрос</span><span class="tc">03:41</span></div>
           <p class="ln">А если мак упадёт посреди звонка?</p>
         </div>
       </article>
 
-      <article data-t="200" class="turn" data-spk="s1">
+      <article data-t="224" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">03:20</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">03:44</span></div>
           <p class="ln">Встреча создаётся с первой секунды записи. После сбоя запись восстанавливается и дорасшифровывается. И базу он регулярно бэкапит сам.</p>
         </div>
       </article>
 
-      <article data-t="210" class="turn" data-spk="me">
+      <article data-t="234" class="turn" data-spk="me">
         <span class="av" data-spk="me">Я</span>
         <div class="body">
-          <div class="who"><span class="nm">Я</span><span class="tc">03:30</span></div>
+          <div class="who"><span class="nm">Я</span><span class="tc">03:54</span></div>
           <p class="ln">А старые записи, которые уже есть, — их можно?</p>
         </div>
       </article>
 
-      <article data-t="214" class="turn" data-spk="s1">
+      <article data-t="238" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">03:34</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">03:58</span></div>
           <p class="ln">Да: загружаешь готовую запись, аудио или видео, — расшифрует так же, с именами, саммари и задачами. А любую встречу можно выгрузить в Markdown, и отпечатки голосов — перенести на другой свой мак.</p>
         </div>
       </article>
 
-      <article data-t="228" class="turn" data-spk="me">
+      <article data-t="252" class="turn" data-spk="me">
         <span class="av" data-spk="me">Я</span>
         <div class="body">
-          <div class="who"><span class="nm">Я</span><span class="tc">03:48</span></div>
+          <div class="who"><span class="nm">Я</span><span class="tc">04:12</span></div>
           <p class="ln">Убедили. Как поставить?</p>
         </div>
       </article>
 
-      <article data-t="231" class="turn" data-spk="s1" data-flag="task" id="t-install">
+      <article data-t="255" class="turn" data-spk="s1" data-flag="task" id="t-install">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="chip f-task"><i>✓</i>Задача</span><span class="tc">03:51</span></div>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="chip f-task"><i>✓</i>Задача</span><span class="tc">04:15</span></div>
           <p class="ln">Скачиваешь, перетаскиваешь в «Программы» и запускаешь. Он подписан и заверен в Apple — никаких команд в Терминале, а дальше обновляется сам.</p>
           <div class="embed">
             <ol class="inst">
               <li>Откройте <b>.dmg</b> и перетащите <b>VoiceGrep</b> в папку «Программы».</li>
               <li>Запустите VoiceGrep — мастер первого запуска попросит доступ к <b>Микрофону</b> и <b>Записи экрана</b>.</li>
+              <li>В разделе «Настройки → Лицензия» скопируйте «ID машины» и <a href="https://t.me/ilyabazheno">напишите в&nbsp;Telegram</a> — пришлём ключ активации.</li>
             </ol>
           </div>
         </div>
       </article>
 
-      <article data-t="241" class="turn" data-spk="s2">
+      <article data-t="265" class="turn" data-spk="s2">
         <span class="av" data-spk="s2">ОБ</span>
         <div class="body">
-          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">04:01</span></div>
+          <div class="who"><span class="nm">Ольга Белова</span><span class="tc">04:25</span></div>
           <p class="ln">А мак какой нужен?</p>
         </div>
       </article>
 
-      <article data-t="244" class="turn" data-spk="s1">
+      <article data-t="268" class="turn" data-spk="s1">
         <span class="av" data-spk="s1" data-ini="s1">С1</span>
         <div class="body">
-          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">04:04</span></div>
-          <p class="ln">Apple Silicon — M1 и новее, macOS 14.4 или выше. Весит около 23&nbsp;МБ. И бесплатно.</p>
+          <div class="who"><span class="nm" data-name="s1">Собеседник 1</span><span class="tc">04:28</span></div>
+          <p class="ln">Apple Silicon — M1 и новее, macOS 14.4 или выше. Весит около 23&nbsp;МБ. И бесплатно — только запись включается ключом активации: копируешь «ID машины» в настройках, пишешь <a href="https://t.me/ilyabazheno">в&nbsp;Telegram</a> — присылают ключ.</p>
         </div>
       </article>
 
-      <article data-t="250" class="turn" data-spk="me" data-flag="dec">
+      <article data-t="282" class="turn" data-spk="me" data-flag="dec">
         <span class="av" data-spk="me">Я</span>
         <div class="body">
-          <div class="who"><span class="nm">Я</span><span class="chip f-dec"><i>◆</i>Решение</span><span class="tc">04:10</span></div>
+          <div class="who"><span class="nm">Я</span><span class="chip f-dec"><i>◆</i>Решение</span><span class="tc">04:42</span></div>
           <p class="ln">Всё, ставлю.</p>
         </div>
       </article>
 
-      <p class="tx-end"><span><span class="sq"></span>Звонок закончился · запись остановлена сама · <span class="js-total">04:13</span></span></p>
+      <p class="tx-end"><span><span class="sq"></span>Звонок закончился · запись остановлена сама · <span class="js-total">04:45</span></span></p>
     </div>
 
   <section class="summary" id="summary">
@@ -975,11 +1168,11 @@
         <div class="panel">
           <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v4M3 5h4M6 17v4M4 19h4"/><path d="M13 3 16 9l6 3-6 3-3 6-3-6-6-3 6-3z"/></svg>Саммари</h3>
           <ul class="bul">
-            <li>VoiceGrep сам замечает звонок, пишет системный звук и микрофон и после звонка расшифровывает их прямо на Mac, без облака.</li>
+            <li>VoiceGrep сам замечает звонок в Zoom, Teams, Google Meet, Телемосте или Telegram, пишет системный звук и микрофон и после звонка делает транскрибацию прямо на Mac, без облака.</li>
             <li>Основной язык — русский, английский тоже поддерживается.</li>
             <li>Человека называют один раз — дальше его узнают по голосу на всех встречах.</li>
-            <li>Поиск внутри встречи и ассистент по всему архиву (через внешнюю LLM), метки и скриншоты по ходу звонка, импорт своих записей, экспорт в Markdown.</li>
-            <li>Apple Silicon, macOS 14.4+, около 23&nbsp;МБ, бесплатно.</li>
+            <li>Поиск внутри встречи и ассистент по всему архиву (через внешнюю LLM), метки и скриншоты по ходу звонка, импорт своих записей, экспорт в Markdown; граф общения — круги людей, куда уходит время по кругам и проектам, кто связывает команды и с кем встречи стали реже.</li>
+            <li>Apple Silicon, macOS 14.4+, около 23&nbsp;МБ, бесплатно; для записи нужен ключ активации — выдаётся по «ID машины» через Telegram.</li>
           </ul>
         </div>
         <div class="panel">
@@ -1003,6 +1196,13 @@
                 <div class="t-meta"><span class="who-mini"><span class="av" data-spk="me">Я</span>Я</span><span class="if-unnamed"><a href="#namer-card">назвать ↑</a></span><span class="if-named">готово: «<span data-name="s1">Собеседник 1</span>»</span></div>
               </div>
             </li>
+            <li class="task">
+              <span class="box" aria-hidden="true">✓</span>
+              <div>
+                <div class="t-title">Получить ключ активации</div>
+                <div class="t-meta"><span class="who-mini"><span class="av" data-spk="me">Я</span>Я</span><a href="#faq-key">как получить ↓</a></div>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -1014,12 +1214,99 @@
       </div>
     </div>
   </section>
+
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="sum-head">
+        <h2>Вопросы и ответы</h2>
+        <p>То же, о чём говорили на звонке, — коротко и по пунктам.</p>
+      </div>
+      <div class="faq-list">
+        <details class="qa" id="faq-what">
+          <summary><h3>Что такое VoiceGrep?</h3></summary>
+          <div class="ans">
+            <p>Приложение для Mac, которое живёт в строке меню: само записывает онлайн-звонки, после звонка делает транскрибацию — превращает речь в текст — прямо на устройстве и подписывает реплики именами участников, узнавая их по голосу. Запись и расшифровка не покидают Mac, и в звонок не подключается бот.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-apps">
+          <summary><h3>С какими программами для звонков работает VoiceGrep?</h3></summary>
+          <div class="ans">
+            <p>С любыми, где звонок идёт через микрофон Mac: Zoom, Microsoft Teams, Google Meet, Телемост, Telegram, FaceTime, Slack и другие — в том числе звонки в браузере. VoiceGrep сам замечает начало звонка и останавливает запись, когда он закончился. При автозаписи он старается писать только звук приложения звонка, чтобы уведомления и музыка из других программ не попадали в запись.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-zoom">
+          <summary><h3>Как сделать транскрибацию звонка в Zoom или Teams?</h3></summary>
+          <div class="ans">
+            <p>Специально ничего делать не нужно. Установите VoiceGrep, разрешите доступ к Микрофону и Записи экрана, введите <a href="#faq-key">ключ активации</a> — и просто созванивайтесь. Когда звонок закончится, расшифровка появится в карточке встречи: с таймкодами, разбивкой по говорящим и поиском. Ни ссылку на встречу вставлять, ни бота приглашать не нужно.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-privacy">
+          <summary><h3>Куда попадают записи и расшифровки?</h3></summary>
+          <div class="ans">
+            <p>Остаются на вашем Mac: аудио, текст и отпечатки голосов хранятся локально, распознавание речи и голосов работает на устройстве. Это не настройка, которую можно случайно переключить, — приложение так устроено.</p>
+            <p>Сеть нужна, только чтобы один раз скачать модель распознавания (0,6–1&nbsp;ГБ) и проверять обновления. Если вы сами подключите облачную языковую модель для саммари и ассистента, ей уйдёт текст встреч (расшифровки, заметки, материалы) — не аудио и не голоса; с локальной моделью (Ollama, LM Studio) не уходит и он.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-key">
+          <summary><h3>Это бесплатно? Что за ключ активации?</h3></summary>
+          <div class="ans">
+            <p>VoiceGrep бесплатный. Чтобы записывать и импортировать новые встречи, нужен ключ активации: он привязан к компьютеру и выдаётся на срок. Откройте «Настройки → Лицензия», скопируйте «ID машины» и <a href="https://t.me/ilyabazheno">напишите в&nbsp;Telegram</a> — пришлём ключ.</p>
+            <p>За 14 дней до конца срока приложение напомнит о продлении; на новом Mac понадобится новый ключ. Без ключа всё уже записанное остаётся доступным: слушать, искать, экспортировать.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-lang">
+          <summary><h3>Насколько хорошо VoiceGrep распознаёт русскую речь?</h3></summary>
+          <div class="ans">
+            <p>VoiceGrep сделан в первую очередь для звонков на русском. Английский тоже поддерживается: язык выбирается в настройках, можно включить автоопределение.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-voices">
+          <summary><h3>Как VoiceGrep узнаёт, кто говорит?</h3></summary>
+          <div class="ans">
+            <p>Ваш голос приходит с микрофона, поэтому ваши реплики подписаны «Я». Остальных VoiceGrep различает по голосу: назовите собеседника один раз — отпечаток его голоса сохранится, и на следующих встречах VoiceGrep подпишет его реплики сам.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-import">
+          <summary><h3>Можно ли расшифровать готовую запись?</h3></summary>
+          <div class="ans">
+            <p>Да. Загрузите аудио или видео (m4a, mp3, wav, mp4, mov и другие форматы, которые открывает macOS) — VoiceGrep расшифрует его так же, как свой звонок: с разбивкой по голосам, а с подключённой языковой моделью — ещё и с саммари и задачами. Любую встречу можно выгрузить в Markdown.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-summary">
+          <summary><h3>Делает ли VoiceGrep саммари и список задач?</h3></summary>
+          <div class="ans">
+            <p>Да, если подключить языковую модель: по своему API-ключу, через подписку Claude или ChatGPT (их программы для терминала <code>claude</code> и <code>codex</code>) или локальную (Ollama, LM Studio). Тогда после звонка появятся краткое содержание и задачи с исполнителями: задачи VoiceGrep предлагает, а вы подтверждаете нужные. По всему архиву встреч отвечает ассистент — со ссылками на разговоры.</p>
+            <p>Транскрибация и имена участников работают и без языковой модели.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-graph">
+          <summary><h3>Что показывает граф общения?</h3></summary>
+          <div class="ans">
+            <p>Это отдельное окно в разделе «Люди». Граф сам находит круги людей, которые бывают на встречах вместе, и подписывает их проектом или компанией. На соседних вкладках видно, сколько часов в неделю уходит на каждый круг или проект, кто связывает разные команды и какие из них общаются только через вас, с кем встречи стали реже или прекратились.</p>
+            <p>Всё считается на вашем Mac, по вашему архиву, — языковая модель для этого не нужна.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-cloud">
+          <summary><h3>Чем VoiceGrep отличается от облачных сервисов транскрибации?</h3></summary>
+          <div class="ans">
+            <p>Облачные сервисы обрабатывают запись на своих серверах, многие — подключая к звонку бота-участника. VoiceGrep ничего не подключает к звонку и никуда не загружает запись: транскрибация идёт на вашем Mac. Поэтому он подходит и для звонков с клиентами, которые нельзя отдавать третьим лицам (если не подключать облачную языковую модель), — и работает без интернета.</p>
+          </div>
+        </details>
+        <details class="qa" id="faq-req">
+          <summary><h3>Какие системные требования?</h3></summary>
+          <div class="ans">
+            <p>Mac на Apple Silicon (M1 и новее) и macOS 14.4 или новее. Приложение весит около 23&nbsp;МБ, модель распознавания — 0,6–1&nbsp;ГБ, она скачивается один раз. Нужны разрешения «Микрофон» и «Запись экрана»: второе — только чтобы macOS отдала звук звонка, видео экрана не сохраняется.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
   </main>
 
   <section class="closing">
     <div class="wrap">
       <h2>Следующий звонок расшифрует ваш Mac</h2>
-      <p>Полностью локальная запись и расшифровка звонков для macOS.</p>
+      <p>Полностью локальная запись и транскрибация звонков для macOS.</p>
       <a class="btn lg no-touch" href="VoiceGrep-1.11.0.dmg">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
         Скачать для macOS
@@ -1029,12 +1316,13 @@
         <span class="lbl">Отправить ссылку на Mac</span>
       </button>
       <div class="meta"><span>Бесплатно</span><span>Apple Silicon</span><span>~23&nbsp;МБ</span><span>macOS 14.4+</span><span>Обновляется само</span></div>
+      <p class="key-note center">Для записи нужен ключ активации: пришлите «ID машины» из настроек в&nbsp;Telegram — выдадим. <a href="#faq-key">Подробнее о&nbsp;ключе</a></p>
     </div>
   </section>
 
   <footer>
     <div class="wrap foot-in">
-      <span>VoiceGrep — локальная запись и расшифровка звонков для macOS.</span>
+      <span>VoiceGrep — локальная транскрибация звонков Zoom, Teams, Google Meet и Телемоста на Mac.</span>
       <span>Все данные хранятся только на вашем Mac.</span>
       <button class="foot-theme js-theme" type="button"><svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 1 1 9.9 3.5a6.6 6.6 0 0 0 10.6 10.6z"/></svg><svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg><span class="t-dark">Тёмная тема</span><span class="t-light">Светлая тема</span></button>
     </div>
@@ -1432,6 +1720,18 @@
           copy();
         }
       });
+    });
+
+    // FAQ: a link to a question (#faq-key from the hero, a shared URL) opens its <details> —
+    // Safari doesn't auto-expand on fragment navigation, and a repeat click fires no hashchange
+    function openQA(id) {
+      var d = id && document.getElementById(id);
+      if (d && d.tagName === 'DETAILS') d.open = true;
+    }
+    openQA(location.hash.slice(1));
+    window.addEventListener('hashchange', function () { openQA(location.hash.slice(1)); });
+    $$('a[href^="#faq-"]').forEach(function (a) {
+      a.addEventListener('click', function () { openQA(a.getAttribute('href').slice(1)); });
     });
 
     onScroll();
