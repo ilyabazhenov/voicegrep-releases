@@ -3,15 +3,15 @@
   <url>
     <loc>https://voicegrep.com/</loc>
     <lastmod>2026-10-21</lastmod>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://voicegrep.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://voicegrep.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://voicegrep.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voicegrep.com/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://voicegrep.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voicegrep.com/"/>
   </url>
   <url>
-    <loc>https://voicegrep.com/en/</loc>
+    <loc>https://voicegrep.com/ru/</loc>
     <lastmod>2026-10-21</lastmod>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://voicegrep.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://voicegrep.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://voicegrep.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voicegrep.com/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://voicegrep.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voicegrep.com/"/>
   </url>
 </urlset>

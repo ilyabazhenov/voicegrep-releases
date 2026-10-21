@@ -1,4 +1,4 @@
-# voicegrep.com — the landing (RU at /, EN at /en/). Service files below aren't pages:
+# voicegrep.com — the landing (EN at /, RU at /ru/; /en/ is a redirect to /). Service files below aren't pages:
 # the repo READMEs duplicate the landing, appcast.xml is Sparkle's update feed (Sparkle
 # ignores robots.txt). open.html is NOT listed: it carries its own noindex, which a
 # crawler must be allowed to fetch to see.

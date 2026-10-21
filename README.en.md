@@ -8,17 +8,17 @@
 
 Records online calls, transcribes them on-device and recognizes who's speaking by voice. No cloud.
 
-[![Version](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fvoicegrep.com%2Fappcast.xml&query=%2F%2Fitem%5B1%5D%2F*%5Blocal-name()%3D%27shortVersionString%27%5D&label=version&color=0e7c6b)](https://voicegrep.com/en/)
+[![Version](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fvoicegrep.com%2Fappcast.xml&query=%2F%2Fitem%5B1%5D%2F*%5Blocal-name()%3D%27shortVersionString%27%5D&label=version&color=0e7c6b)](https://voicegrep.com/)
 ![macOS 14.4+](https://img.shields.io/badge/macOS-14.4%2B-111111?logo=apple)
 ![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1%2B-111111?logo=apple)
 ![To the cloud: 0 bytes](https://img.shields.io/badge/to%20the%20cloud-0%20bytes-0e7c6b)
 ![Developer ID, notarized](https://img.shields.io/badge/Developer%20ID-notarized-555555)
 
 **[Download for macOS](https://voicegrep.com/VoiceGrep-1.11.0.dmg)** ·
-[voicegrep.com](https://voicegrep.com/en/) ·
+[voicegrep.com](https://voicegrep.com/) ·
 [По-русски](README.md)
 
-<a href="https://voicegrep.com/en/"><img src="og-image-en.png" alt="VoiceGrep lays out a call by voice: “Me” is the microphone, Olivia Bell is recognized by voice, Speaker 1 is waiting for a name. To the cloud: 0 bytes." width="860"></a>
+<a href="https://voicegrep.com/"><img src="og-image-en.png" alt="VoiceGrep lays out a call by voice: “Me” is the microphone, Olivia Bell is recognized by voice, Speaker 1 is waiting for a name. To the cloud: 0 bytes." width="860"></a>
 
 </div>
 
@@ -130,7 +130,7 @@ The app's source is closed. This repository holds what's distributed publicly:
 
 | File | What it is |
 |---|---|
-| [`index.html`](index.html), [`en/`](en/) | The [voicegrep.com](https://voicegrep.com/) website (GitHub Pages) |
+| [`index.html`](index.html), [`ru/`](ru/) | The [voicegrep.com](https://voicegrep.com/) website (GitHub Pages) |
 | `VoiceGrep-<version>.dmg` | The latest build; older ones are removed when a new one ships |
 | [`appcast.xml`](appcast.xml) | The update feed the app polls |
 | [`open.html`](open.html) | Forwarding page for `voicegrep://` meeting links |

@@ -8,17 +8,17 @@
 
 Записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт собеседников по голосу. Без облака.
 
-[![Версия](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fvoicegrep.com%2Fappcast.xml&query=%2F%2Fitem%5B1%5D%2F*%5Blocal-name()%3D%27shortVersionString%27%5D&label=%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F&color=0e7c6b)](https://voicegrep.com/)
+[![Версия](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fvoicegrep.com%2Fappcast.xml&query=%2F%2Fitem%5B1%5D%2F*%5Blocal-name()%3D%27shortVersionString%27%5D&label=%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F&color=0e7c6b)](https://voicegrep.com/ru/)
 ![macOS 14.4+](https://img.shields.io/badge/macOS-14.4%2B-111111?logo=apple)
 ![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1%2B-111111?logo=apple)
 ![В облако — 0 байт](https://img.shields.io/badge/%D0%B2%20%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE-0%20%D0%B1%D0%B0%D0%B9%D1%82-0e7c6b)
 ![Developer ID, нотаризовано](https://img.shields.io/badge/Developer%20ID-%D0%BD%D0%BE%D1%82%D0%B0%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BE-555555)
 
 **[Скачать для macOS](https://voicegrep.com/VoiceGrep-1.11.0.dmg)** ·
-[voicegrep.com](https://voicegrep.com/) ·
+[voicegrep.com](https://voicegrep.com/ru/) ·
 [English](README.en.md)
 
-<a href="https://voicegrep.com/"><img src="og-image.png" alt="VoiceGrep раскладывает звонок по голосам: «Я» — микрофон, Ольга Белова узнана по голосу, Собеседник 1 ждёт имени. В облако: 0 байт." width="860"></a>
+<a href="https://voicegrep.com/ru/"><img src="og-image.png" alt="VoiceGrep раскладывает звонок по голосам: «Я» — микрофон, Ольга Белова узнана по голосу, Собеседник 1 ждёт имени. В облако: 0 байт." width="860"></a>
 
 </div>
 
@@ -127,7 +127,7 @@ EdDSA). Проверить вручную — «Проверить обновл�
 
 | Файл | Что это |
 |---|---|
-| [`index.html`](index.html), [`en/`](en/) | Сайт [voicegrep.com](https://voicegrep.com/) (GitHub Pages) |
+| [`index.html`](index.html), [`ru/`](ru/) | Сайт [voicegrep.com](https://voicegrep.com/ru/) (GitHub Pages) |
 | `VoiceGrep-<версия>.dmg` | Последняя сборка; старые удаляются при выходе новой |
 | [`appcast.xml`](appcast.xml) | Лента обновлений, которую опрашивает приложение |
 | [`open.html`](open.html) | Переадресация ссылок на встречи `voicegrep://` |
