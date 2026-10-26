@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — VoiceGrep</title>
+<link rel="alternate" hreflang="ru" href="https://voicegrep.com/ru/privacy/">
+<style>
+  :root { --bg:#fff; --fg:#1d1d1f; --muted:#6e6e73; --accent:#4f46e5; color-scheme: light dark; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#111113; --fg:#f5f5f7; --muted:#a1a1a6; --accent:#818cf8; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:48px 16px 80px; }
+  h1 { font-size:30px; margin:0 0 4px; } h2 { font-size:20px; margin:32px 0 8px; }
+  .muted { color:var(--muted); } a { color:var(--accent); } li { margin:4px 0; }
+</style>
+</head>
+<body>
+<main>
+  <!-- Source of truth: web/privacy/index.html in the VoiceGrep repo; copied by scripts/stage-web.sh (make publish / make publish-web). -->
+  <h1>Privacy</h1>
+  <p class="muted">VoiceGrep and the “VoiceGrep — who is speaking” browser extension. Updated October 26, 2026.</p>
+
+  <h2>In short</h2>
+  <p>VoiceGrep is a Mac app that records calls and transcribes them <b>on your device</b>. Recordings,
+    transcripts and voiceprints stay on your Mac. We run no servers that receive your conversations,
+    and we do not sell or share your data.</p>
+
+  <h2>The VoiceGrep app</h2>
+  <ul>
+    <li>Audio, transcripts, participants and voiceprints are stored in the app's folder on your Mac.</li>
+    <li>Speech and voice recognition run on the device. Recognition models are downloaded on first
+      launch; none of your data is sent with that.</li>
+    <li>If <b>you</b> connect a cloud language-model provider in Settings (for summaries, tasks, the
+      assistant), transcript text is sent to the provider you chose, under its terms. Without such a
+      connection, text never leaves the Mac.</li>
+    <li>If <b>you</b> turn on the team directory, people's names and voiceprints are published to the git
+      repository you configured — and only there.</li>
+    <li>Updates are checked against a public update feed; the request carries none of your recordings.</li>
+  </ul>
+
+  <h2>The “VoiceGrep — who is speaking” browser extension</h2>
+  <ul>
+    <li><b>What it reads.</b> Only on call pages of supported services (currently Kontur.Talk):
+      participants' display names on the tiles and the speaking indicator. It does not read chat,
+      screen, audio, other sites or your browsing history.</li>
+    <li><b>Where it sends it.</b> Only to the VoiceGrep app on the same Mac, through the browser's
+      built-in channel to local programs (native messaging). The extension sends nothing to the
+      internet — not to us, not to third parties.</li>
+    <li><b>When.</b> Names are passed only while VoiceGrep is recording the call. No recording — names
+      never leave the browser.</li>
+    <li><b>What it stores.</b> Only your settings (consent and the list of enabled services) in browser
+      storage.</li>
+    <li><b>Why.</b> So that after transcription VoiceGrep can suggest the right names for the voices.
+      The decision is always yours.</li>
+    <li>The extension asks for consent on first run; you can turn it off at any time in the extension
+      itself or by removing it from the browser.</li>
+  </ul>
+  <p>The use of information received by the extension adheres to the
+    <a href="https://developer.chrome.com/docs/webstore/program-policies/limited-use">Chrome Web Store User
+    Data Policy</a>, including the Limited Use requirements: the data is used only for this feature, is
+    not transferred to third parties, is not used for advertising and is not read by humans.</p>
+
+  <h2>Questions</h2>
+  <p>Questions about privacy, your data or the extension — email <a href="mailto:amio.env@gmail.com">amio.env@gmail.com</a>.
+    Project site — <a href="https://voicegrep.com/">voicegrep.com</a>.</p>
+</main>
+</body>
+</html>
