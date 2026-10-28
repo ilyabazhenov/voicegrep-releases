@@ -103,7 +103,7 @@ The app is signed with Developer ID and notarized by Apple — no Terminal comma
 
 **Activation key.** VoiceGrep is free, but recording or importing new meetings needs a key — tied to your
 Mac and valid for a set period. Open Settings → License (“Настройки → Лицензия”), copy the machine ID
-(“ID машины”) and [message us on Telegram](https://t.me/ilyabazheno) — we'll send a key. The app reminds
+(“ID машины”) and [message us on Telegram](https://t.me/ilyabazhenov) — we'll send a key. The app reminds
 you 14 days before it expires; a new Mac needs a new key. Without one, everything already recorded stays
 available: play, search, export, ask the assistant.
 
@@ -118,7 +118,7 @@ EdDSA-signed). To check manually, use “Проверить обновления
 
 ## Feedback
 
-Found a bug, need a key or have an idea — [message us on Telegram](https://t.me/ilyabazheno).
+Found a bug, need a key or have an idea — [message us on Telegram](https://t.me/ilyabazhenov).
 
 If you attach anything, **please don't send recordings or transcripts of other people's conversations**
 without their consent. To look into a problem, the VoiceGrep and macOS versions, the steps you took and
