@@ -4,137 +4,140 @@
 
 # VoiceGrep
 
-**Расшифровка звонков прямо на вашем Mac.**
+**Call transcripts, right on your Mac.**
 
-Записывает онлайн-звонки, расшифровывает их на устройстве и узнаёт собеседников по голосу. Без облака.
+Records online calls, transcribes them on-device and recognizes who's speaking by voice. No cloud.
 
-[![Версия](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fvoicegrep.com%2Fappcast.xml&query=%2F%2Fitem%5B1%5D%2F*%5Blocal-name()%3D%27shortVersionString%27%5D&label=%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F&color=0e7c6b)](https://voicegrep.com/ru/)
+[![Version](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fvoicegrep.com%2Fappcast.xml&query=%2F%2Fitem%5B1%5D%2F*%5Blocal-name()%3D%27shortVersionString%27%5D&label=version&color=0e7c6b)](https://voicegrep.com/)
 ![macOS 14.4+](https://img.shields.io/badge/macOS-14.4%2B-111111?logo=apple)
 ![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1%2B-111111?logo=apple)
-![В облако — 0 байт](https://img.shields.io/badge/%D0%B2%20%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE-0%20%D0%B1%D0%B0%D0%B9%D1%82-0e7c6b)
-![Developer ID, нотаризовано](https://img.shields.io/badge/Developer%20ID-%D0%BD%D0%BE%D1%82%D0%B0%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BE-555555)
+![To the cloud: 0 bytes](https://img.shields.io/badge/to%20the%20cloud-0%20bytes-0e7c6b)
+![Developer ID, notarized](https://img.shields.io/badge/Developer%20ID-notarized-555555)
 
-**[Скачать для macOS](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** ·
-[voicegrep.com](https://voicegrep.com/ru/) ·
-[English](README.en.md)
+**[Download for macOS](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** ·
+[voicegrep.com](https://voicegrep.com/) ·
+[По-русски](README.md)
 
-<a href="https://voicegrep.com/ru/"><img src="og-image.png" alt="VoiceGrep раскладывает звонок по голосам: «Я» — микрофон, Ольга Белова узнана по голосу, Собеседник 1 ждёт имени. В облако: 0 байт." width="860"></a>
+<a href="https://voicegrep.com/"><img src="og-image-en.png" alt="VoiceGrep lays out a call by voice: “Me” is the microphone, Olivia Bell is recognized by voice, Speaker 1 is waiting for a name. To the cloud: 0 bytes." width="860"></a>
 
 </div>
 
-VoiceGrep живёт в строке меню и сам замечает, когда начинается звонок. Пишет две дорожки — системный
-звук и микрофон, а когда звонок заканчивается, прямо на Mac превращает их в текст и подписывает, кто что
-сказал. Человека достаточно назвать один раз: дальше его голос узнаётся на всех следующих встречах.
+VoiceGrep lives in the menu bar and notices on its own when a call starts. It records two tracks — system
+audio and the microphone — and when the call ends, it turns them into text right on the Mac and labels who
+said what. Name a person once, and their voice is recognized in every meeting after that.
 
-Лучше всего работает с русской речью, английский тоже поддерживается. Интерфейс — на русском.
+> **Heads-up:** VoiceGrep is built for Russian first; English is supported too — switch the meeting
+> language in Settings or let it auto-detect. The interface, summaries and tasks are in Russian for now;
+> the assistant can answer in English.
 
-## Что умеет
+## What it does
 
-**Запись**
-- **Сама начинает и сама заканчивает.** Звонок начался — запись пошла, закончился — остановилась.
-  Пять звонков подряд разрезаются на пять встреч.
-- **Только звук звонка.** При автозаписи VoiceGrep старается писать лишь приложение звонка: музыка и
-  «дзынь» из других программ в запись не попадают.
-- **Отметки по ходу разговора.** Плавающая панель с таймером (включается в настройках): «Важно», «Вопрос», «Задача», «Решение»,
-  заметки и скриншоты — всё привязано к моменту звонка.
+**Recording**
+- **Starts and stops on its own.** The call begins — recording starts; the call ends — it stops. Five
+  calls back to back become five meetings.
+- **Only the call's audio.** When recording automatically, VoiceGrep aims to capture just the call app:
+  music and random pings from other apps stay out.
+- **Marks during the call.** A floating panel with a timer (turn it on in Settings): Important, Question,
+  Task, Decision, notes and screenshots — each pinned to its moment in the conversation.
 
-**Расшифровка и голоса**
-- **Расшифровка на устройстве.** Два движка на выбор — Parakeet (по умолчанию, быстрее) и Whisper.
-- **Узнавание по голосу.** «Я» — это микрофон. Остальных VoiceGrep различает сам: назовите собеседника
-  один раз, и его реплики будут подписаны здесь и во всех следующих встречах.
-- **Правки — в пару кликов.** Переназначить реплику, разделить её, объединить двух собеседников, поправить
-  неверно узнанного.
+**Transcripts and voices**
+- **On-device transcription.** Two engines to choose from — Parakeet (default, faster) and Whisper.
+- **Recognition by voice.** “Me” is the microphone. Everyone else VoiceGrep tells apart itself: name a
+  speaker once, and their lines are labeled here and in every future meeting.
+- **Fixes in a couple of clicks.** Reassign a line, split it, merge two speakers, correct a wrong match.
 
-**После звонка**
-- **Поиск** по встрече: остаются только реплики с нужным словом, можно отфильтровать по участникам.
-- **Ассистент по всему архиву:** «о чём договорились с Сергеем?», «какие у меня задачи?» — ищет по
-  расшифровкам, даже по звучанию, и отвечает со ссылками на разговоры.
-- **Саммари и задачи с исполнителями.** Задачи VoiceGrep только предлагает — нужные подтверждаете вы.
-  Ассистенту, саммари и задачам нужна языковая модель — см. [Приватность](#приватность).
-- **Люди и проекты.** Карточка на каждого человека — роль, компания, заметки; граф «кто с кем
-  созванивается»; встречи раскладываются по проектам.
-- **Импорт и экспорт.** Загрузите готовую запись (аудио или видео) — она расшифруется и разложится по голосам. Любую
-  встречу можно выгрузить в Markdown или одним аудиофайлом, а отпечатки голосов — перенести на другой Mac.
-- **Архив для внешних ИИ-клиентов.** По желанию VoiceGrep отдаёт архив по MCP — в Claude Desktop, Claude
-  Code, Cursor и другие клиенты. По умолчанию выключено.
+**After the call**
+- **Search** within a meeting: only the lines with your word remain, and you can filter by speaker.
+- **An assistant over the whole archive:** “what did we agree with Sam?”, “what are my tasks?” — it
+  searches the transcripts, even by sound, and answers with links back to the conversations.
+- **Summaries and tasks with owners.** VoiceGrep only suggests tasks; you confirm the ones you want.
+  The assistant, summaries and tasks need a language model — see [Privacy](#privacy).
+- **People and projects.** A card for every person — role, company, notes; a graph of who meets with
+  whom; meetings grouped into projects.
+- **Import and export.** Bring in a recording you already have (audio or video) — it's transcribed and
+  split by voice. Export any meeting to Markdown or as a single audio file, and move voiceprints to another Mac.
+- **Your archive in other AI clients.** Optionally, VoiceGrep serves the archive over MCP to Claude
+  Desktop, Claude Code, Cursor and others. Off by default.
 
-**Надёжность**
-- Встреча создаётся с первой секунды записи; после сбоя запись восстанавливается и дорасшифровывается.
-- База сама регулярно сохраняет снимки.
+**Reliability**
+- A meeting exists from the first second of recording; after a crash the recording is recovered and
+  transcribed.
+- The database backs itself up regularly.
 
-## Приватность
+## Privacy
 
-Запись, расшифровка и узнавание голосов работают на устройстве. Это не галочка в настройках, которую можно
-случайно снять: приложение так устроено.
+Recording, transcription and voice recognition all run on the device. That's not a checkbox you could
+untick by accident — it's how the app is built.
 
-| Что                      | Где                                              |
+| What                     | Where                                            |
 |--------------------------|--------------------------------------------------|
-| Аудио звонка             | на этом Mac                                      |
-| Расшифровка              | на этом Mac                                      |
-| Отпечатки голосов        | на этом Mac                                      |
-| Языковая модель          | не подключена; по желанию — локальная, ваш ключ API или подписка |
-| Ушло в облако            | **0 байт**, пока вы сами не подключите облачную модель |
+| Call audio               | on this Mac                                      |
+| Transcript               | on this Mac                                      |
+| Voiceprints              | on this Mac                                      |
+| Language model           | not connected; opt-in — local, your API key or your subscription |
+| Sent to the cloud        | **0 bytes**, unless you connect a cloud model yourself |
 
-**Зачем VoiceGrep ходит в сеть:** один раз скачать модель распознавания речи (0,6–1 ГБ), проверять
-обновления и — только если вы её подключили — обращаться к языковой модели. Подключить можно:
+**Why VoiceGrep goes online:** to download the speech model once (0.6–1 GB), to check for updates and —
+only if you connected one — to reach a language model. You can connect:
 
-- **локальную модель** (Ollama, LM Studio) — тогда и тексты встреч не покидают Mac;
-- **API провайдера** своим ключом или **свою подписку** через CLI (`claude` / `codex`) — тогда текст
-  расшифровок (не аудио и не голоса) уходит этому провайдеру.
+- **a local model** (Ollama, LM Studio) — then meeting text never leaves the Mac either;
+- **a provider's API** with your own key or **your own subscription** via CLI (`claude` / `codex`) — then
+  transcript text (not audio, not voices) goes to that provider.
 
-То же касается выдачи архива по MCP: клиент вроде Claude Desktop отправляет прочитанное своей модели.
+The same applies to serving the archive over MCP: a client such as Claude Desktop sends what it reads to
+its own model.
 
-**Разрешения:** «Микрофон» и «Запись экрана». Второе нужно только для того, чтобы macOS отдала звук
-звонка: видео экрана VoiceGrep не сохраняет — только скриншоты, которые вы сделали сами.
+**Permissions:** Microphone and Screen Recording. The latter is only how macOS lets an app capture the
+call's system audio — no screen video is ever saved, only screenshots you take yourself.
 
-## Установка
+## Install
 
-1. **[Скачайте .dmg](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** (около 23 МБ).
-2. Откройте его и перетащите VoiceGrep в «Программы».
-3. Запустите. Мастер первого запуска попросит доступ к микрофону и записи экрана, а модель распознавания
-   скачается сама в фоне.
+1. **[Download the .dmg](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** (about 23 MB).
+2. Open it and drag VoiceGrep into Applications.
+3. Launch it. The first-run setup asks for Microphone and Screen Recording access, and the speech model
+   downloads in the background.
 
-Приложение подписано Developer ID и заверено Apple — команды в Терминале не нужны.
+The app is signed with Developer ID and notarized by Apple — no Terminal commands needed.
 
-**Требования:** Mac на Apple Silicon (M1 и новее), macOS 14.4 или новее.
+**Requirements:** a Mac with Apple Silicon (M1 or later), macOS 14.4 or later.
 
-**Ключ активации.** VoiceGrep бесплатный, но для записи и импорта новых встреч нужен ключ — он привязан к
-компьютеру и выдаётся на срок. Откройте «Настройки → Лицензия», скопируйте «ID машины» и
-[напишите в Telegram](https://t.me/ilyabazhenov) — пришлём ключ. За 14 дней до конца срока приложение
-напомнит о продлении; на новом Mac понадобится новый ключ. Без ключа всё уже записанное остаётся
-доступным: слушать, искать, экспортировать, спрашивать ассистента.
+**Activation key.** VoiceGrep is free, but recording or importing new meetings needs a key — tied to your
+Mac and valid for a set period. Open Settings → License (“Настройки → Лицензия”), copy the machine ID
+(“ID машины”) and [message us on Telegram](https://t.me/ilyabazhenov) — we'll send a key. The app reminds
+you 14 days before it expires; a new Mac needs a new key. Without one, everything already recorded stays
+available: play, search, export, ask the assistant.
 
-**Модель не скачивается** (бывает из-за провайдера или VPN)? Скачайте `parakeet-tdt-0.6b-v3-int8.zip`
-из [Releases → ML-модели](../../releases/tag/models-fluidaudio-0.15.4) и установите через «Настройки →
-Транскрипция → Установить из файла…» (работает для движка Parakeet, он стоит по умолчанию).
+**Model won't download** (it happens with some ISPs or VPNs)? Download `parakeet-tdt-0.6b-v3-int8.zip`
+from [Releases → ML models](../../releases/tag/models-fluidaudio-0.15.4) and install it via Settings →
+Transcription → “Установить из файла…” (Install from file) — this works for the default Parakeet engine.
 
-## Обновления
+## Updates
 
-VoiceGrep проверяет обновления сам и ставит их после вашего подтверждения (Sparkle; обновления подписаны
-EdDSA). Проверить вручную — «Проверить обновления…» в меню VoiceGrep в строке меню.
+VoiceGrep checks for updates itself and installs them once you confirm (Sparkle; updates are
+EdDSA-signed). To check manually, use “Проверить обновления…” (Check for Updates) in VoiceGrep's menu-bar menu.
 
-## Обратная связь
+## Feedback
 
-Нашли ошибку, нужен ключ или есть идея — [пишите в Telegram](https://t.me/ilyabazhenov).
+Found a bug, need a key or have an idea — [message us on Telegram](https://t.me/ilyabazhenov).
 
-Если прикладываете материалы, **не присылайте записи и расшифровки чужих разговоров** без согласия
-собеседников. Для разбора проблемы обычно хватает версии VoiceGrep и macOS, описания шагов и
-«Диагностики обработки» из меню «···» карточки встречи.
+If you attach anything, **please don't send recordings or transcripts of other people's conversations**
+without their consent. To look into a problem, the VoiceGrep and macOS versions, the steps you took and
+the meeting's “Диагностика обработки” (processing diagnostics, in the “···” menu on a meeting card) are usually enough.
 
-## Что лежит в этом репозитории
+## What's in this repository
 
-Код приложения закрыт. Здесь — то, что раздаётся наружу:
+The app's source is closed. This repository holds what's distributed publicly:
 
-| Файл | Что это |
+| File | What it is |
 |---|---|
-| [`index.html`](index.html), [`ru/`](ru/) | Сайт [voicegrep.com](https://voicegrep.com/ru/) (GitHub Pages) |
-| `VoiceGrep-<версия>.dmg` | Последняя сборка; старые удаляются при выходе новой |
-| [`appcast.xml`](appcast.xml) | Лента обновлений, которую опрашивает приложение |
-| [`open.html`](open.html) | Переадресация ссылок на встречи `voicegrep://` |
-| [Releases](../../releases) | Зеркало ML-моделей для скачивания из приложения |
+| [`index.html`](index.html), [`ru/`](ru/) | The [voicegrep.com](https://voicegrep.com/) website (GitHub Pages) |
+| `VoiceGrep-<version>.dmg` | The latest build; older ones are removed when a new one ships |
+| [`appcast.xml`](appcast.xml) | The update feed the app polls |
+| [`open.html`](open.html) | Forwarding page for `voicegrep://` meeting links |
+| [Releases](../../releases) | Mirror of the ML models the app downloads |
 
 ---
 
 <div align="center">
-<sub>VoiceGrep — локальная запись и расшифровка звонков для macOS. По умолчанию все данные остаются на вашем Mac.</sub>
+<sub>VoiceGrep — private, on-device call transcription for macOS. By default, all your data stays on your Mac.</sub>
 </div>
