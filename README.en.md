@@ -14,7 +14,7 @@ Records online calls, transcribes them on-device and recognizes who's speaking b
 ![To the cloud: 0 bytes](https://img.shields.io/badge/to%20the%20cloud-0%20bytes-0e7c6b)
 ![Developer ID, notarized](https://img.shields.io/badge/Developer%20ID-notarized-555555)
 
-**[Download for macOS](https://voicegrep.com/VoiceGrep-1.11.0.dmg)** ·
+**[Download for macOS](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** ·
 [voicegrep.com](https://voicegrep.com/) ·
 [По-русски](README.md)
 
@@ -92,7 +92,7 @@ call's system audio — no screen video is ever saved, only screenshots you take
 
 ## Install
 
-1. **[Download the .dmg](https://voicegrep.com/VoiceGrep-1.11.0.dmg)** (about 23 MB).
+1. **[Download the .dmg](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** (about 23 MB).
 2. Open it and drag VoiceGrep into Applications.
 3. Launch it. The first-run setup asks for Microphone and Screen Recording access, and the speech model
    downloads in the background.

@@ -14,7 +14,7 @@
 ![В облако — 0 байт](https://img.shields.io/badge/%D0%B2%20%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE-0%20%D0%B1%D0%B0%D0%B9%D1%82-0e7c6b)
 ![Developer ID, нотаризовано](https://img.shields.io/badge/Developer%20ID-%D0%BD%D0%BE%D1%82%D0%B0%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BE-555555)
 
-**[Скачать для macOS](https://voicegrep.com/VoiceGrep-1.11.0.dmg)** ·
+**[Скачать для macOS](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** ·
 [voicegrep.com](https://voicegrep.com/ru/) ·
 [English](README.en.md)
 
@@ -89,7 +89,7 @@ VoiceGrep живёт в строке меню и сам замечает, ког
 
 ## Установка
 
-1. **[Скачайте .dmg](https://voicegrep.com/VoiceGrep-1.11.0.dmg)** (около 23 МБ).
+1. **[Скачайте .dmg](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** (около 23 МБ).
 2. Откройте его и перетащите VoiceGrep в «Программы».
 3. Запустите. Мастер первого запуска попросит доступ к микрофону и записи экрана, а модель распознавания
    скачается сама в фоне.
