@@ -2,16 +2,36 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://voicegrep.com/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://voicegrep.com/"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://voicegrep.com/ru/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://voicegrep.com/"/>
   </url>
   <url>
     <loc>https://voicegrep.com/ru/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://voicegrep.com/"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://voicegrep.com/ru/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://voicegrep.com/"/>
+  </url>
+  <url>
+    <loc>https://voicegrep.com/ru/alternativy/</loc>
+    <lastmod>2026-10-29</lastmod>
+  </url>
+  <url>
+    <loc>https://voicegrep.com/ru/rasshifrovka-audio/</loc>
+    <lastmod>2026-10-29</lastmod>
+  </url>
+  <url>
+    <loc>https://voicegrep.com/ru/transkribaciya-teams/</loc>
+    <lastmod>2026-10-29</lastmod>
+  </url>
+  <url>
+    <loc>https://voicegrep.com/ru/transkribaciya-telemost/</loc>
+    <lastmod>2026-10-29</lastmod>
+  </url>
+  <url>
+    <loc>https://voicegrep.com/ru/transkribaciya-zoom/</loc>
+    <lastmod>2026-10-29</lastmod>
   </url>
 </urlset>
