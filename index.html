@@ -652,6 +652,14 @@
     },
     {
      "@type": "Question",
+     "name": "Do I need to tell people I’m recording?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "\u003cp>Yes. Say so at the start of the call and get consent where the law or your company requires it. VoiceGrep doesn’t join the meeting, so the call service won’t tell participants about the recording for you.\u003c/p>"
+     }
+    },
+    {
+     "@type": "Question",
      "name": "Is it free? What’s the activation key?",
      "acceptedAnswer": {
       "@type": "Answer",
@@ -975,7 +983,7 @@
         <span class="av" data-spk="s1" data-ini="s1">S1</span>
         <div class="body">
           <div class="who"><span class="nm" data-name="s1">Speaker 1</span><span class="tc">02:03</span></div>
-          <p class="ln">It splits them into separate meetings on its own. And when it records automatically, it captures only the call app’s audio — notifications, music and random pings from other apps stay out.</p>
+          <p class="ln">When it records automatically, it usually splits them into separate meetings on its own. And it tries to capture only the call app’s audio, so notifications, music and random pings from other apps stay out.</p>
         </div>
       </article>
 
@@ -1259,6 +1267,12 @@
             <p>The network is only used to download the speech model once (0.6–1&nbsp;GB) and to check for updates. If you connect a cloud language model for summaries and the assistant, it receives meeting text (transcripts, notes, attachments) — never audio or voices; with a local model (Ollama, LM Studio) not even that leaves your Mac.</p>
           </div>
         </details>
+        <details class="qa" id="faq-consent">
+          <summary><h3>Do I need to tell people I’m recording?</h3></summary>
+          <div class="ans">
+            <p>Yes. Say so at the start of the call and get consent where the law or your company requires it. VoiceGrep doesn’t join the meeting, so the call service won’t tell participants about the recording for you.</p>
+          </div>
+        </details>
         <details class="qa" id="faq-key">
           <summary><h3>Is it free? What’s the activation key?</h3></summary>
           <div class="ans">
@@ -1335,7 +1349,7 @@
   <footer>
     <div class="wrap foot-in">
       <span>VoiceGrep — on-device transcription of Zoom, Teams and Google Meet calls on your Mac.</span>
-      <span>All your data stays on your Mac.</span>
+      <span>Audio and voiceprints stay on your Mac.</span>
       <button class="foot-theme js-theme" type="button"><svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 1 1 9.9 3.5a6.6 6.6 0 0 0 10.6 10.6z"/></svg><svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg><span class="t-dark">Dark theme</span><span class="t-light">Light theme</span></button>
     </div>
   </footer>
