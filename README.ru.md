@@ -16,7 +16,7 @@
 
 **[Скачать для macOS](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** ·
 [voicegrep.com](https://voicegrep.com/ru/) ·
-[English](README.en.md)
+[English](README.md)
 
 <a href="https://voicegrep.com/ru/"><img src="og-image.png" alt="VoiceGrep раскладывает звонок по голосам: «Я» — микрофон, Ольга Белова узнана по голосу, Собеседник 1 ждёт имени. В облако: 0 байт." width="860"></a>
 

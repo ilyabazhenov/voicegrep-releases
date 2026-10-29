@@ -16,7 +16,7 @@ Records online calls, transcribes them on-device and recognizes who's speaking b
 
 **[Download for macOS](https://voicegrep.com/VoiceGrep-1.12.0.dmg)** ·
 [voicegrep.com](https://voicegrep.com/) ·
-[По-русски](README.md)
+[По-русски](README.ru.md)
 
 <a href="https://voicegrep.com/"><img src="og-image-en.png" alt="VoiceGrep lays out a call by voice: “Me” is the microphone, Olivia Bell is recognized by voice, Speaker 1 is waiting for a name. To the cloud: 0 bytes." width="860"></a>
 
