@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What’s new in VoiceGrep — release notes | VoiceGrep</title>
+<meta name="description" content="VoiceGrep release notes: what changed in each update of the on-device call transcription app for Mac — speech recognition, speaker recognition, recording.">
+<meta property="og:title" content="What’s new in VoiceGrep">
+<meta property="og:description" content="VoiceGrep release notes: what changed in each update of the on-device call transcription app for Mac — speech recognition, speaker recognition, recording.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://voicegrep.com/changelog/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:site_name" content="VoiceGrep">
+<meta property="og:image" content="https://voicegrep.com/og-image-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VoiceGrep: “Call transcripts, right on your Mac” with speaker lanes — Me, Olivia Bell (recognized by voice), Speaker 1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://voicegrep.com/changelog/">
+<link rel="alternate" hreflang="ru" href="https://voicegrep.com/ru/changelog/">
+<link rel="alternate" hreflang="en" href="https://voicegrep.com/changelog/">
+<link rel="alternate" hreflang="x-default" href="https://voicegrep.com/changelog/">
+<link rel="stylesheet" href="../guide.css">
+<script>
+  // Before first paint: phones get "send the link to your Mac" instead of the download button,
+  // and the theme the visitor picked on the landing (shared key) applies without a flash.
+  if (navigator.maxTouchPoints > 0 && window.matchMedia && matchMedia('(pointer: coarse)').matches) document.documentElement.classList.add('touch');
+  (function () {
+    var t = null; try { t = localStorage.getItem('vg.landing.theme'); } catch (e) {}
+    if (t !== 'dark' && t !== 'light') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<script src="../guide.js" defer></script>
+<!-- seo:jsonld:start -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://voicegrep.com/#website",
+   "url": "https://voicegrep.com/",
+   "name": "VoiceGrep",
+   "inLanguage": [
+    "ru",
+    "en"
+   ],
+   "publisher": {
+    "@id": "https://voicegrep.com/#org"
+   }
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://voicegrep.com/#org",
+   "name": "VoiceGrep",
+   "url": "https://voicegrep.com/",
+   "logo": "https://voicegrep.com/apple-touch-icon.png",
+   "sameAs": [
+    "https://t.me/ilyabazhenov",
+    "https://github.com/ilyabazhenov/voicegrep-releases"
+   ]
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://voicegrep.com/changelog/#page",
+   "url": "https://voicegrep.com/changelog/",
+   "name": "What’s new in VoiceGrep",
+   "description": "VoiceGrep release notes: what changed in each update of the on-device call transcription app for Mac — speech recognition, speaker recognition, recording.",
+   "inLanguage": "en",
+   "isPartOf": {
+    "@id": "https://voicegrep.com/#website"
+   },
+   "about": {
+    "@id": "https://voicegrep.com/#app"
+   },
+   "publisher": {
+    "@id": "https://voicegrep.com/#org"
+   },
+   "breadcrumb": {
+    "@id": "https://voicegrep.com/changelog/#crumbs"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://voicegrep.com/changelog/#crumbs",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "VoiceGrep",
+     "item": "https://voicegrep.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "What’s new",
+     "item": "https://voicegrep.com/changelog/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<!-- seo:jsonld:end -->
+</head>
+<body>
+  <nav class="top" aria-label="Navigation">
+    <div class="wrap nav-in">
+      <a class="brand" href="../" aria-label="VoiceGrep — home">
+        <svg width="30" height="30" viewBox="100 100 824 824" aria-hidden="true"><defs><linearGradient id="lg-m" x1="132" y1="116" x2="892" y2="916" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FCFDFD"/><stop offset=".52" stop-color="#E4E9EA"/><stop offset="1" stop-color="#C4CED1"/></linearGradient><linearGradient id="lg-w" x1="512" y1="272" x2="512" y2="752" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#70D9C8"/><stop offset="1" stop-color="#078F88"/></linearGradient></defs><rect x="100" y="100" width="824" height="824" rx="184" fill="url(#lg-m)"/><g fill="url(#lg-w)"><rect x="284" y="432" width="72" height="160" rx="36"/><rect x="380" y="352" width="72" height="320" rx="36"/><rect x="476" y="272" width="72" height="480" rx="36"/><rect x="572" y="352" width="72" height="320" rx="36"/><rect x="668" y="432" width="72" height="160" rx="36"/></g></svg>
+        VoiceGrep
+      </a>
+      <div class="nav-links">
+        <a class="txt" href="../#t-privacy">Privacy</a>
+        <a class="txt" href="../#t-names">Recognition</a>
+        <a class="txt" href="../#faq">FAQ</a>
+        <button class="theme js-theme" type="button" aria-pressed="false" aria-label="Dark theme" title="Dark theme"><svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 1 1 9.9 3.5a6.6 6.6 0 0 0 10.6 10.6z"/></svg><svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg></button>
+        <a class="lang" href="../ru/changelog/" hreflang="ru" lang="ru" title="Русская версия">RU</a>
+        <a class="btn sm no-touch" href="../VoiceGrep-1.12.0.dmg">Download</a>
+        <button class="btn sm only-touch js-share" type="button" data-done="Copied" title="Send link to your Mac"><span class="lbl" aria-live="polite">Send to Mac</span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <nav aria-label="Breadcrumb">
+      <ol class="crumbs">
+        <li><a href="../">VoiceGrep</a></li>
+        <li aria-current="page">What’s new</li>
+      </ol>
+    </nav>
+    <article class="guide changelog">
+      <h1>What’s new in&nbsp;VoiceGrep</h1>
+      <p class="lead">What changed from version to version. Updates arrive on their own: VoiceGrep checks for them and offers to install the new version in one click.</p>
+<!-- changelog:start -->
+      <nav aria-label="Versions">
+        <ul class="versions">
+          <li><a href="#v1-12-0">1.12.0</a></li>
+          <li><a href="#v1-11-0">1.11.0</a></li>
+          <li><a href="#v1-10-0">1.10.0</a></li>
+          <li><a href="#v1-9-0">1.9.0</a></li>
+          <li><a href="#v1-8-0">1.8.0</a></li>
+          <li><a href="#v1-7-0">1.7.0</a></li>
+          <li><a href="#v1-6-0">1.6.0</a></li>
+          <li><a href="#v1-5-0">1.5.0</a></li>
+          <li><a href="#v1-4-0">1.4.0</a></li>
+          <li><a href="#v1-3-0">1.3.0</a></li>
+          <li><a href="#v1-2-0">1.2.0</a></li>
+        </ul>
+      </nav>
+      <section class="release" id="v1-12-0" aria-labelledby="v1-12-0-h">
+        <h2 id="v1-12-0-h">Version 1.12.0 <time datetime="2026-10-29">October&nbsp;29, 2026</time></h2>
+        <div class="notes">
+<h3>New speech recognition model</h3>
+<p>Meetings are now transcribed with the <b>Parakeet Ultra</b> model. It’s noticeably more
+accurate than the previous one — it drops and mixes up words less often — while speed and load
+on your computer stay the same.</p>
+<p>After the update, the new model <b>downloads itself once</b> — about 550 MB. While it’s
+downloading, meetings are transcribed with the previous model, so there’s nothing to wait for.
+The download doesn’t start during a call. You can see which model is transcribing right now
+in “Settings → <span lang="ru">Транскрипция → Модель</span> Parakeet” (Transcription → Parakeet model). On a metered connection you
+can turn off the automatic download in the same place — then the model downloads on the first
+transcription or when you press the button.</p>
+<p>Service tokens like “&lt;unk&gt;” and English “mm-hmm” on pauses are also gone from
+transcripts.</p>
+
+<h3>A new “<span lang="ru">Участники</span>” (Participants) block</h3>
+<p>Instead of several cards above the transcript, there’s now a single block. Named people are
+shown as chips, and voices awaiting an answer as short questions: an unnamed “Speaker”, a
+voice the calendar or Talk calls by a different name, a person created from Talk data. Each
+question has a hint, a “<span lang="ru">послушать</span>” (listen) button, a one-click answer and “<span lang="ru">Отменить</span>” (Undo)
+for a few seconds after you answer.</p>
+<p>The previous participants view opens via the “<span lang="ru">Все участники</span>” (All participants) link in
+the block header, and you can bring it back entirely in “Settings → <span lang="ru">Транскрипция → Отображение</span>
+<span lang="ru">встречи</span>” (Transcription → Meeting view).</p>
+
+<h3>Speaker recognition</h3>
+<p><b>You can label a person in several meetings at once.</b> If you turn on “Settings →
+<span lang="ru">Транскрипция → Правка участников → Предлагать подписать человека в других встречах</span>”
+(Transcription → Editing participants → Suggest labeling the person in other meetings), then
+when you name a “Speaker”, VoiceGrep looks for the same voice in already transcribed meetings
+from two weeks before and after and offers to label them too. Nothing changes until you click
+“<span lang="ru">Подписать</span>” (Label), and the labels can be undone. The feature is new and <b>off</b> by
+default: before labeling, open the list (“<span lang="ru">Показать</span>”, Show) and uncheck the ones that don’t
+belong.</p>
+<p>Recognition has become more careful: it recognizes familiar people more often and labels a
+voice with someone else’s name less often. A voice is remembered only once the person has
+spoken for at least 20 seconds. This means that <b>after the update, labels on new meetings
+may differ slightly from what you’re used to</b> — in borderline cases VoiceGrep now leaves
+“Speaker” more often rather than guessing.</p>
+<p>If you talk without headphones and your voice comes back through the other person’s
+speakers, that echo is now cut out and no longer turns into their lines. And a phrase that
+used to be transcribed twice — for two different people — now stays with one.</p>
+
+<h3>Labels from Kontur.Talk</h3>
+<p>If you call in the Kontur.Talk app, VoiceGrep can read from it who is speaking right now and
+label participants more accurately: suggest names for unnamed voices, sort out lines when
+several people have merged into one voice, and create new people from their full names in
+Talk (such people are marked, and you confirm their name).</p>
+<p>This is <b>off</b> by default. To turn it on: “Settings → <span lang="ru">Кто говорит → Читать, кто</span>
+<span lang="ru">говорит, из приложения Толк</span>” (Who’s speaking → Read who’s speaking from the Talk app), then
+“<span lang="ru">Разрешить…</span>” (Allow…) — macOS will ask you to give VoiceGrep Accessibility access. Data from
+Talk never leaves your Mac.</p>
+
+<h3>People and the meeting view</h3>
+<p>“<span lang="ru">Граф общения</span>” (Communication graph) opens in a separate window: groups of people, where
+time goes, who connects different teams and who you’re meeting less often.</p>
+<p>New player: a speaker track right under the scrubber shows who spoke and when. Avatars got a
+thin ring in the person’s color.</p>
+<p>“<span lang="ru">Открепить</span>” (Detach) and “<span lang="ru">Удалить из встречи</span>” (Remove from meeting) no longer delete a
+person who has voiceprints or tasks. VoiceGrep takes a database snapshot before merging people
+and removing a participant.</p>
+
+<h3>Recording and stability</h3>
+<p>The microphone no longer drops silently on a stereo input, an 8 kHz headset, a 96 kHz audio
+interface or inputs with three or more channels. Re-encoding such recordings no longer crashes
+the app.</p>
+<p>The window no longer hangs after splitting and merging meetings, when checking recognition,
+or when dragging the column divider. Fixed a rare crash that could happen even when idle — at
+night, for example.</p>
+<p>Live transcription during a call — a draft of the text right in the meeting view. It’s
+still experimental and <b>off</b>; turn it on in “Settings → <span lang="ru">Запись → Живая расшифровка во</span>
+<span lang="ru">время звонка</span>” (Recording → Live transcription during a call).</p>
+
+<h3>Other</h3>
+<p>External access (MCP): when many apps are connected to the archive at once, new ones are no
+longer refused — idle connections free up their slot and reconnect on their own with the next
+request.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-11-0" aria-labelledby="v1-11-0-h">
+        <h2 id="v1-11-0-h">Version 1.11.0 <time datetime="2026-10-19">October&nbsp;19, 2026</time></h2>
+        <div class="notes">
+<h3>Calendar link via OWA Widget</h3>
+<p>If you have OWA Widget installed (version 1.0.55 or newer), VoiceGrep can figure out on its
+own which calendar meeting was recorded and take its title, invitee list and agenda from
+there. A meeting is linked automatically only when the answer is unambiguous. If several
+meetings were happening at that time, the meeting view will ask “<span lang="ru">Какая это была встреча</span>?”
+(Which meeting was this?).</p>
+<p>The calendar meeting’s subject is shown in the meeting view header. Invitees and the agenda
+help the summary, tasks and the assistant. If the recording has unnamed voices and the invite
+lists people who aren’t among the participants yet, the meeting view will suggest their
+names.</p>
+<p>This is <b>off</b> by default. Turn it on in “Settings → <span lang="ru">Данные → Календарь</span>” (Data →
+Calendar); OWA Widget itself must have AI access enabled (“Settings → AI (MCP)” in OWA
+Widget). The first time VoiceGrep connects, OWA Widget will ask whether to let it in — click
+“<span lang="ru">Разрешить</span>” (Allow).</p>
+
+<h3>External access (MCP): permission for each app</h3>
+<p>If you have “<span lang="ru">Доступ извне</span> (MCP)” (External access) turned on, VoiceGrep now asks for
+permission for each app that connects to the archive. <b>After the update, the “<span lang="ru">Разрешить</span> /
+<span lang="ru">Отклонить</span>” (Allow / Deny) prompt will also appear once for apps that were already
+connected</b>: the window pops up at the top center of the screen the first time they make a
+request. The list of apps and the “<span lang="ru">Отозвать</span>” (Revoke) button are in “Settings → <span lang="ru">Данные</span> →
+<span lang="ru">Доступ извне</span> (MCP) → <span lang="ru">Клиенты</span>” (Data → External access → Clients); the check can also be
+turned off there.</p>
+<p>Connected apps can also now see an ongoing recording (when it started and in which app, no
+text) and a meeting’s place in the transcription queue, and they find people by name in any
+word order: “Vlad Karetko” finds “Karetko Vlad”.</p>
+
+<h3>Other</h3>
+<p>The license is now verified more reliably. If “Settings → <span lang="ru">Лицензия</span>” (License) says the copy
+of the app has been modified, download VoiceGrep again from the website and install it over
+the old one: your meeting archive won’t be affected.</p>
+<p>Rows in the meeting list are now single-line, which makes the list more stable.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-10-0" aria-labelledby="v1-10-0-h">
+        <h2 id="v1-10-0-h">Version 1.10.0 <time datetime="2026-10-05">October&nbsp;5, 2026</time></h2>
+        <div class="notes">
+<h3>VoiceGrep is now notarized by Apple</h3>
+<p>The app is signed with an Apple Developer certificate and has passed Apple’s check
+(notarization). New users no longer need to lift the block through Terminal: VoiceGrep opens
+like any other app.</p>
+
+<h3>Once, after this update</h3>
+<p>Because of the new signature, macOS treats VoiceGrep as a new app, so after updating you
+need to grant access again, once. Your recordings, transcripts and settings stay where they
+are.</p>
+<p><b>Keychain.</b> On first launch, macOS may ask whether VoiceGrep may use data from your
+keychain. Enter your Mac password and click <b>“Always Allow”</b>. That’s where the license and
+the language model key are stored: if you deny it, VoiceGrep won’t see the license and won’t
+start recording. If you did deny it, restart VoiceGrep and the prompt will appear again.</p>
+<p><b>Screen Recording and Microphone.</b> Open “VoiceGrep Settings → <span lang="ru">Разрешения</span>”
+(Permissions) and grant both again. If VoiceGrep is already checked in “System Settings →
+Privacy &amp; Security → Screen Recording” but the app still asks for access, remove the old
+entry with the “−” button and add it again. After granting screen recording access, restart
+VoiceGrep.</p>
+<p><b>Launch at login.</b> If VoiceGrep used to start when you logged in, check the toggle
+“Settings → <span lang="ru">Запись</span> (Recording) → <span lang="ru">Автостарт</span> (Autostart) → <span lang="ru">Запускать при входе в систему</span>”
+(Launch at login).</p>
+
+<h3>Other</h3>
+<p>The link in “Settings → <span lang="ru">О приложении</span>” (About) now leads to the new website
+<a href="https://voicegrep.com">voicegrep.com</a>.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-9-0" aria-labelledby="v1-9-0-h">
+        <h2 id="v1-9-0-h">Version 1.9.0 <time datetime="2026-09-30">September&nbsp;30, 2026</time></h2>
+        <div class="notes">
+<h3>Meeting links</h3>
+<p>Every meeting now has a link that opens it directly in VoiceGrep. Right-click a meeting in
+the list → “<span lang="ru">Скопировать ссылку на встречу</span>” (Copy meeting link) and paste it into a note, task
+or email: clicking the link opens the meeting.</p>
+<p>If your archive is connected to Claude Desktop, Claude Code or other MCP clients, the
+client itself gives links to the meetings it talks about. Clicking one in the chat opens a
+short page in the browser, which then opens the meeting in VoiceGrep. The browser may ask
+once for permission to open VoiceGrep — allow it.</p>
+
+<h3>External AI clients (MCP): meeting titles and projects</h3>
+<p>Clients can now rename meetings and create projects (including nested ones), as well as
+rename and delete them. For example: “title this week’s meetings by topic” or “create a Q4
+project and put the meetings there”. Deleting a project keeps its meetings — only their link
+to the project goes away. A client can’t delete a project that has your note, materials or an
+assistant chat — that’s done in the app.</p>
+<p>This is off by default and has its own toggle, “<span lang="ru">Разрешить переименовывать встречи и</span>
+<span lang="ru">управлять проектами</span>” (Allow renaming meetings and managing projects), in “Settings → <span lang="ru">Данные</span> →
+<span lang="ru">Доступ извне</span> (MCP)” (Data → External access). An already connected client will see it after
+reconnecting. Every change is logged to the mcp.log file next to the database.</p>
+
+<h3>Fixes</h3>
+<p>A project’s view no longer brings back the old name if the project was renamed while the
+view was open.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-8-0" aria-labelledby="v1-8-0-h">
+        <h2 id="v1-8-0-h">Version 1.8.0 <time datetime="2026-09-29">September&nbsp;29, 2026</time></h2>
+        <div class="notes">
+<h3>Search finds words by how they sound</h3>
+<p>The assistant and archive search now compare not just spelling but also how words sound.
+If the transcription spelled a term the way it heard it, you can still find it: a query for
+“QMS” finds the Russian word “kumys”. Exact matches still come first, and the assistant tells
+verbatim mentions apart from sound-alikes. You can also search meeting titles and their
+summaries.</p>
+<p>Search no longer freezes the window on a large archive: the index is built in the
+background.</p>
+
+<h3>External AI clients (MCP): filing into projects and stable connections</h3>
+<p>If your archive is connected to Claude Desktop, Claude Code, Cursor or other clients, you
+can ask them to file meetings into projects — for example, “sort this week’s meetings into
+projects”. The client adds meetings to existing projects and removes them from there. It
+can’t create, rename or delete projects, or change the meetings themselves. This is off by
+default and has its own toggle in “Settings → <span lang="ru">Данные → Доступ извне</span> (MCP)” (Data → External
+access). An already connected client will see it after reconnecting.</p>
+<p>Clients no longer ask for confirmation on every archive request: reads are now correctly
+marked as reads. Up to 64 clients can connect at once: previously a few open but idle sessions
+could take up every slot, and a new client was refused. The same settings show how many
+clients are connected right now.</p>
+
+<h3>Database backups no longer fill up the disk</h3>
+<p>The app made a copy of the database on every launch, and over time the backups folder took
+up more and more disk space. Now a copy is made at most once every six hours, and the app
+keeps the three most recent, one for each of the last seven days, and no more than 3 GB in
+total. On the first launch of the new version, extra old copies are deleted. Your meetings,
+recordings and settings are not affected.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-7-0" aria-labelledby="v1-7-0-h">
+        <h2 id="v1-7-0-h">Version 1.7.0 <time datetime="2026-09-08">September&nbsp;8, 2026</time></h2>
+        <div class="notes">
+<h3>Process several meetings at once</h3>
+
+<p>Select any number of meetings in the list and right-click: actions that used to require
+opening each meeting one by one are now right there — “<span lang="ru">В избранное</span>” (Add to favorites),
+“<span lang="ru">Добавить в проект</span>” (Add to project) and “<span lang="ru">Обработать через</span> LLM” (Process with LLM). The last
+one is how you catch up on an older archive: a single pass over all selected meetings in a
+row — “<span lang="ru">Улучшить текст</span>” (Improve text), “<span lang="ru">Собрать саммари</span>” (Build summary), “<span lang="ru">Извлечь задачи</span>”
+(Extract tasks) or “<span lang="ru">Придумать название</span>” (Suggest a title).</p>
+
+<p>You choose the pass — the toggles in the processing settings don’t affect a batch. Before
+starting, the app tells you how much it’s about to process and asks for confirmation: every
+meeting uses requests to your model. Meetings are then processed one after another; the list
+shows “<span lang="ru">Обработка через</span> LLM” (Processing with LLM) and “<span lang="ru">В очереди</span>” (Queued), and a bar in the
+current meeting’s view shows the position (“3 <span lang="ru">из</span> 12”, i.e. 3 of 12). You can stop at any
+time — right-click the selection, or use the ✨ menu in the meeting view; work already done is
+kept.</p>
+
+<p>Meetings without a finished transcript are skipped, and if not the whole selection was
+processed, the app tells you at the end. In a batch, “<span lang="ru">Придумать название</span>” (Suggest a title)
+leaves alone meetings you’ve named yourself. The item appears once the language model is
+enabled in Settings.</p>
+
+<h3>Bookmarks: full text, editing and jumping to the moment</h3>
+
+<p>The bookmarks you add during a call are now gathered in the meeting view as a single
+timeline: type icon, timecode and the full text of your note — it’s no longer cut off.
+Right-click to copy a note, edit it or add one to a bookmark set from the menu bar without a
+comment, or delete the bookmark. A button in the section header copies all of the meeting’s
+bookmarks at once as a list with timecodes.</p>
+
+<p>Once a meeting is processed, clicking a bookmark starts playback ten seconds before the
+marked moment and scrolls the transcript to the same spot.</p>
+
+<p>While recording, the same block is available right in the meeting view — with a timer,
+four bookmark buttons and a “<span lang="ru">заметка к моменту…</span>” (note for this moment…) field. It’s there for
+when the floating panel is turned off or gets in the way. The assistant in the meeting view
+also sees your bookmarks with timecodes, so you can ask “what did I bookmark in this
+meeting?”.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-6-0" aria-labelledby="v1-6-0-h">
+        <h2 id="v1-6-0-h">Version 1.6.0 <time datetime="2026-08-28">August&nbsp;28, 2026</time></h2>
+        <div class="notes">
+<h3>Materials: documents and notes alongside the transcript</h3>
+
+<p>You can now attach files to a meeting or a project — an agenda, slides from the call, a
+contract, a screenshot. The app keeps its own copy, so renaming or deleting the original on
+disk won’t break anything. PDF, Word, presentations and spreadsheets are converted to text, and
+the assistant takes them into account when answering: “what does the contract they sent say
+about deadlines?” becomes a question for the meeting, not for a file you open separately.</p>
+
+<p>You can also write a note right in the app — it’s a material like any other, just typed by
+you, and unlike an attached document there’s no second copy of it anywhere, so notes are
+included in the regular database snapshot. When meetings are merged, materials move to the
+combined meeting; when a meeting is split, they stay with the first one.</p>
+
+<p>If the app crashes when opening a meeting with an attached document, text extraction can be
+turned off: Settings → <span lang="ru">Данные → Материалы</span> → “<span lang="ru">Извлекать текст из документов</span>” (Data → Materials →
+Extract text from documents). Text that’s already been extracted is kept, and turning the
+option back on resumes extraction.</p>
+
+<h3>Open your archive to an external assistant</h3>
+
+<p>VoiceGrep can expose its archive to Claude Desktop, Claude Code, Codex or Cursor: the same
+transcript search, meeting reading, participants, tasks and materials, but from the work tool
+you already use. Everything stays on your machine, nothing goes out to the internet, and access
+is read-only — nothing can be changed from outside.</p>
+
+<p>Off by default. Turn it on in Settings → “<span lang="ru">Доступ извне</span> (MCP)” (External access), where
+you’ll also find ready-made config snippets for each client — just copy and paste.</p>
+
+<h3>A voiceprint directory for teams</h3>
+
+<p>When the same group of people has calls with several colleagues, recognition no longer
+starts from scratch for each of them: a shared directory lets you recognize voices that someone
+else has already named. The directory only <b>suggests</b> — it never renames anyone on its own
+and doesn’t interfere with recognition; the decision is always yours.</p>
+
+<p>Off by default; turn it on in Settings → “<span lang="ru">Каталог команды</span>” (Team directory). Keep in mind
+that voiceprints are biometric data: share them only within your team.</p>
+
+<h3>The “<span lang="ru">Знания</span>” (Knowledge) section has been removed</h3>
+
+<p>The experiment with a fact base that the assistant maintained on its own didn’t pay off, and
+the section has been removed entirely — along with the two toggles for automatic fact capture
+in the processing settings. <b>Accumulated facts will be deleted the first time this version
+launches, and they can’t be recovered.</b> Meetings, transcripts, people, tasks, projects and
+voiceprints are not affected — only the contents of the “<span lang="ru">Знания</span>” (Knowledge) section itself go
+away.</p>
+
+<h3>Faster and more reliable</h3>
+
+<p><b>The meeting card no longer hangs the app.</b> On long transcripts the app could get stuck
+redrawing endlessly: the window froze and the fans roared while audio kept playing. Line text
+now uses its own rendering — selection and copying work as before.</p>
+
+<p><b>The window opens right away.</b> Clicking the Dock icon after a long idle period (when
+another app is active during a call) brought up the window with a noticeable delay — at that
+moment the app was re-reading the entire archive. Now it shows the window first.</p>
+
+<p><b>“<span lang="ru">Проверка узнавания</span>” (Recognition check) no longer computes the same thing twice</b> —
+the badge on the card and the list itself now share a single result, and edits inside the list
+apply noticeably faster.</p>
+
+<p><b>Two copies of the app no longer interfere with each other.</b> If a second copy happened
+to be running, it could mistake the other copy’s live recording for an abandoned one and start
+transcribing it mid-call — leaving a transcript in the archive without a single line of yours.
+Now a live recording is visible as such, and the second copy leaves the other’s work alone.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-5-0" aria-labelledby="v1-5-0-h">
+        <h2 id="v1-5-0-h">Version 1.5.0 <time datetime="2026-08-21">August&nbsp;21, 2026</time></h2>
+        <div class="notes">
+<h3>The transcription model downloads itself — and no longer depends on a VPN</h3>
+
+<p>The model used to be downloaded from HuggingFace, which some users simply can’t reach:
+without a VPN the app was useless. Now the model comes from our own server, and if that server
+doesn’t respond for some reason, the app quietly falls back to the old route — so things can’t
+get worse than before.</p>
+
+<p>The download starts <b>at launch</b>, not at the end of your first call: by the time the
+first transcript appears, the model is usually already in place. Progress is shown as a line in
+the VoiceGrep menu in the menu bar. A dropped connection no longer starts everything over — the
+download resumes where it left off. Automatic download can be turned off in Settings →
+<span lang="ru">Распознавание</span> (Recognition).</p>
+
+<p>The models for telling voices apart now simply ship inside the app — that download is gone
+entirely, and your first meeting no longer waits on the network. And if there’s no network at
+all, the transcription model can be installed from a file downloaded in advance: Settings →
+<span lang="ru">Распознавание</span> → “<span lang="ru">Установить из файла…</span>” (Recognition → Install from file…). The same place now
+has “<span lang="ru">Удалить модель</span>” (Delete model) — to free up space or reinstall a damaged copy.</p>
+
+<h3>Recording the other side no longer cuts out when the screen goes dark</h3>
+
+<p>An unpleasant quirk of macOS: when the display turns off, the system also turns off
+system-audio capture. On an eighteen-minute call the screen went dark from inactivity at minute
+eight — from then on only your microphone was recorded, and ten minutes of the other
+participants’ speech were lost. From the outside the recording looked normal.</p>
+
+<p>There are now two safeguards. While recording, the display doesn’t sleep from inactivity —
+the “<span lang="ru">Не давать экрану гаснуть во время записи</span>” (Keep the display on while recording) toggle in
+Settings → <span lang="ru">Запись</span> (Recording). Closing the lid and putting the Mac to sleep manually work as
+usual. And if recording of the other participants does get interrupted, VoiceGrep restarts it
+on its own and keeps writing to the same file, filling the gap with silence so the tracks stay
+in sync.</p>
+
+<p>If a gap does happen, the meeting gets a warning, “<span lang="ru">Дорожка собеседников записалась не</span>
+<span lang="ru">полностью</span>” (The other participants’ track wasn’t fully recorded), saying how much time was
+lost — the failure is now visible instead of being discovered through a strange transcript. The
+flip side of the first safeguard: a recording you forgot about used to end when the computer
+went to sleep; now only the time-based auto-stops (in the same recording settings) will end
+it — and until then the screen stays on.</p>
+
+<h3>A fresh install is ready to go without a trip through Settings</h3>
+
+<p>On new installs, automatic call recording, summaries and tasks are on from the start. The
+first-run setup assistant now opens by itself (previously the app silently lived as a single
+icon in the menu bar, and nobody granted it permissions) and has a new step for auto-recording
+and launching at login. Existing VoiceGrep users are not affected: your settings stay exactly as
+they were.</p>
+
+<h3>Miscellaneous</h3>
+
+<p><b>An empty meeting is no longer deleted if capture was failing.</b> The app removes
+recordings in which not a single word was spoken — but if the sound was dropping out at that
+moment because of the capture itself, the silence may not be yours. Such a meeting is now kept,
+with a warning: a forty-minute call whose capture died at the start no longer disappears along
+with the only trace of the failure.</p>
+
+<p><b>“<span lang="ru">Пересобрать саммари</span>” (Rebuild summary) and “<span lang="ru">Распознать заново</span>” (Re-transcribe) no
+longer get in each other’s way.</b> Run back to back, they could write a summary on top of a
+transcript that no longer existed. Now the second action waits for the first, and an unavailable
+button explains why it’s unavailable — before you confirm replacing the transcript, not
+after.</p>
+
+<p><b>New language model providers:</b> DeepSeek and Polza AI — in the preset list under
+Settings → <span lang="ru">Обработка</span> (Processing).</p>
+        </div>
+      </section>
+      <section class="release" id="v1-4-0" aria-labelledby="v1-4-0-h">
+        <h2 id="v1-4-0-h">Version 1.4.0 <time datetime="2026-08-18">August&nbsp;18, 2026</time></h2>
+        <div class="notes">
+<h3>Your own recordings — now in VoiceGrep too</h3>
+
+<p>You can create a meeting from an existing file: “<span lang="ru">Файл → Импортировать запись…</span>” (File →
+Import recording…, ⌘I), or the same item in the VoiceGrep menu in the menu bar — it works even
+with the window closed. Both audio and video work (only the sound is taken from video), and the
+file is copied into the archive, so you can delete the original afterwards. Transcription
+starts automatically; if a call is being recorded at that moment, the import waits for it to
+finish.</p>
+
+<p>In such a recording all voices are on a single track, so the app doesn’t know which one is
+yours — it asks after transcription, with a single “which one is me” question. Until you answer,
+no summary or tasks are generated: without “me” they would end up being about a stranger.</p>
+
+<p>The app will refuse to import a file with no sound, and it will notice and warn you if you
+import the same file again — in both cases you can insist and continue.</p>
+
+<h3>Transcript text correction is now a separate step — and off by default</h3>
+
+<p>Previously the language model rewrote every line after each transcription. Measured across
+the archive, this step took <b>82% of all processing time</b> — three times as long as the
+transcription itself — while changing about 15% of the words. Summaries, meeting titles, tasks
+and memory work just as well without it, so it’s now off by default: meetings finish processing
+noticeably faster.</p>
+
+<p>If you want text correction, turn it on in Settings → <span lang="ru">Обработка → Править текст расшифровки</span>
+(Processing → Edit transcript text). For an individual meeting you can run it by hand at any
+time: the ✨ menu at the top of the card → “<span lang="ru">Улучшить текст</span>” (Improve text). Corrections already
+made stay as they are.</p>
+
+<h3>Select text across paragraphs</h3>
+
+<p>Meeting summaries, scenario results, person profiles, project overviews and finished
+assistant answers used to be selectable one paragraph at a time: you couldn’t drag a selection
+across several paragraphs or list items. Now you can — and copy it with ⌘C, list markers
+included. To copy an entire assistant answer, use the button below it (it appears on hover) or
+“<span lang="ru">Копировать ответ</span>” (Copy answer) in the right-click menu.</p>
+
+<p>Two small things worth knowing. If a long text is clipped in height, a selection dragged
+past the visible edge also picks up the hidden part — if you want to see what you’re copying,
+click “<span lang="ru">Показать полностью</span>” (Show all) first. And clicking the text of an answer in the chat
+moves the input cursor from the question field into the answer itself: to keep typing, click
+the field.</p>
+
+<h3>Data protection</h3>
+
+<p><b>Two copies of the app on one store no longer stay silent.</b> If VoiceGrep is already
+running, a second copy says so at launch instead of quietly running alongside it. And if the
+app fails to save data, it tells you right away rather than after the fact. Recording doesn’t
+stop in that case — audio is written to disk either way.</p>
+
+<p><b>Merging and splitting meetings no longer bloats the audio.</b> These operations re-encode
+the tracks, and the results used to be four times the size of the originals (53 MB instead of
+13 for a half-hour conversation). Now the size is preserved. Also, if the disk runs out of
+space while exporting audio, the app reports an error instead of silently giving up.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-3-0" aria-labelledby="v1-3-0-h">
+        <h2 id="v1-3-0-h">Version 1.3.0 <time datetime="2026-07-31">July&nbsp;31, 2026</time></h2>
+        <div class="notes">
+<h3>Tasks: statuses, due dates, priority and a board</h3>
+
+<p>The “<span lang="ru">Задачи</span>” (Tasks) section is now complete: “<span lang="ru">Мои дела</span>” (My tasks), “<span lang="ru">Жду от других</span>”
+(Waiting on others), “<span lang="ru">Все задачи</span>” (All tasks), “<span lang="ru">Доска</span>” (Board) and “<span lang="ru">На разбор</span>” (To review).
+A task now has four states — “<span lang="ru">Ожидает</span>” (Pending), “<span lang="ru">В работе</span>” (In progress), “<span lang="ru">Выполнена</span>” (Done)
+and “<span lang="ru">Неактуальна</span>” (No longer relevant), the last being a way to close out an agreement without
+deleting it. Change the status by swiping a row to the right, with a right-click, or in the
+task card.</p>
+
+<p><b>The board</b> has three columns, and cards move by drag and drop. At the top: a
+“<span lang="ru">Мои</span> / <span lang="ru">Жду</span> / <span lang="ru">Все</span>” (Mine / Waiting / All) switch, search and a project filter (you can tick
+several at once, and “<span lang="ru">Без проекта</span>” (No project) shows tasks outside any project). The
+“<span lang="ru">Выполнено</span>” (Done) column keeps only what was closed in the last two weeks, so it doesn’t keep
+growing.</p>
+
+<p>New: due dates (if a deadline was mentioned in the conversation, it’s stored both in words
+and as a date, so you can see where it came from; overdue tasks are highlighted), a “<span lang="ru">Важная</span>”
+(Important) flag, picking a project separately from the meeting, and bulk actions on several
+selected tasks. You can also create a task without a meeting — ⌘N in the “<span lang="ru">Задачи</span>” (Tasks)
+section.</p>
+
+<h3>Nested projects</h3>
+
+<p>A project can now live inside another — a tree up to three levels deep (“Clients” →
+“Acme” → “Rollout”). Drag a row <b>onto the middle</b> of another project to nest it, or
+<b>onto the edge</b> to reorder the list; while you drag, you can see what will happen. Project
+order is now yours, too, rather than alphabetical.</p>
+
+<p>By default a parent project shows both its own meetings and its subprojects’ meetings —
+which is why the number next to the folder is larger than the number of meetings in it. The
+“<span lang="ru">Все</span> / <span lang="ru">Свои</span>” (All / Own) switch in the list header leaves only its own. The meeting itself
+stays in exactly the project you put it in. Deleting a project that has subprojects asks
+whether to move them up or delete them too; meetings are never deleted.</p>
+
+<h3>Recording</h3>
+
+<p><b>No more stray recordings from apps that listen to the microphone.</b> Dictation, noise
+suppression, voice assistants — to VoiceGrep all of these looked like the start of a call, and
+auto-recording kicked in again and again. Settings → <span lang="ru">Запись</span> → “<span lang="ru">Приложения, которые слушают</span>
+<span lang="ru">микрофон</span>” (Recording → Apps that listen to the microphone) now lists all such apps (the list
+fills itself). Tick the ones that shouldn’t count as a call — recording won’t start, and one
+already running will stop. If any other app takes the microphone alongside a ticked one, it
+counts as a call again: a real conversation won’t be lost.</p>
+
+<p><b>Bookmarks and screenshots — now from the menu bar too.</b> While recording, the VoiceGrep
+menu gets a “<span lang="ru">Во время записи</span>” (During recording) section: the same four bookmarks (“<span lang="ru">Важно</span>”,
+“<span lang="ru">Вопрос</span>”, “<span lang="ru">Задача</span>”, “<span lang="ru">Решение</span>” — Important, Question, Task, Decision) and a screenshot (one item
+per display if you have several). A fallback for when the floating panel is turned off or in
+the way.</p>
+
+<p><b>See which app a call was recorded from.</b> The meeting card header shows the app the
+conversation happened in (“Talk”, “Zoom”, “Telegram”) next to the date and duration. It’s
+detected when recording starts; if it can’t be detected, there’s simply no label — the app
+doesn’t guess (this happens with calls in a browser).</p>
+
+<h3>Meetings</h3>
+
+<p><b>Split one meeting into two.</b> If a recording captured two calls back to back, you can
+cut it by hand: “···” above the transcript → “<span lang="ru">Разделить встречу…</span>” (Split meeting…). Possible
+boundaries are listed by time with the length of the pause, and the most likely one is
+suggested right away; for the selected one you see the seam — the last line of the first
+meeting and the first line of the second, with playback. Lines are never cut in half. Cut in
+the wrong place? Just merge them back.</p>
+
+<p><b>Export the audio as a single file.</b> “···” → “<span lang="ru">Выгрузить аудиозапись…</span>” (Export
+audio…), or the row’s context menu in the list. Your microphone and the other participants’
+audio are mixed into one .m4a that sounds the way the conversation went. Progress is shown,
+and the mixdown can be cancelled.</p>
+
+<p><b>Share of participation.</b> Above the “<span lang="ru">Участники</span>” (Participants) card there’s a compact
+bar showing what share of the words each person spoke. It counts words, not time (the durations
+of individual lines are unreliable). Turn it off in Settings → <span lang="ru">Транскрипция → Отображение</span>
+<span lang="ru">встречи</span> (Transcription → Meeting display).</p>
+
+<p><b>The buttons at the top of the card, tidied up.</b> Language-model actions are now
+gathered in a single ✨ menu — “<span lang="ru">Улучшить текст</span>” (Improve text), “<span lang="ru">Извлечь задачи</span>” (Extract
+tasks), “<span lang="ru">Придумать название</span>” (Suggest a title) and your scenarios; previously they were
+separate buttons. “<span lang="ru">Распознать заново</span>” (Re-transcribe) now asks for confirmation: this run
+replaces the transcript, and speaker edits, line splits and model improvements will be lost.
+And if the new run doesn’t recognize a single line (say, the model failed to load), the
+previous transcript stays in place.</p>
+
+<h3>Speaker recognition</h3>
+
+<p><b>Fewer stray “Speakers”.</b> If there’s only one other person on the call, short
+fragments of their speech — interruptions, “uh-huh,” “I mean” — are attributed to them instead
+of creating a separate unnamed participant. When there are several voices, the app doesn’t do
+this.</p>
+
+<p><b>Two familiar people no longer get merged into one voice.</b> If the labeling lumped two
+people’s speech into one cluster, the app now more often splits them back apart — including
+when only one of the two is recognized.</p>
+
+<p><b>Showing and learning are now separate.</b> Names are filled in as before, but the app is
+now more careful about adding to a voiceprint — only when the match is confident. This cures
+the slow “contamination” of voiceprints that made recognition degrade over time. The change
+applies only to new transcriptions; meetings already processed aren’t recalculated.</p>
+
+<p><b>Empty participants are removed automatically.</b> If, after your edit, an unnamed
+“Speaker” has no lines of their own left — only short interjections inside other people’s
+blocks — it’s removed from the meeting automatically, with a notice at the top. This never
+applies to named people or to you. Turn it off in Settings → <span lang="ru">Транскрипция → Правка участников</span>
+(Transcription → Participant editing); there’s also a “<span lang="ru">Убрать пустых</span> (N)” (Remove empty (N))
+button above the participant list.</p>
+
+<p>When you reassign a line and there are many participants, the menu now has a short
+“<span lang="ru">Похоже на голос</span>” (Sounds like) section at the top — the two or three people whose voices are
+closest in this meeting. It’s a hint, not a decision: the full alphabetical list is still
+below.</p>
+
+<h3>Fixes</h3>
+
+<p>The app crashed if you deleted a line while the background recognition check was working
+through the archive. If that coincided with a live call, the recording was cut off. Now the
+background check stops and starts over instead of crashing the app.</p>
+        </div>
+      </section>
+      <section class="release" id="v1-2-0" aria-labelledby="v1-2-0-h">
+        <h2 id="v1-2-0-h">Version 1.2.0 <time datetime="2026-07-16">July&nbsp;16, 2026</time></h2>
+        <div class="notes">
+<h3>Meeting titles instead of “Meeting on July 14”</h3>
+
+<p>You can now name a call while it’s still recording: the floating panel has a new field for
+the title. It always works and needs nothing else.</p>
+
+<p>The rest is for those with a language model connected (Settings → “<span lang="ru">Языковая модель</span>”
+(Language model) → “<span lang="ru">Улучшать транскрипт через</span> LLM” (Improve transcript with LLM)). The meeting
+card has a new action, <b>“<span lang="ru">Придумать название</span>”</b> (Suggest a title): one click, and the model
+reads the transcript and proposes a title. If no model is connected, the app tells you so.</p>
+
+<p>This can also happen on its own if, under Settings → “<span lang="ru">Обработка</span>” (Processing), both
+“<span lang="ru">Запускать автоматически после распознавания</span>” (Run automatically after transcription) and
+“<span lang="ru">Предлагать название встречи</span>” (Suggest meeting title) are on (the second is on by default).
+A fresh meeting then gets a title right after transcription. The automation never touches
+meetings you renamed by hand — your title always wins. The prompt sent to the model can be
+edited in the same place.</p>
+
+<h3>Speaker recognition</h3>
+
+<p><b>“<span lang="ru">Запомнить голос</span>” (Remember voice).</b> The app used to promise it would learn a voice
+on its own — but the first voiceprint never appeared: to capture one, the person had to be
+recognized first, and recognizing them without a voiceprint is impossible. It was a closed
+loop, and the same voice kept spawning new unnamed “Speakers” — even for people with hundreds
+of lines in the archive. Now the first voiceprint is captured with a button, in the recognition
+check panel and on the person’s card. It’s built from their speech in meetings that are already
+transcribed — the person needs to have spoken for at least half a minute in one of them,
+otherwise the voiceprint would be noisy and attract other people’s voices; in that case the
+button explains what’s missing.</p>
+
+<p><b>“<span lang="ru">Этого участника не было — раскидать по голосу</span>” (This participant wasn’t here —
+redistribute by voice).</b> If the app attributed someone to a meeting who wasn’t there, their
+lines can be handed out to the real participants — each line goes to the closest voice. Before
+anything is applied you see a list where any row can be corrected by hand. If an unnamed
+“Speaker” is left without a single line of their own afterwards, the app offers to remove
+it.</p>
+
+<p><b>The recognition check no longer invents problems.</b> It used to report “broken
+labeling” where there was none: the conclusion rested on a couple of seconds of interjections.
+Now it draws conclusions only where there’s enough speech, and “we didn’t check this” is no
+longer passed off as “the model can’t tell the voices apart.”</p>
+
+<h3>Recording</h3>
+
+<p>There’s a new toggle, <b>“<span lang="ru">Спрашивать подтверждение перед началом записи</span>”</b> (Ask for
+confirmation before recording) — Settings → <span lang="ru">Запись</span> (Recording) → “<span lang="ru">Параметры автозапуска</span>”
+(Auto-start options); the section is active only when auto-start itself is on. It’s off by
+default: as before, recording starts silently.</p>
+
+<p>When it’s on, VoiceGrep asks first: while the call is going, a panel floats above your
+windows offering “<span lang="ru">Записывать</span>” (Record) / “<span lang="ru">Не записывать</span>” (Don’t record). Without an answer,
+nothing is recorded and nothing is written to disk. The panel stays on screen for the whole
+call — you can say yes midway, and recording starts from that moment. The cost: the start of
+the call is lost, about three to six seconds.</p>
+
+<h3>Fixes</h3>
+
+<p>Deleting a meeting now stops its background processing. Previously transcription kept
+running on the deleted meeting: a spinner hung around, the app wouldn’t quit with ⌘Q, and
+sometimes it crashed.</p>
+        </div>
+      </section>
+      <!-- changelog:end -->
+      <p class="muted">Release notes before version&nbsp;1.2.0 were not published.</p>
+      <div class="cta">
+        <div class="cta-row">
+          <a class="btn no-touch" href="../VoiceGrep-1.12.0.dmg">Download VoiceGrep for macOS</a>
+          <button class="btn only-touch js-share" type="button" data-done="Link copied"><span class="lbl" aria-live="polite">Send link to your Mac</span></button>
+          <a class="btn ghost" href="../">See how it works</a>
+        </div>
+        <p class="meta"><span>Free</span><span>Apple Silicon (M1 or later)</span><span>macOS 14.4+</span><span>~23&nbsp;MB</span><span>Interface in Russian</span></p>
+        <p class="note">Recording needs an activation key: send the <span lang="ru">ID машины</span> (Machine ID) from Settings <a href="https://t.me/ilyabazhenov">via&nbsp;Telegram</a> and we’ll issue one. <a href="../#faq-key">About the key</a></p>
+      </div>
+    </article>
+  </div>
+
+  <footer>
+    <div class="wrap foot-in">
+      <span>VoiceGrep — on-device call transcription on your Mac. Audio and voiceprints stay on your Mac.</span>
+      <nav aria-label="Sections">
+        <a href="../">Home</a>
+        <a href="./" aria-current="page">What’s new</a>
+        <a href="../privacy/">Privacy policy</a>
+      </nav>
+    </div>
+  </footer>
+  <!-- Cloudflare Web Analytics: cookieless page-view counter (no personal data, no consent banner). The token is a public site id. -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cc5905c787cb42c3b4dce62a4beda4ab"}'></script>
+</body>
+</html>

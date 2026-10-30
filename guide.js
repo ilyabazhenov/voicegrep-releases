@@ -1,4 +1,4 @@
-// Guide pages (/ru/<slug>/): the landing's theme toggle (same vg.landing.theme key, so the
+// Guide pages (/ru/<slug>/, /changelog/): the landing's theme toggle (same vg.landing.theme key, so the
 // choice carries between pages), "send the link to your Mac" on phones, and FAQ deep links.
 // The pre-paint part (touch class, stored theme) is inline in each page's <head>.
 (function () {
@@ -39,6 +39,7 @@
   // Phones can't run a Mac app: share or copy the page link instead of downloading.
   function shareLink(b) {
     var url = location.origin + location.pathname;
+    var ask = root.lang === 'en' ? 'Copy the link' : 'Скопируйте ссылку';
     var lbl = b.querySelector('.lbl') || b;
     var flash = function () {
       var orig = b.getAttribute('data-orig') || lbl.textContent;
@@ -47,8 +48,8 @@
       clearTimeout(b._t); b._t = setTimeout(function () { lbl.textContent = orig; }, 1800);
     };
     var copy = function () {
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(flash, function () { window.prompt('Скопируйте ссылку', url); });
-      else window.prompt('Скопируйте ссылку', url);
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(flash, function () { window.prompt(ask, url); });
+      else window.prompt(ask, url);
     };
     if (navigator.share) navigator.share({ title: document.title, url: url }).catch(function (err) { if (!err || err.name !== 'AbortError') copy(); });
     else copy();
