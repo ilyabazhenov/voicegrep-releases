@@ -158,3 +158,17 @@ footer { border-top: 1px solid var(--line); margin-top: 56px; padding: 30px 0; c
   .cta-row { flex-direction: column; align-items: stretch; }
   .lead { font-size: 1.08rem; }
 }
+
+/* ---------- changelog (/ru/changelog/: releases between the changelog markers — scripts/landing_changelog.py) ---------- */
+.versions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 .6em; padding: 0; list-style: none; }
+.versions li { margin: 0; }
+.versions a {
+  display: inline-block; padding: 4px 11px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--card); color: var(--muted); font: 600 .86rem/1.4 var(--mono);
+}
+.versions a:hover { color: var(--fg); border-color: var(--accent); text-decoration: none; }
+.release { border-top: 1px solid var(--line); margin-top: 2.4em; padding-top: .2em; scroll-margin-top: 70px; }
+.release h2 { margin-top: .9em; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.release h2 time { font: 500 .95rem/1.4 var(--sans); letter-spacing: 0; color: var(--faint); }
+.release .notes h3:first-child { margin-top: .9em; }
+.changelog > .muted { margin-top: 2.4em; font-size: .92rem; }
