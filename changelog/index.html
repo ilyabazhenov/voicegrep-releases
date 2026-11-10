@@ -123,7 +123,7 @@
         <a class="txt" href="../#faq">FAQ</a>
         <button class="theme js-theme" type="button" aria-pressed="false" aria-label="Dark theme" title="Dark theme"><svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 1 1 9.9 3.5a6.6 6.6 0 0 0 10.6 10.6z"/></svg><svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg></button>
         <a class="lang" href="../ru/changelog/" hreflang="ru" lang="ru" title="Русская версия">RU</a>
-        <a class="btn sm no-touch" href="../VoiceGrep-1.12.0.dmg">Download</a>
+        <a class="btn sm no-touch" href="../VoiceGrep-1.13.0.dmg">Download</a>
         <button class="btn sm only-touch js-share" type="button" data-done="Copied" title="Send link to your Mac"><span class="lbl" aria-live="polite">Send to Mac</span></button>
       </div>
     </div>
@@ -142,6 +142,7 @@
 <!-- changelog:start -->
       <nav aria-label="Versions">
         <ul class="versions">
+          <li><a href="#v1-13-0">1.13.0</a></li>
           <li><a href="#v1-12-0">1.12.0</a></li>
           <li><a href="#v1-11-0">1.11.0</a></li>
           <li><a href="#v1-10-0">1.10.0</a></li>
@@ -155,6 +156,114 @@
           <li><a href="#v1-2-0">1.2.0</a></li>
         </ul>
       </nav>
+      <section class="release" id="v1-13-0" aria-labelledby="v1-13-0-h">
+        <h2 id="v1-13-0-h">Version 1.13.0 <time datetime="2026-11-10">November&nbsp;10, 2026</time></h2>
+        <div class="notes">
+<h3>Tasks have been removed</h3>
+<p>The “<span lang="ru">Задачи</span>” (Tasks) section is gone: the “<span lang="ru">Мои дела</span>” (My tasks) and “<span lang="ru">Жду от других</span>”
+(Waiting on others) boards, tasks in meeting, person and project cards, on the dashboard and
+in exports. <b>The first time the new version starts, saved tasks are deleted, and they
+can’t be restored.</b> If you need them, copy them down or export your meetings to Markdown
+before updating.</p>
+<p>So that agreements aren’t lost, new meeting summaries include a “<span lang="ru">Договорились</span> / <span lang="ru">дальше</span>”
+(Agreed / next steps) block. If you changed the summary prompt, add the block to it
+yourself.</p>
+
+<h3>Speakers are recognized more accurately</h3>
+<p>Voices are now split by a new model, “<span lang="ru">Стандартная</span> (pyannote community-1)” (Standard): it listens
+to the whole recording at once, splits one person into several “<span lang="ru">Собеседник</span>” (Participant) entries
+less often, and recognizes familiar people more often. The cost: short phrases of 1–3 seconds are
+more often attached to the neighbouring voice; you can fix such a line by hand. The model ships
+inside the app, nothing to download, and saved voices keep working without any recalculation. To
+go back, choose “Settings → <span lang="ru">Транскрипция → Определение говорящих → Прежняя</span> (pyannote 3.1)”
+(Transcription → Speaker detection → Previous). This version requires macOS 15 or later.</p>
+<p>Also, a long reply that the app mistakenly gave to the neighbouring speaker is now
+re-checked by voice and moves to the meeting participant whose voice it is. This applies to new
+transcriptions and to “<span lang="ru">Распознать заново</span>” (Recognize again).</p>
+
+<h3>Recording without headphones</h3>
+<p>Without headphones the microphone hears the other people through the speakers, and their
+phrases ended up in the transcript a second time — under your name (“<span lang="ru">Я</span>”, Me). Now these repeats
+are removed during transcription — only where the audio confirms it really is an echo; your own
+words spoken over someone else stay. When you play back or export the audio of such a meeting,
+your microphone is heard only during your replies, so your voice no longer sounds hollow.
+Recordings made with headphones don’t change. The switch is “Settings → <span lang="ru">Транскрипция → Убирать</span>
+<span lang="ru">эхо собеседников из вашей дорожки</span>” (Transcription → Remove the other people’s echo from your
+track), on by default. For an older meeting with repeats, press “<span lang="ru">Распознать заново</span>” (Recognize
+again) in its card.</p>
+
+<h3>Live transcription — automatic, in the meeting card</h3>
+<p>During a call the conversation text now appears right in the meeting card, in the “<span lang="ru">Идёт</span>
+<span lang="ru">запись</span>” (Recording) block. <b>Live transcription is on for everyone and starts by itself with
+every recording</b>; to turn it off, use “Settings → <span lang="ru">Запись → Живая расшифровка во время звонка</span>”
+(Recording → Live transcription during calls). You can stop and resume it without interrupting
+the recording using the buttons in the draft’s header.</p>
+<p>A separate window is optional: the window icon in the draft’s header or “<span lang="ru">Живая расшифровка в</span>
+<span lang="ru">окне</span>” (Live transcription in a window) in the VoiceGrep menu bar menu. It’s a regular window you
+can move and resize; the pin keeps it on top of all windows, and by default it’s hidden from
+screen sharing. Closing the window doesn’t stop live transcription. The draft isn’t saved to the
+archive — the full transcript appears after the call as before. It needs the Parakeet model
+downloaded; while live transcription runs, the app keeps a second copy of the model in memory —
+if your Mac slows down during a video call, stop it.</p>
+
+<h3>Selecting several replies</h3>
+<p>The meeting transcript has a new “<span lang="ru">Выбрать несколько…</span>” (Select several…) mode, also opened
+with the “<span lang="ru">Выбрать</span>” (Select) button next to search: tick replies with the circle or by clicking
+an empty spot of a row, with ⇧ for a range. The bar at the bottom can reassign the selected
+replies to a participant or to “<span lang="ru">Новый участник…</span>” (New participant…), copy them and delete
+them. Deleting and batch moving can’t be undone — check your selection first.</p>
+<p>Long transcripts now scroll without stutter, and long monologues are split into
+paragraphs. Meetings and the main window open faster.</p>
+
+<h3>Calendar and day overview</h3>
+<p>A new “<span lang="ru">Календарь</span>” (Calendar) item in the sidebar shows meetings on a week or month grid;
+click one to see its time, participants and summary. To jump to a meeting in the calendar, use
+“<span lang="ru">Показать в календаре</span>” (Show in calendar) in its menu in the list.</p>
+<p>While no meeting is selected, “<span lang="ru">Все встречи</span>” (All meetings) shows an overview of the latest
+day: a timeline of meetings by hour, the day’s people, “<span lang="ru">Итоги дня</span>” (Day summary), a question
+box across all meetings and a “<span lang="ru">Последние 30 дней</span>” (Last 30 days) calendar — click a day to
+switch the overview to it. The day summary needs a connected language model; it’s built by
+itself only for the latest day and only with “Settings → <span lang="ru">Обработка → Запускать автоматически</span>
+<span lang="ru">после распознавания</span>” (Processing → Run automatically after recognition) on — otherwise use
+the “<span lang="ru">Собрать</span>” (Build) button.</p>
+
+<h3>Project scenarios</h3>
+<p>Your own prompt scenarios can now run on a project too: create a scenario of the “<span lang="ru">По проекту</span>”
+(By project) kind in “Settings → <span lang="ru">Сценарии</span>” (Scenarios) and run it from the “<span lang="ru">Сценарии</span>”
+(Scenarios) menu at the top of the project card. It takes into account the project’s meetings,
+including subprojects, and the project description; the result is kept in the project card, and
+the assistant sees it in that project’s chat.</p>
+
+<h3>Google Meet</h3>
+<p>The browser extension that shows who is speaking now supports Google Meet on a par with
+Kontur.Talk. The “<span lang="ru">Установить</span>” (Install) button in “Settings → <span lang="ru">Кто говорит</span>” (Who is speaking)
+leads to the Chrome Web Store.</p>
+
+<h3>Recording and stability</h3>
+<p>Fixed the cause of call recordings sometimes coming out empty. And if writing to disk
+still fails, VoiceGrep shows a warning with a sound, and the meeting isn’t deleted as
+empty.</p>
+<p>Switching microphones mid-call — for example, connecting or removing a Bluetooth headset — no
+longer cuts off your track for the rest of the recording or splits the call into two meetings, and
+your replies are no longer shifted in time relative to the other people.</p>
+<p>When auto-recording calls in Kontur.Talk, other Electron apps and Chromium-based browsers,
+only the call app’s audio is now recorded rather than all system audio (with “<span lang="ru">Писать только</span>
+<span lang="ru">звук приложения звонка</span>” (Record only the call app’s audio) on — the default). When all system
+audio is recorded — a manual recording, Safari — apps from the “<span lang="ru">Приложения, которые слушают</span>
+<span lang="ru">микрофон</span>” (Apps that listen to the microphone) list are no longer captured: a virtual
+microphone or noise suppressor no longer turns your voice into a second speaker. If a call in
+such an app starts after you press “<span lang="ru">Начать запись</span>” (Start recording), its audio won’t be recorded.</p>
+<p>Fixed a crash on macOS 15 when an open meeting card was deleted automatically — for
+example, as an empty recording.</p>
+
+<h3>Look and feel</h3>
+<p>Participant colors in a meeting card are easier to tell apart, section headings are
+larger, the app accent is teal, and the app has a new icon. An empty attachments section is hidden: attach a file with
+the paperclip in the meeting header or by dragging it onto the card. “<span lang="ru">Граф общения</span>” (Social
+graph) has moved to the sidebar, under “<span lang="ru">Инструменты</span>” (Tools). Player timecodes no longer stack
+into a column in meetings with many participants.</p>
+        </div>
+      </section>
       <section class="release" id="v1-12-0" aria-labelledby="v1-12-0-h">
         <h2 id="v1-12-0-h">Version 1.12.0 <time datetime="2026-10-29">October&nbsp;29, 2026</time></h2>
         <div class="notes">
@@ -791,7 +900,7 @@ sometimes it crashed.</p>
       <p class="muted">Release notes before version&nbsp;1.2.0 were not published.</p>
       <div class="cta">
         <div class="cta-row">
-          <a class="btn no-touch" href="../VoiceGrep-1.12.0.dmg">Download VoiceGrep for macOS</a>
+          <a class="btn no-touch" href="../VoiceGrep-1.13.0.dmg">Download VoiceGrep for macOS</a>
           <button class="btn only-touch js-share" type="button" data-done="Link copied"><span class="lbl" aria-live="polite">Send link to your Mac</span></button>
           <a class="btn ghost" href="../">See how it works</a>
         </div>
